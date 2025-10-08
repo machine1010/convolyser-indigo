@@ -281,3 +281,4 @@ elif st.session_state.step == "result":
         with c2:
             if st.button("Exit"):
                 st.stop()
+
