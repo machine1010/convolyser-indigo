@@ -1,1 +1,10 @@
-## 
+[theme]
+base = "dark"
+primaryColor = "#dc2626"          # red-600 accent
+backgroundColor = "#0b0b10"       # deep near-black
+secondaryBackgroundColor = "#111827"
+textColor = "#f3f4f6"
+buttonRadius = "12px"
+baseRadius = "14px"
+showWidgetBorder = true
+showSidebarBorder = false
