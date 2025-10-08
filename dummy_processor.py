@@ -9,31 +9,18 @@ from datetime import datetime
 
 class HindiAudioAnalysisPipeline:
     def __init__(self, credentials_path: str, project_id: str = None, location: str = "us-central1"):
-        print("=" * 80)
-        print("INITIALIZING HINDI AUDIO ANALYSIS PIPELINE")
-        print("=" * 80)
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
-        print(f"✓ Credentials loaded from: {credentials_path}")
-        self.project_id = project_id or str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
+        self.project_id = project_id if project_id else str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
         self.location = location
-        print(f"✓ Project ID: {self.project_id}")
-        print(f"✓ Location: {self.location}")
         vertexai.init(project=self.project_id, location=self.location)
-        print("✓ Vertex AI initialized")
         self.model = genai.GenerativeModel("gemini-2.5-pro")
-        print("✓ Gemini 2.5 Pro model loaded")
-        self.generation_config = genai.GenerationConfig(
-            temperature=0.1
-        )
+        self.generation_config = genai.GenerationConfig(temperature=0.1)
         self.transcription_prompt = '''
-(Paste your full transcription prompt here)
+(Paste your full transcription prompt here.)
         '''
         self.analysis_prompt = '''
-(Paste your full analysis prompt here)
+(Paste your full analysis prompt here.)
         '''
-        print("✓ Prompts configured")
-        print("=" * 80)
-        print()
 
     def _load_audio_to_base64(self, file_path: str) -> str:
         with open(file_path, "rb") as audio_file:
@@ -111,13 +98,7 @@ class HindiAudioAnalysisPipeline:
 
 def run_pipeline(audio_path: Path, license_path: Path):
     credentials_path = str(license_path)
-    project_id = None
     out_dir = tempfile.mkdtemp(prefix="hindi-audio-pipeline-")
-    pipeline = HindiAudioAnalysisPipeline(
-        credentials_path=credentials_path, project_id=project_id
-    )
-    result = pipeline.process_audio(
-        audio_file_path=str(audio_path),
-        output_dir=out_dir
-    )
+    pipeline = HindiAudioAnalysisPipeline(credentials_path=credentials_path)
+    result = pipeline.process_audio(audio_file_path=str(audio_path), output_dir=out_dir)
     return result['transcription_path'], result['analysis_path'], result['transcription'], result['analysis']
