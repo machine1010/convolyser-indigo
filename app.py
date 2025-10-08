@@ -140,15 +140,22 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     return Path(tmp.name)  # [web:2]
 
 def _stepper():
+    # The proper stages in order:
+    stages = ["landing", "audio", "license", "ready", "processing", "result"]
     labels = ["Upload audio", "License key", "Explore", "Result"]
-    order = ["landing", "audio", "license", "ready", "processing", "result"]
-    current = st.session_state.step
-    idx = max(1, min(4, [i for i,s in enumerate(["audio","license","ready","result"], start=1) if s in current or (current=="ready" and i==3)] + [1]))
+
+    try:
+        # Map current step to an index (1-based for steps after landing)
+        idx = max(1, min(4, stages.index(st.session_state.step)))
+    except ValueError:
+        idx = 1  # fallback to first step
+
     chips = []
     for i, lbl in enumerate(labels, 1):
         cls = "step active" if i <= idx else "step"
         chips.append(f'<div class="{cls}">{i}. {lbl}</div>')
-    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)  # [web:37]
+    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)
+
 
 # ---------------------------------------------------------
 # Header / Hero
