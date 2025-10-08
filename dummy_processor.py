@@ -27,40 +27,14 @@ class HindiAudioAnalysisPipeline:
         self.model = genai.GenerativeModel("gemini-2.5-pro")
         print("✓ Gemini 2.5 Pro model loaded")
 
-        self.generation_config = genai.GenerationConfig(
-            temperature=0.1
-        )
+        self.generation_config = genai.GenerationConfig(temperature=0.1)
 
-        # Your full prompts (as you gave them)
         self.transcription_prompt = '''
-This is a Hindi language conversation happens between a caller from the govt organisation and a tribal people . U need to pay close attention to the conversation and generate the transcript of it . Also make sure to do the speaker diarization. Donot pay much attention to the background noise and try not to include it in the transcript. Output it in the below mentioned json format .
-If a speaker cannot be identified, label them as "Unknown."
-Context about the caller and conversation - The conversation is all about the a speaker  asking  citizens about to whom they want to see as their next cheif minister and to whom they want to see as their next local leader. The speaker will give them multiple options of leader name as well as their party and the citizen have to choose between them. It is just for information purpose and not for actual casting of vote. The speaker may ask the vidhansabha constituency details and the mobile number and the religion of the citizen .The speaker may ask question about wheather they are satisfied by the work of the current leader or chief minister etc. and take opinion of the people.
-OUTPUT THE EXACT NUMBER OF SPEAKER.DONOT BIASED BY THE CONTEXT. ANALYSE THE AUDIO PROPERLY .
-Provide the output in the following JSON structure:
-{
-  "Call Details": {
-    "Number of Speakers": "<total_number_of_speakers>",
-    "Transcript": [
-      {
-        "Speaker": "<Speaker>",
-        "Timestamp": {
-          "Start": "<start_time>",
-          "End": "<end_time>"
-        },
-        "Voice": "<extracted_text_from_audio>"
-      },
-      ...
-    ]
-  }
-}
-'''
-
+        (Paste your full transcription prompt here)
+        '''
         self.analysis_prompt = '''
-You are an expert analyst tasked with extracting specific information from Hindi language audio call transcripts. Your job is to carefully analyze the provided transcript and extract answers to predefined survey questions.
-
-[...your full analysis prompt continues here...]
-'''
+        (Paste your full analysis prompt here)
+        '''
 
         print("✓ Prompts configured")
         print("=" * 80)
@@ -68,13 +42,11 @@ You are an expert analyst tasked with extracting specific information from Hindi
 
     def _load_audio_to_base64(self, file_path: str) -> str:
         with open(file_path, "rb") as audio_file:
-            audio_data = base64.b64encode(audio_file.read()).decode("utf-8")
-        return audio_data
+            return base64.b64encode(audio_file.read()).decode("utf-8")
 
     def _load_json_to_base64(self, file_path: str) -> str:
         with open(file_path, "rb") as json_file:
-            json_data = base64.standard_b64encode(json_file.read()).decode("utf-8")
-        return json_data
+            return base64.standard_b64encode(json_file.read()).decode("utf-8")
 
     def _clean_json_output(self, content: str) -> str:
         lines = content.splitlines(keepends=True)
@@ -100,7 +72,6 @@ You are an expert analyst tasked with extracting specific information from Hindi
         transcription_path = os.path.join(output_dir, transcription_filename)
         analysis_path = os.path.join(output_dir, analysis_filename)
 
-        # Transcription
         audio_base64 = self._load_audio_to_base64(audio_file_path)
         contents_transcription = [
             {'mime_type': audio_mime_type, 'data': audio_base64},
@@ -112,7 +83,6 @@ You are an expert analyst tasked with extracting specific information from Hindi
         )
         self._save_output(transcription_response.text, transcription_path, clean=True)
 
-        # Analysis
         transcript_base64 = self._load_json_to_base64(transcription_path)
         contents_analysis = [
             {'mime_type': 'text/plain', 'data': transcript_base64},
@@ -144,9 +114,6 @@ You are an expert analyst tasked with extracting specific information from Hindi
             'analysis': analysis_content
         }
 
-# ------------------------------------------------------------------------------
-# Main Streamlit-compatible entry point. UI expects 4 return values.
-# ------------------------------------------------------------------------------
 def run_pipeline(audio_path: Path, license_path: Path):
     credentials_path = str(license_path)
     project_id = None
@@ -159,4 +126,3 @@ def run_pipeline(audio_path: Path, license_path: Path):
         output_dir=out_dir
     )
     return result['transcription_path'], result['analysis_path'], result['transcription'], result['analysis']
-
