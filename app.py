@@ -5,203 +5,260 @@ import tempfile
 from pathlib import Path
 
 import streamlit as st
-from dummy_processor import run_pipeline
+from dummy_processor import run_pipeline  # same dummy backend
 
-st.set_page_config(page_title="Data App", page_icon="✨", layout="wide")
+# ---------------------------------------------------------
+# Page setup (must be first Streamlit call on the page)
+# ---------------------------------------------------------
+st.set_page_config(
+    page_title="YBrantWorks • Conversation Intelligence",
+    page_icon="🎧",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)  # [web:36]
 
-# ---------- Styles to mimic a simple hero ----------
-HERO_CSS = """
+# ---------------------------------------------------------
+# Theming helpers and CSS
+# ---------------------------------------------------------
+THEME_PRIMARY = "#dc2626"  # Tailwind red-600 vibe
+APP_CSS = f"""
 <style>
-.hero {
-  text-align: center;
-  padding: 4rem 1rem 2rem 1rem;
-}
-.hero h1 {
-  font-size: 3rem;
-  line-height: 1.1;
-  margin-bottom: 0.75rem;
-}
-.hero p {
-  color: #6b7280;
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-}
-.hero .btn {
-  display: inline-block;
-  background: #ef4444;
-  color: white;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-  margin: 0 0.5rem;
-  text-decoration: none;
-  font-weight: 600;
-}
-.hero .btn.secondary {
-  background: #111827;
-}
-.card {
-  background: #ecfdf5;
-  border-radius: 0.75rem;
+/* App background: layered deep-red gradient + subtle grid + film grain */
+[data-testid="stAppViewContainer"] {{
+  background:
+    radial-gradient(1200px 700px at -10% -20%, rgba(239,68,68,0.18), transparent 55%),
+    radial-gradient(900px 550px at 110% 10%, rgba(220,38,38,0.16), transparent 60%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(127,29,29,0.16), transparent 60%),
+    linear-gradient(180deg, #0b0b10 0%, #0a0a0a 60%, #08080a 100%);
+}}
+
+[data-testid="stAppViewContainer"]::before {{
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 40px);
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,1) 70%);
+}}
+
+[data-testid="stAppViewContainer"]::after {{
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url('data:image/svg+xml;utf8,\
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">\
+  <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>\
+  <rect width="100%" height="100%" filter="url(%23n)" opacity="0.025"/></svg>') repeat;
+  pointer-events: none;
+}}
+
+.hide-chrome [data-testid="stToolbar"] {{ display: none !important; }}
+.hide-chrome [data-testid="stDecoration"] {{ display: none !important; }}
+.hide-chrome [data-testid="stStatusWidget"] {{ display: none !important; }}
+
+/* Header / hero */
+.navbar {{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 0.5rem 0.75rem 0.25rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+}}
+.brand {{
+  display: flex; align-items: center; gap: 0.65rem; color: #fff;
+  font-weight: 700; letter-spacing: 0.3px; font-size: 1.05rem;
+}}
+.brand img {{ height: 28px; border-radius: 6px; }}
+.cta-row {{ display: flex; gap: 0.65rem; }}
+
+.btn {{
+  background: linear-gradient(180deg, {THEME_PRIMARY}, #b91c1c);
+  color: #fff; border: 1px solid rgba(255,255,255,0.14);
+  padding: 0.6rem 1rem; border-radius: 10px; font-weight: 700;
+  box-shadow: 0 6px 24px rgba(220,38,38,0.25);
+}}
+.btn.secondary {{
+  background: linear-gradient(180deg, #111827, #0f172a);
+  color: #e5e7eb; border: 1px solid rgba(255,255,255,0.08);
+}}
+
+.hero {{
+  padding: 1.25rem 0 0.25rem 0;
+}}
+.hero h1 {{
+  margin: 0; font-size: 2.3rem; line-height: 1.1; color: #f9fafb;
+}}
+.hero p {{
+  margin: 0.35rem 0 1rem 0; color: #e5e7eb; opacity: 0.85;
+}}
+
+/* “Glass” cards and stepper */
+.card {{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
   padding: 1rem;
-}
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}}
+
+.stepper {{
+  display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.75rem;
+}}
+.step {{
+  padding: 0.3rem 0.6rem; border-radius: 999px; font-size: 0.85rem; color:#e5e7eb;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+}}
+.step.active {{ background: {THEME_PRIMARY}; color: #fff; border-color: rgba(255,255,255,0.18); }}
+
+.small-muted {{ color:#e5e7eb; opacity:0.7; font-size:0.9rem; }}
 </style>
 """
-st.markdown(HERO_CSS, unsafe_allow_html=True)
+st.markdown(APP_CSS, unsafe_allow_html=True)  # [web:37]
 
-# ---------- Session State ----------
-def init_state():
-    defaults = {
-        "step": "landing",      # landing -> audio -> license -> ready -> processing -> result
+# ---------------------------------------------------------
+# Session state
+# ---------------------------------------------------------
+def _init_state():
+    for k, v in {
+        "step": "landing",
         "audio_file": None,
         "license_file": None,
         "audio_path": None,
         "license_path": None,
-        "result_path": None,
         "result_obj": None,
-    }
-    for k, v in defaults.items():
+    }.items():
         if k not in st.session_state:
             st.session_state[k] = v
 
-init_state()
+_init_state()  # [web:36]
 
-def reset_all():
-    for k in list(st.session_state.keys()):
-        if k in ("step", "audio_file", "license_file", "audio_path", "license_path", "result_path", "result_obj"):
-            del st.session_state[k]
-    init_state()
-
-def save_to_temp(uploaded_file: "UploadedFile", suffix: str) -> Path:
-    # Persist in-memory upload to a real temp file to get an OS path.
-    # Determine suffix by provided arg or fall back to original name.
+def _save_temp(uploaded_file, suffix: str) -> Path:
     ext = Path(uploaded_file.name).suffix or suffix
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
     tmp.write(uploaded_file.getvalue())
-    tmp.flush()
-    tmp.close()
-    return Path(tmp.name)
+    tmp.flush(); tmp.close()
+    return Path(tmp.name)  # [web:2]
 
-# ---------- UI Flow ----------
+def _stepper():
+    labels = ["Upload audio", "License key", "Explore", "Result"]
+    order = ["landing", "audio", "license", "ready", "processing", "result"]
+    current = st.session_state.step
+    idx = max(1, min(4, [i for i,s in enumerate(["audio","license","ready","result"], start=1) if s in current or (current=="ready" and i==3)] + [1]))
+    chips = []
+    for i, lbl in enumerate(labels, 1):
+        cls = "step active" if i <= idx else "step"
+        chips.append(f'<div class="{cls}">{i}. {lbl}</div>')
+    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)  # [web:37]
+
+# ---------------------------------------------------------
+# Header / Hero
+# ---------------------------------------------------------
+col_logo, col_cta = st.columns([0.7, 0.3])
+with col_logo:
+    st.markdown('<div class="navbar">', unsafe_allow_html=True)  # [web:37]
+    left, right = st.columns([0.8, 0.2])
+    with left:
+        st.markdown('<div class="brand">', unsafe_allow_html=True)  # [web:37]
+        st.image("assets/logo.png", use_container_width=False)  # [attached_image:2]
+        st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+    with right:
+        st.image("assets/icon.png", use_container_width=False)  # [attached_image:1]
+    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+
+with col_logo:
+    st.markdown('<div class="hero">', unsafe_allow_html=True)  # [web:37]
+    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)  # [attached_file:3]
+    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)  # [web:22]
+    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+
+with col_cta:
+    st.markdown('<div class="cta-row">', unsafe_allow_html=True)  # [web:37]
+    if st.session_state.step == "landing":
+        if st.button("Get started", type="primary"):
+            st.session_state.step = "audio"
+    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+
+st.markdown("<hr style='border-color:rgba(255,255,255,0.08)'>", unsafe_allow_html=True)  # [web:37]
+_stepper()  # [web:37]
+
+# ---------------------------------------------------------
+# Flow
+# ---------------------------------------------------------
 if st.session_state.step == "landing":
-    st.markdown(
-        """
-        <div class="hero">
-          <h1>A faster way to build and share data apps</h1>
-          <p>Turn Python scripts into a simple app flow in minutes — no front‑end work required.</p>
-          <a class="btn" href="#" onclick="window.parent.postMessage({type:'streamlit:setStep', step:'audio'}, '*'); return false;">Get started</a>
-          <a class="btn secondary" href="#" onclick="return false;">Try the live playground</a>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Handle the JS anchor by exposing a small listener.
-    st.write("")  # spacer
-
-    # Fallback server-side button for environments where JS is restricted.
-    if st.button("Get started"):
-        st.session_state.step = "audio"
+    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)  # [web:37]
 
 elif st.session_state.step == "audio":
-    st.header("1) Upload conversation audio")
-    st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
-    audio = st.file_uploader(
-        "Choose an audio file", type=["wav", "mp3", "m4a", "aac", "flac", "ogg"], key="audio_uploader"
-    )
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            st.session_state.step = "landing"
-    with col2:
-        if audio is not None:
-            st.audio(audio)
-            if st.button("Continue"):
+    with st.container(border=True):
+        st.subheader("Upload conversation audio")
+        st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
+        audio = st.file_uploader("Choose an audio file", type=["wav","mp3","m4a","aac","flac","ogg"], key="audio_upl")  # [web:2]
+        if audio:
+            st.audio(audio)  # [web:2]
+        c1, c2 = st.columns([0.2, 0.8])
+        with c1:
+            if st.button("Back"):
+                st.session_state.step = "landing"
+        with c2:
+            if audio and st.button("Continue ➝ License"):
                 st.session_state.audio_file = audio
-                st.session_state.audio_path = save_to_temp(audio, ".audio")
+                st.session_state.audio_path = _save_temp(audio, ".audio")  # [web:2]
                 st.session_state.step = "license"
 
 elif st.session_state.step == "license":
-    st.header("2) Upload license key file")
-    st.caption("Accepted: txt, json, key, lic")
-    keyf = st.file_uploader(
-        "Choose a license key file", type=["txt", "json", "key", "lic"], key="license_uploader"
-    )
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Back"):
-            st.session_state.step = "audio"
-    with col2:
-        if keyf is not None:
-            if st.button("Continue"):
+    with st.container(border=True):
+        st.subheader("Upload license key")
+        st.caption("Accepted: txt, json, key, lic")
+        keyf = st.file_uploader("Choose a license key file", type=["txt","json","key","lic"], key="lic_upl")  # [web:2]
+        c1, c2 = st.columns([0.2, 0.8])
+        with c1:
+            if st.button("Back"):
+                st.session_state.step = "audio"
+        with c2:
+            if keyf and st.button("Continue ➝ Explore"):
                 st.session_state.license_file = keyf
-                st.session_state.license_path = save_to_temp(keyf, ".lic")
+                st.session_state.license_path = _save_temp(keyf, ".lic")  # [web:2]
                 st.session_state.step = "ready"
 
 elif st.session_state.step == "ready":
-    st.header("3) Review and explore")
-    with st.container():
-        st.markdown("#### Selected files")
-        st.write(
-            {
-                "audio": getattr(st.session_state.audio_file, "name", None),
-                "license": getattr(st.session_state.license_file, "name", None),
-            }
-        )
-    if st.button("Explore"):
-        st.session_state.step = "processing"
+    with st.container(border=True):
+        st.subheader("Review")
+        st.write({
+            "audio": getattr(st.session_state.audio_file, "name", None),
+            "license": getattr(st.session_state.license_file, "name", None),
+        })  # [web:36]
+        if st.button("Explore", type="primary"):
+            st.session_state.step = "processing"
 
 elif st.session_state.step == "processing":
-    st.header("Running analysis…")
-    with st.spinner("Please wait while the processor generates results"):
-        # Call the dummy backend.
+    with st.spinner("Running analysis…"):
         result_path = run_pipeline(
             audio_path=Path(st.session_state.audio_path),
             license_path=Path(st.session_state.license_path),
-        )
-        st.session_state.result_path = str(result_path)
-        # Load JSON for display.
+        )  # [web:36]
         try:
             st.session_state.result_obj = json.loads(Path(result_path).read_text())
         except Exception:
-            st.session_state.result_obj = {"error": "Failed to read JSON result.", "path": str(result_path)}
-        time.sleep(0.3)
+            st.session_state.result_obj = {"error": "Failed to read JSON."}
+        time.sleep(0.3)  # [web:36]
     st.session_state.step = "result"
-    st.rerun()
+    st.rerun()  # [web:36]
 
 elif st.session_state.step == "result":
-    st.header("Result")
-    if st.session_state.result_obj is not None:
-        st.json(st.session_state.result_obj, expanded=2)
+    with st.container(border=True):
+        st.subheader("Result")
+        st.json(st.session_state.result_obj, expanded=2)  # [web:36]
         st.download_button(
             "Download JSON",
             data=json.dumps(st.session_state.result_obj, indent=2),
             file_name="result.json",
             mime="application/json",
-        )
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Run again"):
-            reset_all()
-            st.session_state.step = "landing"
-    with col2:
-        if st.button("Exit"):
-            st.stop()
-
-# Small JS hook to make the hero anchor button advance the step.
-st.markdown(
-    """
-    <script>
-    window.addEventListener('message', (event) => {
-      if (event.data && event.data.type === 'streamlit:setStep') {
-        const step = event.data.step;
-        const s = window.parent.streamlitDocSend;
-        if (s) s({type: 'streamlit:setComponentValue', args: {step}});
-      }
-    });
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
-# Also handle the synthetic component message via query param fallback.
-if "_component_value" in st.query_params and "step" in st.query_params["_component_value"]:
-    st.session_state.step = st.query_params["_component_value"]["step"]
+        )  # [web:36]
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Run again"):
+                for k in ["step","audio_file","license_file","audio_path","license_path","result_obj"]:
+                    if k in st.session_state: del st.session_state[k]
+                _init_state()
+        with c2:
+            if st.button("Exit"):
+                st.stop()  # [web:36]
