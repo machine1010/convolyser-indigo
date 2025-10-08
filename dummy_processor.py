@@ -12,30 +12,25 @@ class HindiAudioAnalysisPipeline:
         print("=" * 80)
         print("INITIALIZING HINDI AUDIO ANALYSIS PIPELINE")
         print("=" * 80)
-
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
         print(f"✓ Credentials loaded from: {credentials_path}")
-
-        self.project_id = project_id if project_id else str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
+        self.project_id = project_id or str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
         self.location = location
         print(f"✓ Project ID: {self.project_id}")
         print(f"✓ Location: {self.location}")
-
         vertexai.init(project=self.project_id, location=self.location)
         print("✓ Vertex AI initialized")
-
         self.model = genai.GenerativeModel("gemini-2.5-pro")
         print("✓ Gemini 2.5 Pro model loaded")
-
-        self.generation_config = genai.GenerationConfig(temperature=0.1)
-
+        self.generation_config = genai.GenerationConfig(
+            temperature=0.1
+        )
         self.transcription_prompt = '''
-        (Paste your full transcription prompt here)
+(Paste your full transcription prompt here)
         '''
         self.analysis_prompt = '''
-        (Paste your full analysis prompt here)
+(Paste your full analysis prompt here)
         '''
-
         print("✓ Prompts configured")
         print("=" * 80)
         print()
