@@ -238,34 +238,46 @@ elif st.session_state.step == "ready":
 
 elif st.session_state.step == "processing":
     with st.spinner("Running analysis…"):
-        result_path = run_pipeline(
+        result_path1, result_path2, result_obj1, result_obj2 = run_pipeline(
             audio_path=Path(st.session_state.audio_path),
             license_path=Path(st.session_state.license_path),
-        )  # [web:36]
-        try:
-            st.session_state.result_obj = json.loads(Path(result_path).read_text())
-        except Exception:
-            st.session_state.result_obj = {"error": "Failed to read JSON."}
-        time.sleep(0.3)  # [web:36]
+        )
+        st.session_state.result_path1 = result_path1
+        st.session_state.result_path2 = result_path2
+        st.session_state.result_obj1 = result_obj1
+        st.session_state.result_obj2 = result_obj2
     st.session_state.step = "result"
-    st.rerun()  # [web:36]
+    st.rerun()
 
 elif st.session_state.step == "result":
     with st.container(border=True):
-        st.subheader("Result")
-        st.json(st.session_state.result_obj, expanded=2)  # [web:36]
+        st.subheader("Transcription Output")
+        st.json(st.session_state.result_obj1, expanded=2)
         st.download_button(
-            "Download JSON",
-            data=json.dumps(st.session_state.result_obj, indent=2),
-            file_name="result.json",
+            "Download Transcription JSON",
+            data=json.dumps(st.session_state.result_obj1, indent=2),
+            file_name="transcription_output.json",
             mime="application/json",
-        )  # [web:36]
+        )
+        st.subheader("Analysis Output")
+        st.json(st.session_state.result_obj2, expanded=2)
+        st.download_button(
+            "Download Analysis JSON",
+            data=json.dumps(st.session_state.result_obj2, indent=2),
+            file_name="analysis_output.json",
+            mime="application/json",
+        )
         c1, c2 = st.columns(2)
         with c1:
             if st.button("Run again"):
-                for k in ["step","audio_file","license_file","audio_path","license_path","result_obj"]:
-                    if k in st.session_state: del st.session_state[k]
+                for k in [
+                    "step", "audio_file", "license_file", "audio_path",
+                    "license_path", "result_obj1", "result_obj2",
+                    "result_path1", "result_path2"
+                ]:
+                    if k in st.session_state:
+                        del st.session_state[k]
                 _init_state()
         with c2:
             if st.button("Exit"):
-                st.stop()  # [web:36]
+                st.stop()
