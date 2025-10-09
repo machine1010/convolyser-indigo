@@ -75,23 +75,21 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-def init_state():
-    default_values = dict(
-        step="landing",
-        audiofile=None,
-        licensefile=None,
-        audiopath=None,
-        licensepath=None,
-        transcriptionpath=None,
-        analysispath=None,
-        transcriptionraw=None,
-        analysisraw=None,
-    )
-    for k, v in default_values.items():
+def _init_state():
+    for k, v in {
+        "step": "landing",
+        "audio_file": None,
+        "license_file": None,
+        "audio_path": None,
+        "license_path": None,
+        "transcription_path": None,
+        "analysis_path": None,
+        "transcription_raw": None,
+        "analysis_raw": None,
+    }.items():
         if k not in st.session_state:
             st.session_state[k] = v
-
-init_state()
+_init_state()
 
 def save_temp_uploaded_file(uploadedfile, suffix=""):
     ext = Path(uploadedfile.name).suffix or suffix
