@@ -180,7 +180,7 @@ elif st.session_state.step == "processing":
             time.sleep(0.3)
 
         st.session_state.step = "result"
-        st.experimental_rerun()
+        st.rerun()
 
 elif st.session_state.step == "result":
     st.subheader("Transcription Output File Content")
