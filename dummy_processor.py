@@ -13,7 +13,7 @@ class HindiAudioAnalysisPipeline:
         self.project_id = project_id if project_id else str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
         self.location = location
         vertexai.init(project=self.project_id, location=self.location)
-        self.model = genai.GenerativeModel("gemini-2.5-flash")
+        self.model = genai.GenerativeModel(model_name="gemini-2.5-flash")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         self.transcription_prompt = '''
 This is a Hindi language conversation happens between a caller from the govt organisation and a tribal people . U need to pay close attention to the conversation and generate the transcript of it . Also make sure to do the speaker diarization. Donot pay much attention to the background noise and try not to include it in the transcript. Output it in the below mentioned json format .
