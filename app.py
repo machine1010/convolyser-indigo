@@ -137,12 +137,9 @@ elif st.session_state.step == "processing":
             license_path=Path(st.session_state.license_path),
         )
         try:
-            raw_content = Path(result_path).read_text()
-            st.session_state.result_raw = raw_content  # <-- store raw text output
-            st.session_state.result_obj = json.loads(raw_content)
+            st.session_state.result_raw = Path(result_path).read_text()
         except Exception:
-            st.session_state.result_raw = "Failed to read output file content."
-            st.session_state.result_obj = {"error": "Failed to read JSON."}
+            st.session_state.result_raw = "Failed to read output file."
         time.sleep(0.3)
     st.session_state.step = "result"
     st.rerun()
@@ -150,7 +147,7 @@ elif st.session_state.step == "processing":
 elif st.session_state.step == "result":
     with st.container(border=True):
         st.subheader("Result")
-        # Show raw file content as plain text (not JSON/dict)
+        # Show contents exactly as in the file, do NOT parse as JSON
         st.text(st.session_state.result_raw)
         st.download_button(
             "Download Output",
@@ -158,13 +155,3 @@ elif st.session_state.step == "result":
             file_name="result.txt",
             mime="text/plain",
         )
-        c1, c2 = st.columns(2)
-        with c1:
-            if st.button("Run again"):
-                for k in ["step","audio_file","license_file","audio_path","license_path","result_obj","result_raw"]:
-                    if k in st.session_state:
-                        del st.session_state[k]
-                _init_state()
-        with c2:
-            if st.button("Exit"):
-                st.stop()
