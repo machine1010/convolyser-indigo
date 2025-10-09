@@ -220,4 +220,129 @@ _stepper()
 # ---------------------------------------------------------------------
 # Flow screens
 # ---------------------------------------------------------------------
-if st.session
+if st.session_state.step == "landing":
+    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)
+
+elif st.session_state.step == "audio":
+    with st.container(border=True):
+        st.subheader("Upload conversation audio")
+        st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
+        audio = st.file_uploader(
+            "Choose an audio file",
+            type=["wav", "mp3", "m4a", "aac", "flac", "ogg"],
+            key="audio_upl",
+        )
+        if audio:
+            st.audio(audio)
+        c1, c2 = st.columns([0.2, 0.8])
+        with c1:
+            if st.button("Back"):
+                st.session_state.step = "landing"
+        with c2:
+            if audio and st.button("Continue ➝ License"):
+                st.session_state.audio_file = audio
+                st.session_state.audio_path = _save_temp(audio, ".audio")
+                st.session_state.step = "license"
+
+elif st.session_state.step == "license":
+    with st.container(border=True):
+        st.subheader("Upload license key")
+        st.caption("Accepted: txt, json, key, lic")
+        keyf = st.file_uploader(
+            "Choose a license key file",
+            type=["txt", "json", "key", "lic"],
+            key="lic_upl",
+        )
+        c1, c2 = st.columns([0.2, 0.8])
+        with c1:
+            if st.button("Back"):
+                st.session_state.step = "audio"
+        with c2:
+            if keyf and st.button("Continue ➝ Explore"):
+                st.session_state.license_file = keyf
+                st.session_state.license_path = _save_temp(keyf, ".key")
+                st.session_state.step = "ready"
+
+elif st.session_state.step == "ready":
+    with st.container(border=True):
+        st.subheader("Ready to analyze")
+        st.caption("Summary of inputs")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.write("Audio path:", st.session_state.audio_path)
+        with c2:
+            st.write("License path:", st.session_state.license_path)
+        cc1, cc2 = st.columns([0.2, 0.8])
+        with cc1:
+            if st.button("Back"):
+                st.session_state.step = "license"
+        with cc2:
+            if st.button("Run analysis"):
+                st.session_state.step = "processing"
+
+elif st.session_state.step == "processing":
+    with st.spinner("Transcribing and analyzing…"):
+        try:
+            result = run_pipeline(
+                st.session_state.audio_path, st.session_state.license_path
+            )
+            # Flexible mapping to session state
+            st.session_state.transcription_path = Path(
+                result.get("transcription_path") or result.get("transcript_path", "")
+            ) if result.get("transcription_path") or result.get("transcript_path") else None
+            st.session_state.analysis_path = Path(
+                result.get("analysis_path") or result.get("report_path", "")
+            ) if result.get("analysis_path") or result.get("report_path") else None
+            st.session_state.transcription_raw = result.get("transcription_raw") or result.get("transcript_raw")
+            st.session_state.analysis_raw = result.get("analysis_raw") or result.get("report_raw")
+            # Gentle delay for UX continuity
+            time.sleep(0.6)
+            st.session_state.step = "result"
+        except Exception as e:
+            st.error(f"Processing failed: {e}")
+            st.session_state.step = "ready"
+
+elif st.session_state.step == "result":
+    st.subheader("Results")
+    with st.container(border=True):
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### Transcription")
+            if st.session_state.transcription_raw:
+                if isinstance(st.session_state.transcription_raw, (list, dict)):
+                    st.json(st.session_state.transcription_raw)
+                else:
+                    st.write(st.session_state.transcription_raw)
+            if st.session_state.transcription_path and Path(st.session_state.transcription_path).exists():
+                with open(st.session_state.transcription_path, "rb") as f:
+                    st.download_button(
+                        "Download transcript",
+                        f,
+                        file_name=Path(st.session_state.transcription_path).name,
+                        mime="application/json",
+                    )
+        with c2:
+            st.markdown("#### Analysis")
+            if st.session_state.analysis_raw:
+                if isinstance(st.session_state.analysis_raw, (list, dict)):
+                    st.json(st.session_state.analysis_raw)
+                else:
+                    st.write(st.session_state.analysis_raw)
+            if st.session_state.analysis_path and Path(st.session_state.analysis_path).exists():
+                with open(st.session_state.analysis_path, "rb") as f:
+                    st.download_button(
+                        "Download analysis",
+                        f,
+                        file_name=Path(st.session_state.analysis_path).name,
+                        mime="application/json",
+                    )
+    cc1, cc2 = st.columns([0.2, 0.8])
+    with cc1:
+        if st.button("Back"):
+            st.session_state.step = "ready"
+    with cc2:
+        if st.button("Start over"):
+            for k in list(st.session_state.keys()):
+                del st.session_state[k]
+            _init_state()
+            st.session_state.step = "landing"
