@@ -3,7 +3,7 @@ import time
 import tempfile
 from pathlib import Path
 import streamlit as st
-from dummy_processor import run_pipeline
+from dummy_processor import runpipeline
 
 # Set page config with wide layout
 st.set_page_config(
