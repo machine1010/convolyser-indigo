@@ -128,7 +128,7 @@ elif st.session_state["step"] == "processing":
         st.session_state["analysisraw"] = "Analysis results: Good call quality."
         time.sleep(0.5)
         st.session_state["step"] = "result"
-        st.experimental_rerun()
+        st.rerun()
 elif st.session_state["step"] == "result":
     st.subheader("Transcription Output")
     st.text(st.session_state.get("transcriptionraw",'No output or unable to read file'))
