@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 
 import streamlit as st
-from dummy_processor import run_pipeline
+from dummy_processor_actual_prompt import run_pipeline
 
 st.set_page_config(
     page_title="YBrantWorks • Conversation Intelligence",
@@ -13,13 +13,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-THEME_PRIMARY = "#dc2626"
-APP_CSS = """
-<style>
-/* ... CSS code unchanged ... */
-</style>
-"""
-st.markdown(APP_CSS, unsafe_allow_html=True)
+# ... [keep your CSS + helper code unchanged] ...
 
 def _init_state():
     for k, v in {
@@ -28,12 +22,13 @@ def _init_state():
         "license_file": None,
         "audio_path": None,
         "license_path": None,
-        "result_obj": None,
-        "result_raw": None,
+        "transcription_path": None,
+        "analysis_path": None,
+        "transcription_raw": None,
+        "analysis_raw": None,
     }.items():
         if k not in st.session_state:
             st.session_state[k] = v
-
 _init_state()
 
 def _save_temp(uploaded_file, suffix: str) -> Path:
@@ -43,6 +38,22 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.flush()
     tmp.close()
     return Path(tmp.name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def _stepper():
     stages = ["landing", "audio", "license", "ready", "processing", "result"]
@@ -132,26 +143,58 @@ elif st.session_state.step == "ready":
 
 elif st.session_state.step == "processing":
     with st.spinner("Running analysis…"):
-        result_path = run_pipeline(
-            audio_path=Path(st.session_state.audio_path),
-            license_path=Path(st.session_state.license_path),
-        )
+        # Returns file paths and content objects
         try:
-            st.session_state.result_raw = Path(result_path).read_text()
-        except Exception:
-            st.session_state.result_raw = "Failed to read output file."
+            t_path, a_path, t_content, a_content = run_pipeline(
+                audio_path=Path(st.session_state.audio_path),
+                license_path=Path(st.session_state.license_path),
+            )
+            st.session_state.transcription_path = t_path
+            st.session_state.analysis_path = a_path
+            # Read raw file content (do not parse, just read as text)
+            try:
+                st.session_state.transcription_raw = Path(t_path).read_text(encoding="utf-8")
+            except Exception:
+                st.session_state.transcription_raw = "(Failed to read transcription file)"
+            try:
+                st.session_state.analysis_raw = Path(a_path).read_text(encoding="utf-8")
+            except Exception:
+                st.session_state.analysis_raw = "(Failed to read analysis file)"
+        except Exception as e:
+            st.session_state.transcription_raw = f"Pipeline failed:\n{e}"
+            st.session_state.analysis_raw = ""
         time.sleep(0.3)
     st.session_state.step = "result"
     st.rerun()
 
 elif st.session_state.step == "result":
     with st.container(border=True):
-        st.subheader("Result")
-        # Show contents exactly as in the file, do NOT parse as JSON
-        st.text(st.session_state.result_raw)
+        st.subheader("Transcription Output File Content:")
+        st.text(st.session_state.transcription_raw or "(No output or unable to read file)")
         st.download_button(
-            "Download Output",
-            data=st.session_state.result_raw,
-            file_name="result.txt",
+            "Download Transcription Output",
+            data=st.session_state.transcription_raw or "",
+            file_name="transcription_output.txt",
             mime="text/plain",
         )
+        st.subheader("Analysis Output File Content:")
+        st.text(st.session_state.analysis_raw or "(No output or unable to read file)")
+        st.download_button(
+            "Download Analysis Output",
+            data=st.session_state.analysis_raw or "",
+            file_name="analysis_output.txt",
+            mime="text/plain",
+        )
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Run again"):
+                for k in [
+                    "step","audio_file","license_file","audio_path","license_path",
+                    "transcription_path","analysis_path","transcription_raw","analysis_raw"
+                ]:
+                    if k in st.session_state:
+                        del st.session_state[k]
+                _init_state()
+        with c2:
+            if st.button("Exit"):
+                st.stop()
