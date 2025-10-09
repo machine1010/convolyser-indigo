@@ -152,7 +152,7 @@ elif st.session_state["step"] == "result":
             for k in ["step","audiofile","licensefile","transcriptionraw","analysisraw"]:
                 if k in st.session_state: del st.session_state[k]
             st.session_state["step"] = "landing"
-            st.experimental_rerun()
+            st.rerun()
     with col2:
         if st.button("Exit"):
             st.stop()
@@ -165,5 +165,5 @@ if st.session_state["step"] == "landing":
         gs = st.button("Get started", key="real-get-started")
     if gs:
         st.session_state["step"] = "audio"
-        st.experimental_rerun()
+        st.rerun()
 
