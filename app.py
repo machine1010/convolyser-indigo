@@ -248,7 +248,7 @@ elif st.session_state.step == "processing":
             st.session_state.result_obj = {"error": "Failed to read JSON."}
         time.sleep(0.3)
     st.session_state.step = "result"
-    st.experimental_rerun()
+    st.rerun()
 
 elif st.session_state.step == "result":
     with st.container(border=True):
