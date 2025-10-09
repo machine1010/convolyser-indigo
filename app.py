@@ -6,105 +6,50 @@ from pathlib import Path
 import streamlit as st
 from dummy_processor import run_pipeline
 
-# ------ Violet Theme & CSS ------
-VIOLET_GRADIENT = """
+# ----- Violet Theme CSS -----
+st.markdown("""
 <style>
 body, .stApp {
     background: linear-gradient(180deg, #6C3DD6 0%, #08001A 100%);
-    color: #f2f2ff;
+    color: #ece6fa;
     min-height: 100vh;
 }
-.stApp {
-    font-family: 'Inter', Arial, sans-serif;
-}
-
-/* Red boxes for steps */
+.stApp { font-family: 'Inter', Arial, sans-serif;}
 .step-box {
-    background: linear-gradient(99deg,#dc2626 70%,rgba(30,0,40,0.9) 100%);
+    background: linear-gradient(93deg,#dc2626 65%,#6c3dd620 100%);
     border-radius: 18px;
-    padding: 1.5rem 1.25rem;
-    margin-bottom: 1rem;
+    padding: 1.3rem 1.1rem;
     color: #fff;
-    font-size: 1.1rem;
-    box-shadow: 0 2px 14px 0 rgba(201,70,89,0.12);
+    font-size: 1.05rem;
+    box-shadow: 0 2px 14px 0 rgba(140,40,89,0.15);
     border: 2px solid #b91c1c;
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
 }
-.step-symbol {
-    font-size: 2rem;
-    margin-right: 0.75em;
-    min-width: 2.5em;
-    text-align: center;
-}
-.step-separator {
-    margin: 0 0.8rem;
-    font-size: 2rem;
-    color: #ffffffb0;
-}
+.step-symbol { font-size:2em; margin-right:0.6em;}
+.step-separator { margin: 0 0.7em; font-size:1.6em; color:#fff8;}
 .get-started-row {
-    position: fixed;
-    left: 32px; bottom: 18px; z-index: 100;
+    position:fixed; left:32px; bottom:24px; z-index:100;
 }
 .slider-container {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 46vw;
-    min-width: 350px;
-    max-width: 720px;
-    height: 480px;
-    z-index: 10;
-    border-radius: 1.6rem;
-    overflow: hidden;
-    background: rgba(90,22,168,0.3);
-    box-shadow: 0 0 60px 0 rgba(67,24,115,0.22);
+    position:absolute; top:62px; right:3vw; width:44vw; min-width:290px; max-width:540px;
+    height:340px; z-index:10; border-radius:1.5rem; overflow:hidden;
+    background:rgba(90,22,168,0.14); box-shadow:0 0 60px 0 rgba(67,24,115,0.12);
 }
 .slider-img {
-    object-fit: cover;
-    width: 100%; height: 100%;
-    border-radius: 1.6rem;
-    transition: all 0.5s;
-    box-shadow: 0 10px 40px 0 rgba(96,44,176,0.13);
+    object-fit:cover; width:100%; height:100%; border-radius:1.4rem; transition:all 0.6s;
 }
-.header-bar {
-    display: flex; align-items: center;
-    padding: 2rem 2rem 1.2rem 2rem;
-}
-.brand-logo {
-    height: 52px;
-    border-radius: 14px;
-    margin-right: 16px;
-}
-.header-title {
-    font-weight: 700;
-    font-size: 2.2rem;
-    letter-spacing: 1px;
-    color: #f6f0fd;
-    margin-bottom: 0.3rem;
-    margin-top: 0.9rem;
-}
-.header-caption {
-    font-size: 1.1rem;
-    color: #e2cfff;
-    opacity: 0.85;
-    font-weight: 400;
-    margin-bottom: 1.6rem;
-}
-/* Hide Streamlit default UI chrome */
+.header-bar { display:flex;align-items:center; padding:2rem 1.7rem 0.8rem 2rem;}
+.brand-logo { height:48px; border-radius:10px; margin-right:16px;}
+.header-title { font-weight:700; font-size:2.18rem; letter-spacing:1px; color:#f6f0fd; margin-bottom:0.1rem;}
+.header-caption { font-size:1.03rem; color:#d9ccf1; opacity:0.85; font-weight:400; margin-bottom:1.3rem;}
 header, .stToolbar, .stStatusWidget, .stDecoration {display:none !important;}
 </style>
-"""
-st.markdown(VIOLET_GRADIENT, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-# ------ Demo slider images ------
-SLIDER_IMAGES = [
-    "slider1.jpg", # place your actual image paths here
-    "slider2.jpg",
-    "slider3.jpg"
-]
+# ----- Slider Images and JS -----
+SLIDER_IMAGES = ["slider1.jpg","slider2.jpg","slider3.jpg"]
 
-def render_slider(img_list, interval=4):
+def render_slider(img_list, interval=3):
     import streamlit.components.v1 as components
     slider_html = """
     <div id="slider" class='slider-container'>
@@ -116,14 +61,14 @@ def render_slider(img_list, interval=4):
     function showImg() {
       let slideimg = document.getElementById('slideimg');
       if (slideimg) slideimg.src = imgs[idx];
-      idx = (idx+1) %% imgs.length;
+      idx = (idx + 1) %% imgs.length;
     }
     setInterval(showImg, %d*1000);
     </script>
     """ % (img_list[0], json.dumps(img_list), interval)
-    components.html(slider_html, height=480)
+    components.html(slider_html, height=340)
 
-# ------ Page state ------
+# ----- Session State -----
 def _init_state():
     for k, v in {
         "step": "landing",
@@ -147,36 +92,33 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.flush(); tmp.close()
     return Path(tmp.name)
 
-# ------ Render main page ------
-# Header with logo and title
-st.markdown("<div class='header-bar'>"
+# ----- Header -----
+st.markdown(
+    "<div class='header-bar'>"
     "<img src='https://ybrantworks.com/logo-dark.png' class='brand-logo'/>"
     "<div><div class='header-title'>ConvoCheck Intelligence</div>"
     "<div class='header-caption'>Verify Every Voice, Unlock Every Insight</div></div></div>",
     unsafe_allow_html=True
 )
-
-# Place slider visually on right
 render_slider(SLIDER_IMAGES)
 
-# Steps/symbols box row
+# ----- Steps -----
 steps = [
     ("audio","📤","Upload audio"),
     ("license","🔑","Add Access key"),
     ("ready","📊","Explore Insight"),
     ("result","🎯","Result")
 ]
-
 step_boxes = ""
-for i, (_key, _icon, _label) in enumerate(steps):
-    step_boxes += f"<div class='step-box'><span class='step-symbol'>{_icon}</span>{_label}</div>"
-    if i < len(steps) - 1:
+for i, (_, icon, label) in enumerate(steps):
+    step_boxes += f"<div class='step-box'><span class='step-symbol'>{icon}</span>{label}</div>"
+    if i < len(steps)-1:
         step_boxes += "<span class='step-separator'>&#x276D;</span>"
-st.markdown(f"<div style='display:flex;flex-wrap:wrap;align-items:center;margin-bottom:14px'>{step_boxes}</div>", unsafe_allow_html=True)
+st.markdown(f"<div style='display:flex;flex-wrap:wrap;align-items:center;margin-bottom:14px;'>{step_boxes}</div>", unsafe_allow_html=True)
 
-# ------ Step UI ------
+# ----- Step UI -----
 if st.session_state.step == "landing":
-    st.markdown('<div class="step-box" style="margin-top:28px;">Welcome &mdash; click “Get started” to begin.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="step-box" style="margin-top:24px;">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)
 
 elif st.session_state.step == "audio":
     st.markdown('<div class="step-box"><span class="step-symbol">📤</span>Upload conversation audio</div>', unsafe_allow_html=True)
@@ -266,15 +208,15 @@ elif st.session_state.step == "result":
         if st.button("Exit"):
             st.stop()
 
-# ------ Get started button bottom left ------
+# Get Started button
 st.markdown("""
 <div class='get-started-row'>
     <form>
         <button type="button" style="
         background: linear-gradient(95deg,#dc2626,#b91c1c);
-        color:#fff;font-size:1.3em;font-weight:700;
-        padding:0.7em 2.1em;border-radius:1.5em;
-        box-shadow:0 8px 22px 0 rgba(140,40,89,0.22);
+        color:#fff;font-size:1.2em;font-weight:700;
+        padding:0.7em 2em;border-radius:1.2em;
+        box-shadow:0 10px 24px 0 rgba(140,40,89,0.20);
         border:none;
         " onclick="window.location.replace('?step=audio')">Get Started</button>
     </form>
