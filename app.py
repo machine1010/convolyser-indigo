@@ -2,108 +2,143 @@ import json
 import time
 import tempfile
 from pathlib import Path
-
 import streamlit as st
-from dummy_processor import run_pipeline
+from dummyprocessor import runpipeline
 
+# Set page config with wide layout
 st.set_page_config(
-    page_title="YBrantWorks • Conversation Intelligence",
-    page_icon="🎧",
+    page_title="BrantWorks Conversation Intelligence",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-# ... [keep your CSS + helper code unchanged] ...
+# Inject custom CSS for gradient background with lines and reposition Get Started button
+st.markdown(
+    """
+    <style>
+    /* Background gradient with diagonal lines */
+    body {
+        background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+        background-size: 200% 200%;
+        animation: gradientBG 15s ease infinite;
+        position: relative;
+        overflow-x: hidden;
+    }
+    @keyframes gradientBG {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
+    /* Diagonal lines overlay */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        background-image:
+            repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 20px),
+            repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 20px);
+        z-index: -1;
+    }
 
-def _init_state():
-    for k, v in {
-        "step": "landing",
-        "audio_file": None,
-        "license_file": None,
-        "audio_path": None,
-        "license_path": None,
-        "transcription_path": None,
-        "analysis_path": None,
-        "transcription_raw": None,
-        "analysis_raw": None,
-    }.items():
+    /* Move Get Started button container to bottom left */
+    .cta-row {
+        display: flex !important;
+        justify-content: flex-start !important; /* align left */
+        align-items: flex-end !important; /* align bottom */
+        height: 100px; /* fixed height container */
+        position: relative;
+        padding-left: 20px;
+    }
+
+    /* Optionally, add margin-top to push button down if inside container */
+    .cta-row > button:first-child {
+        margin-top: auto !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Initialize session state defaults if not present
+def initstate():
+    defaults = dict(
+        step="landing",
+        audiofile=None,
+        licensefile=None,
+        audiopath=None,
+        licensepath=None,
+        transcriptionpath=None,
+        analysispath=None,
+        transcriptionraw=None,
+        analysisraw=None,
+    )
+    for k, v in defaults.items():
         if k not in st.session_state:
             st.session_state[k] = v
-_init_state()
 
-def _save_temp(uploaded_file, suffix: str) -> Path:
-    ext = Path(uploaded_file.name).suffix or suffix
+
+initstate()
+
+
+def savetempuploadedfile(uploadedfile, suffix: str = ""):
+    from pathlib import Path
+
+    ext = Path(uploadedfile.name).suffix or suffix
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
-    tmp.write(uploaded_file.getvalue())
+    tmp.write(uploadedfile.getvalue())
     tmp.flush()
     tmp.close()
     return Path(tmp.name)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def _stepper():
-    stages = ["landing", "audio", "license", "ready", "processing", "result"]
-    labels = ["Upload audio", "License key", "Explore", "Result"]
+def stepper(stages):
+    labels = {
+        "landing": "Upload audio",
+        "audio": "License key",
+        "license": "Explore",
+        "ready": "Result",
+    }
     try:
-        idx = max(1, min(4, stages.index(st.session_state.step)))
+        idx = max(0, min(len(stages) - 1, stages.index(st.session_state.step)))
     except ValueError:
-        idx = 1
+        idx = 0
     chips = []
-    for i, lbl in enumerate(labels, 1):
-        cls = "step active" if i <= idx else "step"
-        chips.append(f'<div class="{cls}">{i}. {lbl}</div>')
-    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)
+    for i, lbl in enumerate(labels.values()):
+        cls = "step active" if i == idx else "step"
+        chips.append(f'<div class="{cls}">{lbl}</div>')
+    st.markdown(
+        f'<div class="stepper">{"".join(chips)}</div>',
+        unsafe_allow_html=True,
+    )
 
-col_logo, col_cta = st.columns([0.7, 0.3])
-with col_logo:
-    st.markdown('<div class="navbar">', unsafe_allow_html=True)
-    left, right = st.columns([0.8, 0.2])
-    with left:
-        st.markdown('<div class="brand">', unsafe_allow_html=True)
+
+with st.container():
+    collogo, colcta = st.columns([0.7, 0.3])
+    with collogo:
         st.image("assets/logo.png", use_container_width=False)
-        st.markdown("</div>", unsafe_allow_html=True)
-    with right:
-        st.image("assets/icon.png", use_container_width=False)
-    st.markdown("</div>", unsafe_allow_html=True)
+    with colcta:
+        # "Get started" button is moved to bottom left by CSS above
+        if st.session_state.step == "landing":
+            if st.button("Get started", type="primary"):
+                st.session_state.step = "audio"
 
-with col_logo:
-    st.markdown('<div class="hero">', unsafe_allow_html=True)
-    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)
-    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("---")
 
-with col_cta:
-    st.markdown('<div class="cta-row">', unsafe_allow_html=True)
-    if st.session_state.step == "landing":
-        if st.button("Get started", type="primary"):
-            st.session_state.step = "audio"
-    st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("<hr style='border-color:rgba(255,255,255,0.08)'>", unsafe_allow_html=True)
-_stepper()
+stepper(["landing", "audio", "license", "ready", "processing", "result"])
 
 if st.session_state.step == "landing":
-    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="card">Welcome, click Get started to begin.</div>', unsafe_allow_html=True)
 
 elif st.session_state.step == "audio":
-    with st.container(border=True):
+    with st.container():
         st.subheader("Upload conversation audio")
         st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
-        audio = st.file_uploader("Choose an audio file", type=["wav","mp3","m4a","aac","flac","ogg"], key="audio_upl")
+        audio = st.file_uploader("Choose an audio file", type=["wav", "mp3", "m4a", "aac", "flac", "ogg"], key="audioupl")
         if audio:
             st.audio(audio)
         c1, c2 = st.columns([0.2, 0.8])
@@ -111,90 +146,86 @@ elif st.session_state.step == "audio":
             if st.button("Back"):
                 st.session_state.step = "landing"
         with c2:
-            if audio and st.button("Continue ➝ License"):
-                st.session_state.audio_file = audio
-                st.session_state.audio_path = _save_temp(audio, ".audio")
+            if audio and st.button("Continue License"):
+                st.session_state.audiofile = audio
+                st.session_state.audiopath = savetempuploadedfile(audio, ".audio")
                 st.session_state.step = "license"
 
 elif st.session_state.step == "license":
-    with st.container(border=True):
+    with st.container():
         st.subheader("Upload license key")
         st.caption("Accepted: txt, json, key, lic")
-        keyf = st.file_uploader("Choose a license key file", type=["txt","json","key","lic"], key="lic_upl")
+        keyf = st.file_uploader("Choose a license key file", type=["txt", "json", "key", "lic"], key="keylicupl")
         c1, c2 = st.columns([0.2, 0.8])
         with c1:
             if st.button("Back"):
                 st.session_state.step = "audio"
         with c2:
-            if keyf and st.button("Continue ➝ Explore"):
-                st.session_state.license_file = keyf
-                st.session_state.license_path = _save_temp(keyf, ".lic")
+            if keyf and st.button("Continue Explore"):
+                st.session_state.licensefile = keyf
+                st.session_state.licensepath = savetempuploadedfile(keyf, ".lic")
                 st.session_state.step = "ready"
 
 elif st.session_state.step == "ready":
-    with st.container(border=True):
+    with st.container():
         st.subheader("Review")
-        st.write({
-            "audio": getattr(st.session_state.audio_file, "name", None),
-            "license": getattr(st.session_state.license_file, "name", None),
-        })
+        st.write("Audio file:", getattr(st.session_state.audiofile, "name", None))
+        st.write("License file:", getattr(st.session_state.licensefile, "name", None))
         if st.button("Explore", type="primary"):
             st.session_state.step = "processing"
 
 elif st.session_state.step == "processing":
-    with st.spinner("Running analysis…"):
-        # Returns file paths and content objects
+    with st.spinner("Running analysis..."):
         try:
-            t_path, a_path, t_content, a_content = run_pipeline(
-                audio_path=Path(st.session_state.audio_path),
-                license_path=Path(st.session_state.license_path),
+            tpath, apath, tcontent, acontent = runpipeline(
+                audiopath=Path(st.session_state.audiopath), licensepath=Path(st.session_state.licensepath)
             )
-            st.session_state.transcription_path = t_path
-            st.session_state.analysis_path = a_path
-            # Read raw file content (do not parse, just read as text)
-            try:
-                st.session_state.transcription_raw = Path(t_path).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.transcription_raw = "(Failed to read transcription file)"
-            try:
-                st.session_state.analysis_raw = Path(a_path).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.analysis_raw = "(Failed to read analysis file)"
+            st.session_state.transcriptionpath = tpath
+            st.session_state.analysispath = apath
+            st.session_state.transcriptionraw = Path(tpath).read_text(encoding="utf-8")
+            st.session_state.analysisraw = Path(apath).read_text(encoding="utf-8")
         except Exception as e:
-            st.session_state.transcription_raw = f"Pipeline failed:\n{e}"
-            st.session_state.analysis_raw = ""
+            st.session_state.transcriptionraw = f"Pipeline failed: {e}"
+            st.session_state.analysisraw = None
         time.sleep(0.3)
-    st.session_state.step = "result"
-    st.rerun()
+        st.session_state.step = "result"
+        st.experimental_rerun()
 
 elif st.session_state.step == "result":
-    with st.container(border=True):
-        st.subheader("Transcription Output File Content:")
-        st.text(st.session_state.transcription_raw or "(No output or unable to read file)")
+    with st.container():
+        st.subheader("Transcription Output File Content")
+        st.text(st.session_state.transcriptionraw or "No output or unable to read file")
         st.download_button(
             "Download Transcription Output",
-            data=st.session_state.transcription_raw or "",
-            file_name="transcription_output.txt",
+            data=st.session_state.transcriptionraw or "",
+            file_name="transcriptionoutput.txt",
             mime="text/plain",
         )
-        st.subheader("Analysis Output File Content:")
-        st.text(st.session_state.analysis_raw or "(No output or unable to read file)")
+        st.subheader("Analysis Output File Content")
+        st.text(st.session_state.analysisraw or "No output or unable to read file")
         st.download_button(
             "Download Analysis Output",
-            data=st.session_state.analysis_raw or "",
-            file_name="analysis_output.txt",
+            data=st.session_state.analysisraw or "",
+            file_name="analysisoutput.txt",
             mime="text/plain",
         )
         c1, c2 = st.columns(2)
         with c1:
             if st.button("Run again"):
                 for k in [
-                    "step","audio_file","license_file","audio_path","license_path",
-                    "transcription_path","analysis_path","transcription_raw","analysis_raw"
+                    "step",
+                    "audiofile",
+                    "licensefile",
+                    "audiopath",
+                    "licensepath",
+                    "transcriptionpath",
+                    "analysispath",
+                    "transcriptionraw",
+                    "analysisraw",
                 ]:
                     if k in st.session_state:
                         del st.session_state[k]
-                _init_state()
+                initstate()
         with c2:
             if st.button("Exit"):
                 st.stop()
