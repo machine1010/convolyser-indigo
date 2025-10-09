@@ -15,7 +15,7 @@ st.set_page_config(
     page_icon="🎧",
     layout="wide",
     initial_sidebar_state="collapsed",
-)  # [web:36]
+)
 
 # ---------------------------------------------------------
 # Theming helpers and CSS
@@ -113,7 +113,7 @@ APP_CSS = f"""
 .small-muted {{ color:#e5e7eb; opacity:0.7; font-size:0.9rem; }}
 </style>
 """
-st.markdown(APP_CSS, unsafe_allow_html=True)  # [web:37]
+st.markdown(APP_CSS, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
 # Session state
@@ -130,14 +130,16 @@ def _init_state():
         if k not in st.session_state:
             st.session_state[k] = v
 
-_init_state()  # [web:36]
+_init_state()
 
 def _save_temp(uploaded_file, suffix: str) -> Path:
     ext = Path(uploaded_file.name).suffix or suffix
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
     tmp.write(uploaded_file.getvalue())
-    tmp.flush(); tmp.close()
-    return Path(tmp.name)  # [web:2]
+    tmp.flush()
+    tmp.close()
+    return Path(tmp.name)
+
 def _stepper():
     # The proper stages in order:
     stages = ["landing", "audio", "license", "ready", "processing", "result"]
@@ -160,45 +162,45 @@ def _stepper():
 # ---------------------------------------------------------
 col_logo, col_cta = st.columns([0.7, 0.3])
 with col_logo:
-    st.markdown('<div class="navbar">', unsafe_allow_html=True)  # [web:37]
+    st.markdown('<div class="navbar">', unsafe_allow_html=True)
     left, right = st.columns([0.8, 0.2])
     with left:
-        st.markdown('<div class="brand">', unsafe_allow_html=True)  # [web:37]
-        st.image("assets/logo.png", use_container_width=False)  # [attached_image:2]
-        st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+        st.markdown('<div class="brand">', unsafe_allow_html=True)
+        st.image("assets/logo.png", use_container_width=False)
+        st.markdown("</div>", unsafe_allow_html=True)
     with right:
-        st.image("assets/icon.png", use_container_width=False)  # [attached_image:1]
-    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+        st.image("assets/icon.png", use_container_width=False)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with col_logo:
-    st.markdown('<div class="hero">', unsafe_allow_html=True)  # [web:37]
-    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)  # [attached_file:3]
-    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)  # [web:22]
-    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+    st.markdown('<div class="hero">', unsafe_allow_html=True)
+    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)
+    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with col_cta:
-    st.markdown('<div class="cta-row">', unsafe_allow_html=True)  # [web:37]
+    st.markdown('<div class="cta-row">', unsafe_allow_html=True)
     if st.session_state.step == "landing":
         if st.button("Get started", type="primary"):
             st.session_state.step = "audio"
-    st.markdown("</div>", unsafe_allow_html=True)  # [web:37]
+    st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown("<hr style='border-color:rgba(255,255,255,0.08)'>", unsafe_allow_html=True)  # [web:37]
-_stepper()  # [web:37]
+st.markdown("<hr style='border-color:rgba(255,255,255,0.08)'>", unsafe_allow_html=True)
+_stepper()
 
 # ---------------------------------------------------------
 # Flow
 # ---------------------------------------------------------
 if st.session_state.step == "landing":
-    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)  # [web:37]
+    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)
 
 elif st.session_state.step == "audio":
     with st.container(border=True):
         st.subheader("Upload conversation audio")
         st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
-        audio = st.file_uploader("Choose an audio file", type=["wav","mp3","m4a","aac","flac","ogg"], key="audio_upl")  # [web:2]
+        audio = st.file_uploader("Choose an audio file", type=["wav","mp3","m4a","aac","flac","ogg"], key="audio_upl")
         if audio:
-            st.audio(audio)  # [web:2]
+            st.audio(audio)
         c1, c2 = st.columns([0.2, 0.8])
         with c1:
             if st.button("Back"):
@@ -206,14 +208,14 @@ elif st.session_state.step == "audio":
         with c2:
             if audio and st.button("Continue ➝ License"):
                 st.session_state.audio_file = audio
-                st.session_state.audio_path = _save_temp(audio, ".audio")  # [web:2]
+                st.session_state.audio_path = _save_temp(audio, ".audio")
                 st.session_state.step = "license"
 
 elif st.session_state.step == "license":
     with st.container(border=True):
         st.subheader("Upload license key")
         st.caption("Accepted: txt, json, key, lic")
-        keyf = st.file_uploader("Choose a license key file", type=["txt","json","key","lic"], key="lic_upl")  # [web:2]
+        keyf = st.file_uploader("Choose a license key file", type=["txt","json","key","lic"], key="lic_upl")
         c1, c2 = st.columns([0.2, 0.8])
         with c1:
             if st.button("Back"):
@@ -221,7 +223,7 @@ elif st.session_state.step == "license":
         with c2:
             if keyf and st.button("Continue ➝ Explore"):
                 st.session_state.license_file = keyf
-                st.session_state.license_path = _save_temp(keyf, ".lic")  # [web:2]
+                st.session_state.license_path = _save_temp(keyf, ".lic")
                 st.session_state.step = "ready"
 
 elif st.session_state.step == "ready":
@@ -230,7 +232,7 @@ elif st.session_state.step == "ready":
         st.write({
             "audio": getattr(st.session_state.audio_file, "name", None),
             "license": getattr(st.session_state.license_file, "name", None),
-        })  # [web:36]
+        })
         if st.button("Explore", type="primary"):
             st.session_state.step = "processing"
 
@@ -239,31 +241,33 @@ elif st.session_state.step == "processing":
         result_path = run_pipeline(
             audio_path=Path(st.session_state.audio_path),
             license_path=Path(st.session_state.license_path),
-        )  # [web:36]
+        )
         try:
             st.session_state.result_obj = json.loads(Path(result_path).read_text())
         except Exception:
             st.session_state.result_obj = {"error": "Failed to read JSON."}
-        time.sleep(0.3)  # [web:36]
+        time.sleep(0.3)
     st.session_state.step = "result"
-    st.rerun()  # [web:36]
+    st.experimental_rerun()
 
 elif st.session_state.step == "result":
     with st.container(border=True):
         st.subheader("Result")
-        st.json(st.session_state.result_obj, expanded=2)  # [web:36]
+        # Show raw JSON text without formatting
+        st.text(json.dumps(st.session_state.result_obj))
         st.download_button(
             "Download JSON",
             data=json.dumps(st.session_state.result_obj, indent=2),
             file_name="result.json",
             mime="application/json",
-        )  # [web:36]
+        )
         c1, c2 = st.columns(2)
         with c1:
             if st.button("Run again"):
                 for k in ["step","audio_file","license_file","audio_path","license_path","result_obj"]:
-                    if k in st.session_state: del st.session_state[k]
+                    if k in st.session_state:
+                        del st.session_state[k]
                 _init_state()
         with c2:
             if st.button("Exit"):
-                st.stop()  # [web:36]
+                st.stop()
