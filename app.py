@@ -158,16 +158,12 @@ elif st.session_state["step"] == "result":
             st.stop()
 
 # --- Fixed Bottom-Left CTA ---
+# --- Fixed Bottom-Left CTA ---
 if st.session_state["step"] == "landing":
-    st.markdown("""
-        <div class='cta-fix'>
-            <form action="" method="post"><button class="cta-btn" type="submit" name="action" value="start">Get started</button></form>
-        </div>
-        <script>
-        const btn = document.querySelector("button[name='action']")
-        if(btn){ btn.onclick = ()=>{ window.parent.postMessage({streamlitSetComponentValue: {step:'audio'}}, "*"); }; }
-        </script>
-    """, unsafe_allow_html=True)
-    if st.button("Get started", key="real-get-started"):
+    col1, col2, _ = st.columns([1, 8, 4])
+    with col1:
+        gs = st.button("Get started", key="real-get-started")
+    if gs:
         st.session_state["step"] = "audio"
         st.experimental_rerun()
+
