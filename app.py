@@ -1,9 +1,11 @@
 import json
 import time
 import tempfile
+import base64
 from pathlib import Path
 
 import streamlit as st
+from streamlit.components.v1 import html
 from dummy_processor import run_pipeline
 
 # ---------------------------------------------------------------------
@@ -37,19 +39,16 @@ def _inject_theme():
           --card-border:#ffffff22;
           --card-hover:#ffffff1a;
         }
-        /* App background */
         .stApp {
           background:
             radial-gradient(1200px 600px at 50% -10%, var(--bg-2) 0%, var(--bg-1) 35%, var(--bg-0) 80%) fixed,
             linear-gradient(180deg, #000000, #000000) fixed;
           color: var(--text-0);
         }
-        /* Starfield and grid overlays */
         .stApp::before, .stApp::after{
           content:"";
           position:fixed; inset:0; pointer-events:none; z-index:0;
         }
-        /* Grid */
         .stApp::before{
           background:
             linear-gradient(transparent 31px, #ffffff12 32px),
@@ -57,7 +56,6 @@ def _inject_theme():
           background-size:32px 32px;
           mix-blend-mode:screen; opacity:0.25;
         }
-        /* Stars */
         .stApp::after{
           background:
             radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 52%),
@@ -72,12 +70,10 @@ def _inject_theme():
           50%{opacity:0.45}
         }
 
-        /* Typography */
         h1,h2,h3,h4,h5,h6 { color: var(--text-0) !important; }
         p, span, label, small, .markdown-text-container { color: var(--text-1) !important; }
         .small-muted { color: var(--muted); font-size:0.95rem; }
 
-        /* Buttons */
         .stButton>button {
           background: linear-gradient(90deg, var(--accent-0), var(--accent-1));
           color:#fff; border:1px solid #ffffff22;
@@ -89,7 +85,6 @@ def _inject_theme():
           box-shadow:0 10px 28px #b266ff40;
         }
 
-        /* Inputs */
         .stTextInput > div > div > input,
         .stFileUploader > div {
           background: #ffffff0d; color:var(--text-0);
@@ -97,7 +92,6 @@ def _inject_theme():
           border-radius:0.6rem;
         }
 
-        /* Cards and containers */
         .block-container { padding-top: 2rem; z-index:1; position:relative; }
         .card {
           background: var(--card);
@@ -108,13 +102,11 @@ def _inject_theme():
         }
         .card:hover { background: var(--card-hover); }
 
-        /* Navbar, hero, CTA */
         .navbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 0.5rem; }
         .brand { display:flex; align-items:center; gap:.6rem; }
         .hero h1 { font-size: 3rem; line-height: 1.1; margin: .2rem 0 .6rem 0; }
         .cta-row { display:flex; gap:.6rem; justify-content:flex-end; align-items:center; }
 
-        /* Stepper */
         .stepper { display:flex; gap:.5rem; margin: .2rem 0 1rem 0; flex-wrap:wrap; }
         .step {
           background:#ffffff10; border:1px solid #ffffff22; color:var(--text-1);
@@ -122,8 +114,34 @@ def _inject_theme():
         }
         .step.active { background:linear-gradient(90deg, #6d33ff66, #b266ff44); color:#fff; border-color:#b266ff77; }
 
-        /* Horizontal rule */
         hr { border-color: #ffffff18; }
+
+        /* Carousel widget base styles */
+        .cw {
+          width:100%;
+          border-radius:1rem;
+          overflow:hidden;
+          border:1px solid var(--card-border);
+          background: var(--card);
+          box-shadow: 0 8px 28px #00000040;
+        }
+        .cw .frame {
+          position:relative; width:100%; height:260px;
+          background: radial-gradient(600px 260px at 50% 0%, #4a1b8c33, transparent);
+        }
+        .cw .frame img {
+          position:absolute; inset:0; width:100%; height:100%;
+          object-fit:cover; transition: opacity .6s ease; opacity:0;
+        }
+        .cw .dots {
+          position:absolute; bottom:10px; left:0; right:0;
+          display:flex; gap:6px; justify-content:center; z-index:3;
+        }
+        .cw .dot {
+          width:8px; height:8px; border-radius:999px;
+          background:#ffffff66; border:1px solid #ffffffaa;
+        }
+        .cw .dot.active { background:#ffffff; }
         </style>
         """,
         unsafe_allow_html=True,
@@ -162,6 +180,63 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.close()
     return Path(tmp.name)
 
+def _img_mime(path: Path) -> str:
+    ext = path.suffix.lower()
+    if ext in [".jpg", ".jpeg"]:
+        return "image/jpeg"
+    if ext in [".png"]:
+        return "image/png"
+    if ext in [".gif"]:
+        return "image/gif"
+    return "image/png"
+
+def _b64_image(path: Path) -> str:
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+def _render_carousel(image_paths, height: int = 260):
+    imgs = []
+    for p in image_paths:
+        pth = Path(p)
+        if pth.exists():
+            mime = _img_mime(pth)
+            b64 = _b64_image(pth)
+            imgs.append(f'data:{mime};base64,{b64}')
+    if not imgs:
+        return  # nothing to render
+    # Build HTML
+    dots = "".join([f'<div class="dot" data-i="{i}"></div>' for i in range(len(imgs))])
+    tags = "".join([f'<img src="{src}" />' for src in imgs])
+    html(
+        f"""
+        <div class="cw">
+          <div class="frame" style="height:{height}px">
+            {tags}
+            <div class="dots">{dots}</div>
+          </div>
+        </div>
+        <script>
+          (function(){{
+            const root = window.frameElement?.parentElement || document;
+            const scope = root.querySelectorAll('.cw').item(-1) || root;
+            const imgs = scope.querySelectorAll('.frame img');
+            const dots = scope.querySelectorAll('.dot');
+            let i = 0;
+            function show(n){{
+              imgs.forEach((im,ix)=> im.style.opacity = (ix===n?1:0));
+              dots.forEach((d,ix)=> d.classList.toggle('active', ix===n));
+            }}
+            show(0);
+            let timer = setInterval(()=>{{ i = (i+1)%imgs.length; show(i); }}, 2800);
+            dots.forEach((d,ix)=>{{
+              d.addEventListener('click',()=>{{ i=ix; show(i); clearInterval(timer); timer=setInterval(()=>{{ i=(i+1)%imgs.length; show(i); }}, 2800); }});
+            }});
+          }})();
+        </script>
+        """,
+        height=height + 16,
+    )
+
 def _stepper():
     stages = ["landing", "audio", "license", "ready", "processing", "result"]
     labels = ["Upload audio", "License key", "Explore", "Result"]
@@ -185,7 +260,6 @@ with col_logo:
     left, right = st.columns([0.8, 0.2])
     with left:
         st.markdown('<div class="brand">', unsafe_allow_html=True)
-        # Optional branding assets (safe if missing)
         try:
             st.image("assets/logo.png", use_container_width=False)
         except Exception:
@@ -213,6 +287,14 @@ with col_cta:
         if st.button("Get started", type="primary"):
             st.session_state.step = "audio"
     st.markdown("</div>", unsafe_allow_html=True)
+
+    # Right-side carousel under CTA
+    carousel_images = [
+        "assets/carousel_1.jpg",
+        "assets/carousel_2.jpg",
+        "assets/carousel_3.jpg",
+    ]
+    _render_carousel(carousel_images, height=260)
 
 st.markdown("<hr>", unsafe_allow_html=True)
 _stepper()
@@ -286,7 +368,6 @@ elif st.session_state.step == "processing":
             result = run_pipeline(
                 st.session_state.audio_path, st.session_state.license_path
             )
-            # Flexible mapping to session state
             st.session_state.transcription_path = Path(
                 result.get("transcription_path") or result.get("transcript_path", "")
             ) if result.get("transcription_path") or result.get("transcript_path") else None
@@ -295,7 +376,6 @@ elif st.session_state.step == "processing":
             ) if result.get("analysis_path") or result.get("report_path") else None
             st.session_state.transcription_raw = result.get("transcription_raw") or result.get("transcript_raw")
             st.session_state.analysis_raw = result.get("analysis_raw") or result.get("report_raw")
-            # Gentle delay for UX continuity
             time.sleep(0.6)
             st.session_state.step = "result"
         except Exception as e:
