@@ -16,10 +16,10 @@ class HindiAudioAnalysisPipeline:
         self.model = genai.GenerativeModel("gemini-2.5-pro")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         self.transcription_prompt = '''
-(Paste your full transcription prompt here.)
+extract the basic info
         '''
         self.analysis_prompt = '''
-(Paste your full analysis prompt here.)
+summarise it
         '''
 
     def _load_audio_to_base64(self, file_path: str) -> str:
