@@ -158,7 +158,7 @@ elif st.session_state.step == "ready":
 elif st.session_state.step == "processing":
     with st.spinner("Running analysis..."):
         try:
-            tpath, apath, tcontent, acontent = runpipeline(
+            tpath, apath, tcontent, acontent = run_pipeline(
                 audiopath=Path(st.session_state.audiopath),
                 licensepath=Path(st.session_state.licensepath),
                 transcriptionpath=st.session_state.transcriptionpath,
