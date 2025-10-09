@@ -2,79 +2,138 @@ import json
 import time
 import tempfile
 from pathlib import Path
+
 import streamlit as st
 from dummy_processor import run_pipeline
 
+# ---------------------------------------------------------------------
+# Page setup
+# ---------------------------------------------------------------------
 st.set_page_config(
-    page_title="YBrantWorks Conversation Intelligence",
-    page_icon="🧠",
+    page_title="YBrantWorks • Conversation Intelligence",
+    page_icon="🎧",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background: linear-gradient(180deg, #4B0082 0%, #000000 100%);
-        color: white;
-        min-height: 100vh;
-        font-family: "Montserrat", "Roboto", sans-serif;
-    }
-    /* Adjust default text color for visibility */
-    .css-1d391kg, .css-1v0mbdj, .css-1aumxhk, .css-1frv0r7, h1, h2, h3, h4, h5, h6, p, span, label {
-        color: white !important;
-    }
-    .hero h1 {
-        font-size: 3.5rem;
-        font-weight: 700;
-        margin-bottom: 0.4em;
-    }
-    .hero p {
-        font-size: 1.2rem;
-        opacity: 0.90;
-        margin-bottom: 1.4em;
-    }
-    div.stButton > button {
-        background: linear-gradient(90deg, #A020F0 0%, #4B0082 100%);
-        color: white;
-        font-weight: 600;
-        padding: 0.65em 1.7em;
-        border-radius: 40px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        width: 180px;
-    }
-    div.stButton > button:hover {
-        background: linear-gradient(90deg, #4B0082 0%, #A020F0 100%);
-        color: white;
-    }
-    .bottom-left-button {
-        position: fixed;
-        bottom: 36px;
-        left: 36px;
-        z-index: 100;
-    }
-    .main-content {
-        margin-bottom: 80px;
-        margin-top: 32px;
-    }
-    .card {
-        background: rgba(255,255,255,0.08);
-        border-radius: 10px;
-        padding: 1.2em 2em;
-        margin-bottom: 1.7em;
-        box-shadow: 0 2px 18px 0 rgba(80,20,150,0.13);
-    }
-    hr {
-        border-color: rgba(255,255,255,0.07);
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# ---------------------------------------------------------------------
+# Theme injection (Cosmic purple grid, starfield, glass cards)
+# ---------------------------------------------------------------------
+def _inject_theme():
+    st.markdown(
+        """
+        <style>
+        :root{
+          --bg-0:#0a0516;
+          --bg-1:#150a30;
+          --bg-2:#2a0a52;
+          --bg-3:#4a1b8c;
+          --accent-0:#7a3cff;
+          --accent-1:#b266ff;
+          --text-0:#f5f2ff;
+          --text-1:#d8ccff;
+          --muted:#b9a9e6;
+          --card:#ffffff0f;
+          --card-border:#ffffff22;
+          --card-hover:#ffffff1a;
+        }
+        /* App background */
+        .stApp {
+          background:
+            radial-gradient(1200px 600px at 50% -10%, var(--bg-2) 0%, var(--bg-1) 35%, var(--bg-0) 80%) fixed,
+            linear-gradient(180deg, #000000, #000000) fixed;
+          color: var(--text-0);
+        }
+        /* Starfield and grid overlays */
+        .stApp::before, .stApp::after{
+          content:"";
+          position:fixed; inset:0; pointer-events:none; z-index:0;
+        }
+        /* Grid */
+        .stApp::before{
+          background:
+            linear-gradient(transparent 31px, #ffffff12 32px),
+            linear-gradient(90deg, transparent 31px, #ffffff12 32px);
+          background-size:32px 32px;
+          mix-blend-mode:screen; opacity:0.25;
+        }
+        /* Stars */
+        .stApp::after{
+          background:
+            radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent 52%),
+            radial-gradient(2px 2px at 70% 60%, #fff 50%, transparent 52%),
+            radial-gradient(1.5px 1.5px at 40% 80%, #fff 50%, transparent 52%),
+            radial-gradient(1.5px 1.5px at 85% 20%, #fff 50%, transparent 52%);
+          opacity:0.35; filter:drop-shadow(0 0 6px #a884ff88);
+          animation: twinkle 6s linear infinite;
+        }
+        @keyframes twinkle {
+          0%,100%{opacity:0.25}
+          50%{opacity:0.45}
+        }
 
+        /* Typography */
+        h1,h2,h3,h4,h5,h6 { color: var(--text-0) !important; }
+        p, span, label, small, .markdown-text-container { color: var(--text-1) !important; }
+        .small-muted { color: var(--muted); font-size:0.95rem; }
+
+        /* Buttons */
+        .stButton>button {
+          background: linear-gradient(90deg, var(--accent-0), var(--accent-1));
+          color:#fff; border:1px solid #ffffff22;
+          padding:0.6rem 1rem; border-radius:0.7rem;
+          font-weight:600; box-shadow:0 6px 24px #7a3cff33;
+        }
+        .stButton>button:hover {
+          transform: translateY(-1px);
+          box-shadow:0 10px 28px #b266ff40;
+        }
+
+        /* Inputs */
+        .stTextInput > div > div > input,
+        .stFileUploader > div {
+          background: #ffffff0d; color:var(--text-0);
+          border:1px solid var(--card-border);
+          border-radius:0.6rem;
+        }
+
+        /* Cards and containers */
+        .block-container { padding-top: 2rem; z-index:1; position:relative; }
+        .card {
+          background: var(--card);
+          border:1px solid var(--card-border);
+          border-radius: 1rem;
+          padding: 1rem 1.2rem;
+          transition: background .2s ease;
+        }
+        .card:hover { background: var(--card-hover); }
+
+        /* Navbar, hero, CTA */
+        .navbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 0.5rem; }
+        .brand { display:flex; align-items:center; gap:.6rem; }
+        .hero h1 { font-size: 3rem; line-height: 1.1; margin: .2rem 0 .6rem 0; }
+        .cta-row { display:flex; gap:.6rem; justify-content:flex-end; align-items:center; }
+
+        /* Stepper */
+        .stepper { display:flex; gap:.5rem; margin: .2rem 0 1rem 0; flex-wrap:wrap; }
+        .step {
+          background:#ffffff10; border:1px solid #ffffff22; color:var(--text-1);
+          padding:.35rem .6rem; border-radius:.6rem; font-size:.9rem;
+        }
+        .step.active { background:linear-gradient(90deg, #6d33ff66, #b266ff44); color:#fff; border-color:#b266ff77; }
+
+        /* Horizontal rule */
+        hr { border-color: #ffffff18; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+_inject_theme()
+
+# ---------------------------------------------------------------------
+# Session state
+# ---------------------------------------------------------------------
 def _init_state():
     for k, v in {
         "step": "landing",
@@ -89,143 +148,76 @@ def _init_state():
     }.items():
         if k not in st.session_state:
             st.session_state[k] = v
+
 _init_state()
 
-def save_temp_uploaded_file(uploadedfile, suffix=""):
-    ext = Path(uploadedfile.name).suffix or suffix
+# ---------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------
+def _save_temp(uploaded_file, suffix: str) -> Path:
+    ext = Path(uploaded_file.name).suffix or suffix
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
-    tmp.write(uploadedfile.getvalue())
+    tmp.write(uploaded_file.getvalue())
     tmp.flush()
     tmp.close()
     return Path(tmp.name)
 
-st.markdown('<div class="main-content">', unsafe_allow_html=True)
+def _stepper():
+    stages = ["landing", "audio", "license", "ready", "processing", "result"]
+    labels = ["Upload audio", "License key", "Explore", "Result"]
+    try:
+        idx = max(1, min(4, stages.index(st.session_state.step)))
+    except ValueError:
+        idx = 1
+    chips = []
+    for i, lbl in enumerate(labels, 1):
+        cls = "step active" if i <= idx else "step"
+        chips.append(f'<div class="{cls}">{i}. {lbl}</div>')
+    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)
 
-if st.session_state.step == "landing":
+# ---------------------------------------------------------------------
+# Navbar + Hero
+# ---------------------------------------------------------------------
+col_logo, col_cta = st.columns([0.7, 0.3])
+
+with col_logo:
+    st.markdown('<div class="navbar">', unsafe_allow_html=True)
+    left, right = st.columns([0.8, 0.2])
+    with left:
+        st.markdown('<div class="brand">', unsafe_allow_html=True)
+        # Optional branding assets (safe if missing)
+        try:
+            st.image("assets/logo.png", use_container_width=False)
+        except Exception:
+            st.markdown("YBrantWorks", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with right:
+        try:
+            st.image("assets/icon.png", use_container_width=False)
+        except Exception:
+            pass
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with col_logo:
+    st.markdown('<div class="hero">', unsafe_allow_html=True)
+    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)
     st.markdown(
-        """
-        <div class="hero">
-            <h1>Try It Free. Scale When You're Ready.</h1>
-            <p>Get started without limits. Explore Conversation Intelligence. Upgrade only when your insights grow too big to ignore.</p>
-        </div>
-        <div class="card">
-            <h3>Let's Connect and Grow Smarter</h3>
-            <p>Have questions or want to see how our platform can help? Just fill out the form—we'll get back to you soon.</p>
-        </div>
-        """,
+        '<p class="small-muted">Upload a call, apply a license, then explore real‑time outputs — now on a cosmic purple theme.</p>',
         unsafe_allow_html=True,
     )
-elif st.session_state.step == "audio":
-    st.subheader("Upload conversation audio")
-    st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg audio")
-    audio = st.file_uploader("Choose an audio file", type=["wav", "mp3", "m4a", "aac", "flac", "ogg"], key="audioupl")
-    if audio:
-        st.audio(audio)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    c1, c2 = st.columns([0.2, 0.8])
-    with c1:
-        if st.button("Back"):
-            st.session_state.step = "landing"
-    with c2:
-        if audio and st.button("Continue License"):
-            st.session_state.audiofile = audio
-            st.session_state.audiopath = save_temp_uploaded_file(audio, ".audio")
-            st.session_state.step = "license"
-
-elif st.session_state.step == "license":
-    st.subheader("Upload license key")
-    st.caption("Accepted: txt, json, key, lic files")
-    keyf = st.file_uploader("Choose a license key file", type=["txt", "json", "key", "lic"], key="keylicupl")
-    c1, c2 = st.columns([0.2, 0.8])
-    with c1:
-        if st.button("Back"):
+with col_cta:
+    st.markdown('<div class="cta-row">', unsafe_allow_html=True)
+    if st.session_state.step == "landing":
+        if st.button("Get started", type="primary"):
             st.session_state.step = "audio"
-    with c2:
-        if keyf and st.button("Continue Explore"):
-            st.session_state.licensefile = keyf
-            st.session_state.licensepath = save_temp_uploaded_file(keyf, ".lic")
-            st.session_state.step = "ready"
+    st.markdown("</div>", unsafe_allow_html=True)
 
-elif st.session_state.step == "ready":
-    st.subheader("Review & Confirm")
-    st.write("Audio file:", getattr(st.session_state.audiofile, "name", None))
-    st.write("License file:", getattr(st.session_state.licensefile, "name", None))
-    if st.button("Explore"):
-        st.session_state.step = "processing"
+st.markdown("<hr>", unsafe_allow_html=True)
+_stepper()
 
-elif st.session_state.step == "processing":
-    with st.spinner("Running analysis..."):
-        try:
-            tpath, apath, tcontent, acontent = run_pipeline(
-                audiopath=Path(st.session_state.audiopath),
-                licensepath=Path(st.session_state.licensepath),
-                transcriptionpath=st.session_state.transcriptionpath,
-                analysispath=st.session_state.analysispath,
-            )
-            st.session_state.transcriptionpath = tpath
-            st.session_state.analysispath = apath
-            try:
-                st.session_state.transcriptionraw = Path(tpath).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.transcriptionraw = "Failed to read transcription file"
-            try:
-                st.session_state.analysisraw = Path(apath).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.analysisraw = "Failed to read analysis file"
-        except Exception as e:
-            st.session_state.transcriptionraw = f"Pipeline failed: {e}"
-            st.session_state.analysisraw = ""
-            time.sleep(0.3)
-
-        st.session_state.step = "result"
-        st.rerun()
-
-elif st.session_state.step == "result":
-    st.subheader("Transcription Output File Content")
-    st.text(st.session_state.transcriptionraw or "No output or unable to read file")
-    st.download_button(
-        "Download Transcription Output",
-        data=st.session_state.transcriptionraw or "",
-        file_name="transcriptionoutput.txt",
-        mime="text/plain",
-    )
-    st.subheader("Analysis Output File Content")
-    st.text(st.session_state.analysisraw or "No output or unable to read file")
-    st.download_button(
-        "Download Analysis Output",
-        data=st.session_state.analysisraw or "",
-        file_name="analysisoutput.txt",
-        mime="text/plain",
-    )
-    c1, c2 = st.columns(2)
-    with c1:
-        if st.button("Run again"):
-            for k in [
-                "step",
-                "audiofile",
-                "licensefile",
-                "audiopath",
-                "licensepath",
-                "transcriptionpath",
-                "analysispath",
-                "transcriptionraw",
-                "analysisraw",
-            ]:
-                if k in st.session_state:
-                    del st.session_state[k]
-            init_state()
-    with c2:
-        if st.button("Exit"):
-            st.stop()
-
-st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="bottom-left-button">
-""", unsafe_allow_html=True)
-
-if st.session_state.step == "landing":
-    if st.button("Get started", key="bottom_get_started"):
-        st.session_state.step = "audio"
-
-st.markdown("</div>", unsafe_allow_html=True)
+# ---------------------------------------------------------------------
+# Flow screens
+# ---------------------------------------------------------------------
+if st.session
