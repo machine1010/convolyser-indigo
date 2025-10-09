@@ -57,7 +57,7 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
 
 def _stepper():
     stages = ["landing", "audio", "license", "ready", "processing", "result"]
-    labels = ["Upload audio", "License key", "Explore", "Result"]
+    labels = ["Upload audio", "Add Access key", "Explore Insight", "Result"]
     try:
         idx = max(1, min(4, stages.index(st.session_state.step)))
     except ValueError:
@@ -82,8 +82,8 @@ with col_logo:
 
 with col_logo:
     st.markdown('<div class="hero">', unsafe_allow_html=True)
-    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)
-    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
+    st.markdown("<h1> ConvoCheck Intelligence </h1>", unsafe_allow_html=True)
+    st.markdown('<p class="small-muted"> Verify Every Voice, Unlock Every Insight </p>', unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col_cta:
@@ -133,10 +133,10 @@ elif st.session_state.step == "license":
 
 elif st.session_state.step == "ready":
     with st.container(border=True):
-        st.subheader("Review")
+        st.subheader("Review your Inputs ")
         st.write({
-            "audio": getattr(st.session_state.audio_file, "name", None),
-            "license": getattr(st.session_state.license_file, "name", None),
+            "Input audio File ": getattr(st.session_state.audio_file, "name", None),
+            "Input Access Key ": getattr(st.session_state.license_file, "name", None),
         })
         if st.button("Explore", type="primary"):
             st.session_state.step = "processing"
