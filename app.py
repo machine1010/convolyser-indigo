@@ -3,7 +3,7 @@ import time
 import tempfile
 from pathlib import Path
 import streamlit as st
-from dummy_processor import runpipeline
+from dummy_processor import run_pipeline
 
 st.set_page_config(
     page_title="YBrantWorks Conversation Intelligence",
