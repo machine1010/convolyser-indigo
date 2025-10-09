@@ -254,7 +254,18 @@ elif st.session_state.step == "result":
     with st.container(border=True):
         st.subheader("Result")
         # Show raw JSON text without formatting
-        st.text(json.dumps(st.session_state.result_obj))
+
+
+        result = st.session_state.result_obj
+        if "error" in result:
+            st.error(result["error"])
+        else:
+            st.write("Job ID:", result.get("jobid"))
+            st.write("Status:", result.get("status"))
+            st.write("Summary:", result.get("summary"))
+            st.write("Insights:", result.get("insights"))
+            st.write("Metrics:", result.get("metrics"))
+
         st.download_button(
             "Download JSON",
             data=json.dumps(st.session_state.result_obj, indent=2),
