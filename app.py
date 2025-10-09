@@ -169,16 +169,14 @@ elif st.session_state.step == "processing":
 
 elif st.session_state.step == "result":
     with st.container(border=True):
-        st.subheader("Transcription Output File Content:")
-        st.text(st.session_state.transcription_raw or "(No output or unable to read file)")
+        st.subheader("Transcription Output File")
         st.download_button(
             "Download Transcription Output",
             data=st.session_state.transcription_raw or "",
             file_name="transcription_output.txt",
             mime="text/plain",
         )
-        st.subheader("Analysis Output File Content:")
-        st.text(st.session_state.analysis_raw or "(No output or unable to read file)")
+        st.subheader("Analysis Output File")
         st.download_button(
             "Download Analysis Output",
             data=st.session_state.analysis_raw or "",
