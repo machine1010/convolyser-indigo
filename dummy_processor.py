@@ -321,6 +321,14 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 def run_pipeline(audio_path: Path, license_path: Path):
     credentials_path = str(license_path)
     out_dir = tempfile.mkdtemp(prefix="hindi-audio-pipeline-")
+    
     pipeline = HindiAudioAnalysisPipeline(credentials_path=credentials_path)
     result = pipeline.process_audio(audio_file_path=str(audio_path), output_dir=out_dir)
-    return result['transcription_path'], result['analysis_path'], result['transcription'], result['analysis']
+    
+    # Return as dictionary with raw content (not parsed as JSON)
+    return {
+        'transcription_path': result['transcription_path'],
+        'analysis_path': result['analysis_path'],
+        'transcription_raw': result['transcription'],
+        'analysis_raw': result['analysis']
+    }
