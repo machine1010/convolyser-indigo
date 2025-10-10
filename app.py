@@ -267,12 +267,20 @@ def _stepper():
     )
 
 # ==================== LANDING PAGE ====================
+# Landing page - Add image at top left
 if st.session_state.step == "landing":
+    _stepper()
+    
+    # Add image at top left corner
+    col_logo, col_spacer = st.columns([1, 4])
+    with col_logo:
+        # Place your image file in the same directory as app.py
+        # Replace 'logo.png' with your image filename
+        st.image('logo.png', width=150)
+    
+    # Original hero section
     st.markdown('<h1 class="hero-title">🎧 Conversation Intelligence Platform</h1>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>',
-        unsafe_allow_html=True
-    )
+    st.markdown('<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -281,6 +289,7 @@ if st.session_state.step == "landing":
         if st.button("🚀 Get Started", use_container_width=True):
             st.session_state.step = "audio"
             st.rerun()
+
     
     # ==================== NEW SECTIONS ====================
     
