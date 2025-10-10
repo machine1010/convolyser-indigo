@@ -645,28 +645,30 @@ elif st.session_state.step == "processing":
     # Run the actual pipeline
     # Run the actual pipeline
     try:
-        transcription_file, analysis_file, final_file, transcription_content, analysis_content, final_content = run_pipeline(
-        str(st.session_state.audio_path),
-        str(st.session_state.json_path_1),
-        str(st.session_state.json_path_2)
-        )
+        transcription_file, analysis_file, final_file, transcription_content, final_content = run_pipeline(
+            str(st.session_state.audio_path),
+            str(st.session_state.json_path_1),
+            str(st.session_state.json_path_2)
+            )
     
         st.session_state.transcription_path = transcription_file
         st.session_state.analysis_path = analysis_file
     
-        # Load the results
-        with open(transcription_file, 'r', encoding='utf-8') as f:
-            st.session_state.transcription_raw = json.load(f)
+        # Load the results from the content returned
+        st.session_state.transcription_raw = transcription_content
+        st.session_state.analysis_raw = final_content  # Use final_content as it has the analysis
     
-        with open(analysis_file, 'r', encoding='utf-8') as f:
-            st.session_state.analysis_raw = json.load(f)
-
-        
+        st.success("✅ Processing complete!")
+        time.sleep(1)
+        st.session_state.step = "result"
+        st.rerun()
+    
     except Exception as e:
         st.error(f"❌ Processing failed: {str(e)}")
         if st.button("🔄 Try Again"):
             st.session_state.step = "ready"
             st.rerun()
+
 
 # ==================== RESULTS ====================
 elif st.session_state.step == "result":
