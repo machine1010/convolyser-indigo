@@ -7,50 +7,74 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
+
 class HindiAudioAnalysisPipeline:
-    def __init__(self, credentials_path: str, project_id: str = None, location: str = "us-central1"):
+    def __init__(self, credentials_path: str, json_config_1_path: str, json_config_2_path: str, 
+                 project_id: str = None, location: str = "us-central1"):
+        """
+        Initialize the pipeline with credentials and two JSON configuration files
+        
+        Args:
+            credentials_path: Path to Google Cloud credentials JSON file
+            json_config_1_path: Path to first JSON configuration file
+            json_config_2_path: Path to second JSON configuration file
+            project_id: Google Cloud project ID
+            location: Google Cloud location
+        """
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentials_path
         self.project_id = project_id if project_id else str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
         self.location = location
+        
+        # Initialize Vertex AI
         vertexai.init(project=self.project_id, location=self.location)
         self.model = genai.GenerativeModel("gemini-2.0-flash-lite-001")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
+        
+        # Load JSON configuration files
+        self.json_config_1 = self._load_json_file(json_config_1_path)
+        self.json_config_2 = self._load_json_file(json_config_2_path)
+        
         self.transcription_prompt = '''
 This is a Hindi language conversation happens between a caller from the govt organisation and a tribal people . U need to pay close attention to the conversation and generate the transcript of it . Also make sure to do the speaker diarization. Donot pay much attention to the background noise and try not to include it in the transcript. Output it in the below mentioned json format .
+
 If a speaker cannot be identified, label them as "Unknown."
-Context about the caller and conversation - The conversation is all about the a speaker  asking  citizens about to whom they want to see as their next cheif minister and to whom they want to see as their next local leader. The speaker will give them multiple options of leader name as well as their party and the citizen have to choose between them. It is just for information purpose and not for actual casting of vote. The speaker may ask the vidhansabha constituency details and the mobile number and the religion of the citizen .The speaker may ask question about wheather they are satisfied by the work of the current leader or chief minister etc. and take opinion of the people.
+
+Context about the caller and conversation - The conversation is all about the a speaker asking citizens about to whom they want to see as their next cheif minister and to whom they want to see as their next local leader. The speaker will give them multiple options of leader name as well as their party and the citizen have to choose between them. It is just for information purpose and not for actual casting of vote. The speaker may ask the vidhansabha constituency details and the mobile number and the religion of the citizen .The speaker may ask question about wheather they are satisfied by the work of the current leader or chief minister etc. and take opinion of the people.
+
 OUTPUT THE EXACT NUMBER OF SPEAKER.DONOT BIASED BY THE CONTEXT. ANALYSE THE AUDIO PROPERLY .
+
 Provide the output in the following JSON structure:
+
 {
   "Call Details": {
-    "Number of Speakers": "<total_number_of_speakers>",
+    "Number of Speakers": "",
     "Transcript": [
       {
-        "Speaker": "<Speaker>",
+        "Speaker": "",
         "Timestamp": {
-          "Start": "<start_time>",
-          "End": "<end_time>"
+          "Start": "",
+          "End": ""
         },
-        "Voice": "<extracted_text_from_audio>"
+        "Voice": ""
       },
       {
-        "Speaker": "<Speaker>",
+        "Speaker": "",
         "Timestamp": {
-          "Start": "<start_time>",
-          "End": "<end_time>"
+          "Start": "",
+          "End": ""
         },
-        "Voice": "<extracted_text_from_audio>"
+        "Voice": ""
       },
       ...
     ]
   }
 }
-        '''
+'''
+
         self.analysis_prompt = '''
 You are an expert analyst tasked with extracting specific information from Hindi language audio call transcripts. Your job is to carefully analyze the provided transcript and extract answers to predefined survey questions.
 
 ## CRITICAL INSTRUCTIONS:
-
 1. **READ THE ENTIRE TRANSCRIPT CAREFULLY** before answering any question
 2. **EXTRACT ANSWERS ONLY FROM THE TRANSCRIPT** - Do not make assumptions or infer answers
 3. **MATCH ANSWERS TO PROVIDED OPTIONS** - You must select from the given options only
@@ -192,7 +216,6 @@ You are an expert analyst tasked with extracting specific information from Hindi
 ---
 
 ## ANALYSIS GUIDELINES:
-
 1. **For Questions 1-14**: Select EXACTLY ONE option from the provided list that best matches the respondent's answer
 2. **For Question 15-17**: Extract the exact information (block name, village/panchayat name, mobile number) as mentioned in the transcript
 3. **Contextual Understanding**: Understand variations in Hindi responses. For example:
@@ -203,7 +226,6 @@ You are an expert analyst tasked with extracting specific information from Hindi
 5. **Question 9.1**: Only answer this if the respondent answered "नहीं" to Question 9
 
 ## OUTPUT FORMAT:
-
 Return your analysis in the following JSON structure:
 
 {
@@ -234,7 +256,6 @@ Return your analysis in the following JSON structure:
 }
 
 ## IMPORTANT REMINDERS:
-
 - **DO NOT TRANSLATE** the options - keep them in Hindi as provided
 - **DO NOT INVENT** answers - only extract from the transcript. U can do a bit assumption by taking word from the transcript but DONOT GUESS COMPLETELY.
 - **ENSURE VALID JSON** - proper formatting with quotes and commas
@@ -242,23 +263,32 @@ Return your analysis in the following JSON structure:
 - **EXACT OPTION MATCH** - use the exact text of the option as provided above
 
 Now, please analyze the given Hindi transcript and provide the extracted information in the specified JSON format:
-        '''
+'''
+
+    def _load_json_file(self, file_path: str) -> dict:
+        """Load JSON file and return as dictionary"""
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
 
     def _load_audio_to_base64(self, file_path: str) -> str:
+        """Convert audio file to base64 encoding"""
         with open(file_path, "rb") as audio_file:
             return base64.b64encode(audio_file.read()).decode("utf-8")
 
     def _load_json_to_base64(self, file_path: str) -> str:
+        """Convert JSON file to base64 encoding"""
         with open(file_path, "rb") as json_file:
             return base64.standard_b64encode(json_file.read()).decode("utf-8")
 
     def _clean_json_output(self, content: str) -> str:
+        """Clean JSON output by removing markdown code blocks"""
         lines = content.splitlines(keepends=True)
         if len(lines) >= 2:
             lines = lines[1:-1]
         return ''.join(lines)
 
     def _save_output(self, content: str, output_path: str, clean: bool = True) -> None:
+        """Save content to file"""
         if clean:
             content = self._clean_json_output(content)
         with open(output_path, "w", encoding="utf-8") as f:
@@ -272,55 +302,118 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
         analysis_filename: str = "hindi_analysis_output.json",
         audio_mime_type: str = "audio/m4a"
     ) -> dict:
+        """
+        Process audio file with transcription and analysis using the two JSON configs
+        
+        Args:
+            audio_file_path: Path to the audio file
+            output_dir: Directory to save output files
+            transcription_filename: Name for transcription output file
+            analysis_filename: Name for analysis output file
+            audio_mime_type: MIME type of the audio file
+            
+        Returns:
+            Dictionary containing paths and content of transcription and analysis
+        """
+        # Create output directory
         os.makedirs(output_dir, exist_ok=True)
+        
         transcription_path = os.path.join(output_dir, transcription_filename)
         analysis_path = os.path.join(output_dir, analysis_filename)
-
+        
+        # Load audio as base64
         audio_base64 = self._load_audio_to_base64(audio_file_path)
+        
+        # Perform transcription
         contents_transcription = [
             {'mime_type': audio_mime_type, 'data': audio_base64},
             self.transcription_prompt
         ]
+        
         transcription_response = self.model.generate_content(
             contents_transcription,
             generation_config=self.generation_config
         )
+        
+        # Save transcription
         self._save_output(transcription_response.text, transcription_path, clean=True)
-
+        
+        # Load transcription for analysis
         transcript_base64 = self._load_json_to_base64(transcription_path)
+        
+        # Perform analysis
         contents_analysis = [
             {'mime_type': 'text/plain', 'data': transcript_base64},
             self.analysis_prompt
         ]
+        
         analysis_response = self.model.generate_content(
             contents_analysis,
             generation_config=self.generation_config
         )
+        
+        # Save analysis
         self._save_output(analysis_response.text, analysis_path, clean=True)
-
+        
+        # Load results
         try:
             with open(transcription_path, 'r', encoding='utf-8') as f:
                 transcription_content = json.loads(f.read())
         except json.JSONDecodeError:
             with open(transcription_path, 'r', encoding='utf-8') as f:
                 transcription_content = f.read()
+        
         try:
             with open(analysis_path, 'r', encoding='utf-8') as f:
                 analysis_content = json.loads(f.read())
         except json.JSONDecodeError:
             with open(analysis_path, 'r', encoding='utf-8') as f:
                 analysis_content = f.read()
-
+        
         return {
             'transcription_path': transcription_path,
             'analysis_path': analysis_path,
             'transcription': transcription_content,
-            'analysis': analysis_content
+            'analysis': analysis_content,
+            'json_config_1': self.json_config_1,
+            'json_config_2': self.json_config_2
         }
 
-def run_pipeline(audio_path: Path, license_path: Path):
-    credentials_path = str(license_path)
+
+def run_pipeline(audio_path: Path, json_path_1: Path, json_path_2: Path):
+    """
+    Run the complete pipeline with audio file and two JSON configuration files
+    
+    Args:
+        audio_path: Path to audio file
+        json_path_1: Path to first JSON configuration file
+        json_path_2: Path to second JSON configuration file
+        
+    Returns:
+        Tuple of (transcription_path, analysis_path, transcription_content, analysis_content)
+    """
+    # The first JSON file is used as credentials (maintaining backward compatibility)
+    credentials_path = str(json_path_1)
+    
+    # Create output directory
     out_dir = tempfile.mkdtemp(prefix="hindi-audio-pipeline-")
-    pipeline = HindiAudioAnalysisPipeline(credentials_path=credentials_path)
-    result = pipeline.process_audio(audio_file_path=str(audio_path), output_dir=out_dir)
-    return result['transcription_path'], result['analysis_path'], result['transcription'], result['analysis']
+    
+    # Initialize pipeline with all three files
+    pipeline = HindiAudioAnalysisPipeline(
+        credentials_path=credentials_path,
+        json_config_1_path=str(json_path_1),
+        json_config_2_path=str(json_path_2)
+    )
+    
+    # Process audio
+    result = pipeline.process_audio(
+        audio_file_path=str(audio_path),
+        output_dir=out_dir
+    )
+    
+    return (
+        result['transcription_path'],
+        result['analysis_path'],
+        result['transcription'],
+        result['analysis']
+    )
