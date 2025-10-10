@@ -117,55 +117,105 @@ st.markdown("""
     
     .json-viewer {
         background: #1f2937;
+        border: 1px solid #374151;
         border-radius: 8px;
         padding: 20px;
+        max-height: 500px;
+        overflow-y: auto;
         font-family: 'Courier New', monospace;
         font-size: 14px;
-        max-height: 400px;
-        overflow-y: auto;
+        color: #d1fae5;
     }
     
-    .section-title {
-        font-size: 2rem;
-        font-weight: 600;
-        color: #dc2626;
-        margin-top: 40px;
-        margin-bottom: 20px;
+    .stepper-container {
         text-align: center;
+        padding: 30px 0;
+        margin-bottom: 30px;
     }
     
-    .why-section, .solution-section, .use-cases-section {
-        background: rgba(255, 255, 255, 0.05);
-        padding: 25px;
-        border-radius: 12px;
-        margin: 20px 0;
-        line-height: 1.8;
-        color: #e5e7eb;
-    }
-    
-    .use-case-item {
-        background: rgba(220, 38, 38, 0.1);
-        padding: 15px;
-        border-radius: 8px;
-        margin: 15px 0;
-        border-left: 3px solid #dc2626;
-    }
-    
-    .use-case-title {
+    /* New sections styling */
+    .section-title {
+        font-size: 1.8rem;
         font-weight: 600;
-        color: #ef4444;
-        margin-bottom: 8px;
+        color: #ffffff;
+        margin-top: 60px;
+        margin-bottom: 30px;
     }
     
-    .logo-container {
-        position: absolute;
-        top: 10px;
-        left: 20px;
-        z-index: 999;
+    .why-section {
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(29, 78, 216, 0.05) 100%);
+        border-left: 4px solid #3b82f6;
+        padding: 30px;
+        border-radius: 8px;
+        margin: 30px 0;
+        color: #d1d5db;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+    
+    .two-column-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        margin: 40px 0;
+    }
+    
+    .column-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 25px;
+    }
+    
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    
+    .benefit-icon {
+        color: #10b981;
+        font-size: 1.2rem;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+    
+    .benefit-text {
+        color: #e5e7eb;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    /* FAQ Styling */
+    .faq-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-top: 60px;
+        margin-bottom: 30px;
+    }
+    
+    .stExpander {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .stExpander:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(220, 38, 38, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .two-column-section {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
-
 
 def _init_state():
     """Initialize session state variables"""
@@ -185,9 +235,7 @@ def _init_state():
         if k not in st.session_state:
             st.session_state[k] = v
 
-
 _init_state()
-
 
 def _save_temp(uploaded_file, suffix: str) -> Path:
     """Save uploaded file to temporary location"""
@@ -198,43 +246,28 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.close()
     return Path(tmp.name)
 
-
 def _stepper():
     """Display progress stepper"""
     stages = ["landing", "audio", "json1", "json2", "ready", "processing", "result"]
     labels = ["Upload Audio", "JSON File 1", "JSON File 2", "Explore", "Result"]
+    
     try:
         idx = max(1, min(5, stages.index(st.session_state.step)))
     except ValueError:
         idx = 1
-
+    
     chips = []
     for i, lbl in enumerate(labels, 1):
         cls = "step active" if i <= idx else "step"
         chips.append(f'<span class="{cls}">{lbl}</span>')
-
+    
     st.markdown(
-        f'<div style="text-align: center; margin: 30px 0;">{"".join(chips)}</div>',
+        f'<div class="stepper-container">{"".join(chips)}</div>',
         unsafe_allow_html=True
     )
 
-
-# ==================== MAIN FLOW ====================
+# ==================== LANDING PAGE ====================
 if st.session_state.step == "landing":
-    # Add logo/image in top-left corner
-    logo_col, content_col = st.columns([1, 5])
-    with logo_col:
-        # Replace 'logo.png' with your actual image file path
-        # You can use st.image() with a local file or URL
-        try:
-            st.image("logo.png", width=150)
-        except:
-            # Fallback if image not found - displays a placeholder
-            st.markdown('<div class="logo-container">🎧</div>', unsafe_allow_html=True)
-    
-    with content_col:
-        st.markdown("")  # Empty space for alignment
-    
     st.markdown('<h1 class="hero-title">🎧 Conversation Intelligence Platform</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>',
@@ -259,361 +292,310 @@ if st.session_state.step == "landing":
         After recognizing the need for efficient audio conversation analysis in government and organizational surveys, we developed this platform to bridge the gap between raw audio data and actionable insights. This platform was created as an independent solution, performing direct audio transcription and intelligent analysis without relying on multiple third-party services. Our goal is to provide accurate, detailed, and structured insights from Hindi language conversations, particularly for political surveys and citizen engagement initiatives.
     </div>
     """, unsafe_allow_html=True)
-    
-    # Section 2: Our Solution & Key Benefits
+        # Section 2: Our Solution & Key Benefits
     st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="solution-section">
-        <p><strong>🎯 What We Offer:</strong></p>
-        <ul style="line-height: 2;">
-            <li><strong>Direct Audio Transcription:</strong> Convert Hindi audio recordings into accurate text transcripts</li>
-            <li><strong>Intelligent Analysis:</strong> Extract meaningful insights, sentiment, and key themes from conversations</li>
-            <li><strong>Structured Output:</strong> Receive analysis in organized JSON format for easy integration</li>
-            <li><strong>Quality Scoring:</strong> Evaluate question quality and response accuracy automatically</li>
-            <li><strong>Survey Insights:</strong> Generate actionable data points for decision-making</li>
-        </ul>
-        
-        <p style="margin-top: 20px;"><strong>✨ Key Advantages:</strong></p>
-        <ul style="line-height: 2;">
-            <li>No dependency on multiple third-party services</li>
-            <li>Optimized for Hindi language processing</li>
-            <li>Designed specifically for political and social surveys</li>
-            <li>Real-time processing with visual progress tracking</li>
-            <li>Export-ready results in JSON format</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
     
-    # Section 3: Use Cases
-    st.markdown('<h2 class="section-title">Use Cases & Applications</h2>', unsafe_allow_html=True)
+    with col1:
+        st.markdown('<h3 class="column-title">Our Solution</h3>', unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Complete independence from third-party APIs and their limitations</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Direct audio processing for accurate and detailed transcription results</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Intelligent analysis system with context-aware question extraction</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Speaker diarization to identify and separate multiple speakers</div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="use-cases-section">
-        <div class="use-case-item">
-            <div class="use-case-title">🏛️ Political Campaigns & Surveys</div>
-            <div>Analyze voter feedback, understand public sentiment, and track campaign effectiveness through structured conversation analysis.</div>
-        </div>
+    with col2:
+        st.markdown('<h3 class="column-title">Key Benefits</h3>', unsafe_allow_html=True)
         
-        <div class="use-case-item">
-            <div class="use-case-title">🏢 Government Citizen Engagement</div>
-            <div>Process citizen feedback calls, complaints, and suggestions to improve public services and policy decisions.</div>
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Stable and reliable API without external dependencies</div>
         </div>
+        """, unsafe_allow_html=True)
         
-        <div class="use-case-item">
-            <div class="use-case-title">📊 Market Research</div>
-            <div>Convert customer interviews and focus group discussions into actionable insights for product development and marketing strategies.</div>
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Configurable JSON-based survey question templates</div>
         </div>
+        """, unsafe_allow_html=True)
         
-        <div class="use-case-item">
-            <div class="use-case-title">🎓 Academic Research</div>
-            <div>Transcribe and analyze qualitative research interviews for social science and behavioral studies.</div>
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Real-time processing with instant downloadable outputs</div>
         </div>
+        """, unsafe_allow_html=True)
         
-        <div class="use-case-item">
-            <div class="use-case-title">📞 Call Center Quality Assurance</div>
-            <div>Evaluate call quality, agent performance, and customer satisfaction through automated conversation analysis.</div>
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Support for Hindi language conversations with cultural context understanding</div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    st.markdown(
-        '<p style="text-align: center; color: #9ca3af; margin-top: 40px;">Built with ❤️ for meaningful conversations</p>',
-        unsafe_allow_html=True
-    )
+        """, unsafe_allow_html=True)
 
+    # Section 3: Frequently Asked Questions
+    st.markdown('<h2 class="faq-title">Frequently Asked Questions</h2>', unsafe_allow_html=True)
+    
+    with st.expander("How can organizations use this platform for survey analysis?"):
+        st.markdown("""
+        Organizations can upload audio recordings of telephone surveys or field interviews along with their custom JSON configuration files. 
+        The platform automatically transcribes the conversation, performs speaker diarization, and extracts specific answers to predefined survey questions. 
+        This significantly reduces manual data entry time and improves accuracy in capturing survey responses.
+        """)
+    
+    with st.expander("Can I customize the survey questions and analysis parameters?"):
+        st.markdown("""
+        Yes! The platform accepts two JSON configuration files that allow you to define custom survey questions, response options, and analysis parameters. 
+        This makes it highly flexible for different types of surveys, whether political, social, or organizational research. 
+        You can adapt the question sets to match your specific research needs.
+        """)
+    
+    with st.expander("Does the platform work for long-form conversations?"):
+        st.markdown("""
+        Absolutely. The platform is designed to handle conversations of varying lengths, from short 2-3 minute calls to extended interviews. 
+        The transcription engine accurately captures timestamps for each speaker segment, and the analysis module can process comprehensive conversations 
+        while extracting relevant information across the entire audio duration.
+        """)
+    
+    with st.expander("How accurate is the Hindi language transcription and analysis?"):
+        st.markdown("""
+        The platform uses advanced AI models specifically trained for Hindi language understanding, including various dialects and regional variations. 
+        It can handle conversational Hindi with high accuracy, including code-switching between Hindi and English. 
+        The analysis engine understands contextual meanings and can match responses to predefined options even when respondents use colloquial or varied phrasing.
+        """)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+# ==================== AUDIO UPLOAD ====================
 elif st.session_state.step == "audio":
     _stepper()
-    st.markdown('<h2 class="section-title">📁 Upload Audio File</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>ℹ️ Instructions:</strong><br>
-        Upload an audio file (MP3, WAV, M4A, or OGG format). This will be transcribed and analyzed.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">📁 Step 1: Upload Audio File</h2>', unsafe_allow_html=True)
+    st.markdown("Upload your audio file (supported formats: MP3, WAV, M4A, etc.)")
     
-    uploaded = st.file_uploader(
-        "Choose audio file",
-        type=["mp3", "wav", "m4a", "ogg"],
-        help="Supported formats: MP3, WAV, M4A, OGG"
+    audio_file = st.file_uploader(
+        "Choose an audio file",
+        type=["mp3", "wav", "m4a", "ogg", "flac"],
+        key="audio_uploader"
     )
     
-    if uploaded:
-        st.session_state.audio_file = uploaded
-        st.session_state.audio_path = _save_temp(uploaded, ".mp3")
-        st.success(f"✅ Uploaded: {uploaded.name}")
+    if audio_file:
+        st.session_state.audio_file = audio_file
+        st.success(f"✅ Audio file uploaded: {audio_file.name}")
         
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1, 1])
         with col1:
-            if st.button("⬅️ Back", use_container_width=True):
+            if st.button("⬅️ Back"):
                 st.session_state.step = "landing"
                 st.rerun()
         with col2:
             if st.button("Next ➡️", use_container_width=True):
+                st.session_state.audio_path = _save_temp(audio_file, ".m4a")
                 st.session_state.step = "json1"
                 st.rerun()
-    else:
-        if st.button("⬅️ Back to Home", use_container_width=False):
-            st.session_state.step = "landing"
-            st.rerun()
 
+# ==================== JSON FILE 1 UPLOAD ====================
 elif st.session_state.step == "json1":
     _stepper()
-    st.markdown('<h2 class="section-title">📄 Upload JSON Configuration 1</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>ℹ️ Instructions:</strong><br>
-        Upload the first JSON configuration file for transcription settings.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 2: Upload JSON File 1</h2>', unsafe_allow_html=True)
+    st.markdown("Upload the first JSON configuration file")
     
-    uploaded = st.file_uploader(
+    json_file_1 = st.file_uploader(
         "Choose first JSON file",
         type=["json"],
         key="json1_uploader"
     )
     
-    if uploaded:
-        st.session_state.json_file_1 = uploaded
-        st.session_state.json_path_1 = _save_temp(uploaded, ".json")
-        st.success(f"✅ Uploaded: {uploaded.name}")
+    if json_file_1:
+        st.session_state.json_file_1 = json_file_1
+        st.success(f"✅ JSON File 1 uploaded: {json_file_1.name}")
         
-        with st.expander("📋 Preview JSON Content"):
-            try:
-                content = json.loads(uploaded.getvalue().decode("utf-8"))
-                st.json(content)
-            except Exception as e:
-                st.error(f"Error reading JSON: {e}")
-        
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1, 1])
         with col1:
-            if st.button("⬅️ Back", use_container_width=True):
+            if st.button("⬅️ Back"):
                 st.session_state.step = "audio"
                 st.rerun()
         with col2:
             if st.button("Next ➡️", use_container_width=True):
+                st.session_state.json_path_1 = _save_temp(json_file_1, ".json")
                 st.session_state.step = "json2"
                 st.rerun()
-    else:
-        if st.button("⬅️ Back", use_container_width=False):
-            st.session_state.step = "audio"
-            st.rerun()
 
+# ==================== JSON FILE 2 UPLOAD ====================
 elif st.session_state.step == "json2":
     _stepper()
-    st.markdown('<h2 class="section-title">📄 Upload JSON Configuration 2</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>ℹ️ Instructions:</strong><br>
-        Upload the second JSON configuration file for analysis settings.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 3: Upload JSON File 2</h2>', unsafe_allow_html=True)
+    st.markdown("Upload the second JSON configuration file")
     
-    uploaded = st.file_uploader(
+    json_file_2 = st.file_uploader(
         "Choose second JSON file",
         type=["json"],
         key="json2_uploader"
     )
     
-    if uploaded:
-        st.session_state.json_file_2 = uploaded
-        st.session_state.json_path_2 = _save_temp(uploaded, ".json")
-        st.success(f"✅ Uploaded: {uploaded.name}")
+    if json_file_2:
+        st.session_state.json_file_2 = json_file_2
+        st.success(f"✅ JSON File 2 uploaded: {json_file_2.name}")
         
-        with st.expander("📋 Preview JSON Content"):
-            try:
-                content = json.loads(uploaded.getvalue().decode("utf-8"))
-                st.json(content)
-            except Exception as e:
-                st.error(f"Error reading JSON: {e}")
-        
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1, 1])
         with col1:
-            if st.button("⬅️ Back", use_container_width=True):
+            if st.button("⬅️ Back"):
                 st.session_state.step = "json1"
                 st.rerun()
         with col2:
-            if st.button("Next ➡️", use_container_width=True):
+            if st.button("Process All Files ➡️", use_container_width=True):
+                st.session_state.json_path_2 = _save_temp(json_file_2, ".json")
                 st.session_state.step = "ready"
                 st.rerun()
-    else:
-        if st.button("⬅️ Back", use_container_width=False):
-            st.session_state.step = "json1"
-            st.rerun()
 
+# ==================== READY TO PROCESS ====================
 elif st.session_state.step == "ready":
     _stepper()
-    st.markdown('<h2 class="section-title">🚀 Ready to Process</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>✅ All files uploaded successfully!</strong><br>
-        Review your uploads below and click "Start Processing" when ready.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">✅ Ready to Process</h2>', unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns(3)
+    st.markdown('<div class="info-card">', unsafe_allow_html=True)
+    st.markdown("**Files uploaded successfully:**")
+    st.markdown(f"- 🎵 Audio: {st.session_state.audio_file.name if st.session_state.audio_file else 'N/A'}")
+    st.markdown(f"- 📄 JSON File 1: {st.session_state.json_file_1.name if st.session_state.json_file_1 else 'N/A'}")
+    st.markdown(f"- 📄 JSON File 2: {st.session_state.json_file_2.name if st.session_state.json_file_2 else 'N/A'}")
+    st.markdown('</div>', unsafe_allow_html=True)
     
+    col1, col2 = st.columns([1, 1])
     with col1:
-        st.markdown("### 🎵 Audio File")
-        if st.session_state.audio_file:
-            st.write(f"📁 {st.session_state.audio_file.name}")
-            st.audio(st.session_state.audio_file)
-    
-    with col2:
-        st.markdown("### 📄 JSON Config 1")
-        if st.session_state.json_file_1:
-            st.write(f"📁 {st.session_state.json_file_1.name}")
-            if st.button("👁️ View", key="view_json1"):
-                content = json.loads(st.session_state.json_file_1.getvalue().decode("utf-8"))
-                st.json(content)
-    
-    with col3:
-        st.markdown("### 📄 JSON Config 2")
-        if st.session_state.json_file_2:
-            st.write(f"📁 {st.session_state.json_file_2.name}")
-            if st.button("👁️ View", key="view_json2"):
-                content = json.loads(st.session_state.json_file_2.getvalue().decode("utf-8"))
-                st.json(content)
-    
-    st.markdown("---")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("⬅️ Back", use_container_width=True):
+        if st.button("⬅️ Back"):
             st.session_state.step = "json2"
             st.rerun()
     with col2:
-        if st.button("▶️ Start Processing", use_container_width=True):
+        if st.button("🚀 Start Processing", use_container_width=True):
             st.session_state.step = "processing"
             st.rerun()
 
+# ==================== PROCESSING ====================
 elif st.session_state.step == "processing":
     _stepper()
-    st.markdown('<h2 class="section-title">⚙️ Processing...</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>🔄 Processing your files...</strong><br>
-        This may take a few moments. Please wait while we transcribe and analyze your audio.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">⚙️ Processing...</h2>', unsafe_allow_html=True)
     
     progress_bar = st.progress(0)
     status_text = st.empty()
     
     try:
-        # Simulate processing stages
-        status_text.text("📝 Stage 1/3: Transcribing audio...")
-        progress_bar.progress(33)
-        time.sleep(1)
+        status_text.text("📤 Uploading files...")
+        progress_bar.progress(20)
+        time.sleep(0.5)
         
-        status_text.text("🔍 Stage 2/3: Analyzing content...")
-        progress_bar.progress(66)
-        time.sleep(1)
+        status_text.text("🔄 Running pipeline...")
+        progress_bar.progress(40)
         
-        status_text.text("✨ Stage 3/3: Generating insights...")
-        progress_bar.progress(90)
-        
-        # Run the actual pipeline
-        transcription_path, analysis_path = run_pipeline(
-            audio_path=str(st.session_state.audio_path),
-            json_path_1=str(st.session_state.json_path_1),
-            json_path_2=str(st.session_state.json_path_2)
+        # Call the updated pipeline function with 3 files
+        transcription_path,_, final_path, transcription_raw, final_raw = run_pipeline(
+            audio_path=st.session_state.audio_path,
+            json_path_1=st.session_state.json_path_1,
+            json_path_2=st.session_state.json_path_2
         )
         
+        progress_bar.progress(80)
+        status_text.text("✅ Processing complete!")
+        
         st.session_state.transcription_path = transcription_path
-        st.session_state.analysis_path = analysis_path
-        
-        # Load results
-        with open(transcription_path, "r", encoding="utf-8") as f:
-            st.session_state.transcription_raw = f.read()
-        
-        with open(analysis_path, "r", encoding="utf-8") as f:
-            st.session_state.analysis_raw = f.read()
+        st.session_state.analysis_path = final_path
+        st.session_state.transcription_raw = transcription_raw
+        st.session_state.analysis_raw = final_raw
         
         progress_bar.progress(100)
-        status_text.text("✅ Processing complete!")
         time.sleep(1)
         
         st.session_state.step = "result"
         st.rerun()
         
     except Exception as e:
-        st.error(f"❌ Error during processing: {e}")
+        st.error(f"❌ Error during processing: {str(e)}")
         if st.button("🔄 Try Again"):
             st.session_state.step = "ready"
             st.rerun()
 
+# ==================== RESULTS ====================
 elif st.session_state.step == "result":
     _stepper()
-    st.markdown('<h2 class="section-title">📊 Results</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="info-card">
-        <strong>✅ Processing completed successfully!</strong><br>
-        View your transcription and analysis results below. You can download the JSON files for further use.
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">📊 Results</h2>', unsafe_allow_html=True)
     
-    tab1, tab2 = st.tabs(["📝 Transcription", "🔍 Analysis"])
+    tab1, tab2 = st.tabs(["📝 Transcription", "📈 Analysis"])
     
     with tab1:
-        st.markdown("### 📝 Transcription Output")
+        st.markdown("### Transcription Output")
         
         if st.session_state.transcription_raw:
-            try:
-                trans_json = json.loads(st.session_state.transcription_raw)
-                st.json(trans_json)
-                
+            st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
+            st.json(st.session_state.transcription_raw)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with open(st.session_state.transcription_path, "rb") as f:
                 st.download_button(
                     label="⬇️ Download Transcription JSON",
-                    data=st.session_state.transcription_raw,
+                    data=f.read(),
                     file_name="transcription.json",
-                    mime="application/json",
-                    use_container_width=True
+                    mime="application/json"
                 )
-            except json.JSONDecodeError:
-                st.markdown(f"``````")
-        else:
-            st.warning("No transcription data available")
     
     with tab2:
-        st.markdown("### 🔍 Analysis Output")
+        st.markdown("### Analysis Output")
         
         if st.session_state.analysis_raw:
-            try:
-                analysis_json = json.loads(st.session_state.analysis_raw)
-                st.json(analysis_json)
-                
+            st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
+            st.json(st.session_state.analysis_raw)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with open(st.session_state.analysis_path, "rb") as f:
                 st.download_button(
                     label="⬇️ Download Analysis JSON",
-                    data=st.session_state.analysis_raw,
+                    data=f.read(),
                     file_name="analysis.json",
-                    mime="application/json",
-                    use_container_width=True
+                    mime="application/json"
                 )
-            except json.JSONDecodeError:
-                st.markdown(f"``````")
-        else:
-            st.warning("No analysis data available")
     
     st.markdown("---")
     
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("🔄 Process Another", use_container_width=True):
+        if st.button("🔄 Process New Files", use_container_width=True):
             # Reset state
-            for key in ["audio_file", "json_file_1", "json_file_2", "transcription_raw", "analysis_raw"]:
+            for key in ["audio_file", "json_file_1", "json_file_2", "audio_path", "json_path_1", "json_path_2",
+                       "transcription_path", "analysis_path", "transcription_raw", "analysis_raw"]:
                 st.session_state[key] = None
             st.session_state.step = "landing"
             st.rerun()
     
     with col2:
-        if st.button("🏠 Back to Home", use_container_width=True):
-            st.session_state.step = "landing"
+        if st.button("⬅️ Back to Ready", use_container_width=True):
+            st.session_state.step = "ready"
             st.rerun()
