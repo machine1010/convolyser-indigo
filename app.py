@@ -292,62 +292,73 @@ if st.session_state.step == "landing":
         After recognizing the need for efficient audio conversation analysis in government and organizational surveys, we developed this platform to bridge the gap between raw audio data and actionable insights. This platform was created as an independent solution, performing direct audio transcription and intelligent analysis without relying on multiple third-party services. Our goal is to provide accurate, detailed, and structured insights from Hindi language conversations, particularly for political surveys and citizen engagement initiatives.
     </div>
     """, unsafe_allow_html=True)
-    
-    # Section 2: Our Solution & Key Benefits
+        # Section 2: Our Solution & Key Benefits
     st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="two-column-section">
-        <div>
-            <h3 class="column-title">Our Solution</h3>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Complete independence from third-party APIs and their limitations</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Direct audio processing for accurate and detailed transcription results</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Intelligent analysis system with context-aware question extraction</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Speaker diarization to identify and separate multiple speakers</div>
-            </div>
-        </div>
-        
-        <div>
-            <h3 class="column-title">Key Benefits</h3>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Stable and reliable API without external dependencies</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Configurable JSON-based survey question templates</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Real-time processing with instant downloadable outputs</div>
-            </div>
-            
-            <div class="benefit-item">
-                <div class="benefit-icon">✓</div>
-                <div class="benefit-text">Support for Hindi language conversations with cultural context understanding</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
     
+    with col1:
+        st.markdown('<h3 class="column-title">Our Solution</h3>', unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Complete independence from third-party APIs and their limitations</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Direct audio processing for accurate and detailed transcription results</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Intelligent analysis system with context-aware question extraction</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Speaker diarization to identify and separate multiple speakers</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown('<h3 class="column-title">Key Benefits</h3>', unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Stable and reliable API without external dependencies</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Configurable JSON-based survey question templates</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Real-time processing with instant downloadable outputs</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="benefit-item">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-text">Support for Hindi language conversations with cultural context understanding</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     # Section 3: Frequently Asked Questions
     st.markdown('<h2 class="faq-title">Frequently Asked Questions</h2>', unsafe_allow_html=True)
     
