@@ -29,7 +29,7 @@ class AudioAnalysisPipeline:
         
         # Initialize Vertex AI
         vertexai.init(project=self.project_id, location=self.location)
-        self.model = genai.GenerativeModel("gemini-2.0-flash-lite-001")
+        self.model = genai.GenerativeModel("gemini-2.5-pro")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         
         # Initialize all prompts
@@ -124,7 +124,7 @@ class AudioAnalysisPipeline:
     def process_audio(
         self,
         audio_file_path: str,
-        agent_json_path: str,
+        json_path_2: str,
         output_dir: str = "./output",
         transcription_filename: str = "audio_transcript.json",
         evaluation_filename: str = "evaluation_output.json",
@@ -139,7 +139,7 @@ class AudioAnalysisPipeline:
         
         Args:
             audio_file_path: Path to Hindi audio file
-            agent_json_path: Path to agent's survey JSON
+            json_path_2: Path to agent's survey JSON
             output_dir: Directory to save output files
             transcription_filename: Name for transcription output file
             evaluation_filename: Name for evaluation output file
@@ -212,7 +212,7 @@ class AudioAnalysisPipeline:
 
         # Step 4: Merge agent and analysis JSONs
         print("Step 4/6: Merging survey responses...")
-        self._merge_survey_jsons(agent_json_path, analysis_path, merged_path)
+        self._merge_survey_jsons(json_path_2, analysis_path, merged_path)
         print(f"   -> Saved merged data to {merged_path}")
 
         # Step 5: Compare merged answers
@@ -266,8 +266,8 @@ def run_pipeline(audio_path, json_path_2, json_path_1):
     
     Args:
         audio_path: Path to audio file
-        agent_json_path: Path to agent's survey JSON file
-        gemini_json_path: Path to Gemini API credentials JSON file
+        json_path_2: Path to agent's survey JSON file
+        json_path_1: Path to Gemini API credentials JSON file
         
     Returns:
         Tuple of (transcription_path, analysis_path, final_path, transcription_content, 
@@ -285,7 +285,7 @@ def run_pipeline(audio_path, json_path_2, json_path_1):
     # Process audio with full 6-step pipeline
     result = pipeline.process_audio(
         audio_file_path=str(audio_path),
-        agent_json_path=str(agent_json_path),
+        json_path_2=str(json_path_2),
         output_dir=out_dir
     )
     
@@ -308,7 +308,7 @@ if __name__ == '__main__':
     
     result = pipeline.process_audio(
         audio_file_path="path/to/audio.m4a",
-        agent_json_path="path/to/agent_data.json",
+        json_path_2="path/to/agent_data.json",
         output_dir="./output"
     )
     
