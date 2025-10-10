@@ -368,14 +368,13 @@ elif st.session_state.step == "processing":
             result = run_pipeline(
                 st.session_state.audio_path, st.session_state.license_path
             )
-            st.session_state.transcription_path = Path(
-                result.get("transcription_path") or result.get("transcript_path", "")
-            ) if result.get("transcription_path") or result.get("transcript_path") else None
-            st.session_state.analysis_path = Path(
-                result.get("analysis_path") or result.get("report_path", "")
-            ) if result.get("analysis_path") or result.get("report_path") else None
-            st.session_state.transcription_raw = result.get("transcription_raw") or result.get("transcript_raw")
-            st.session_state.analysis_raw = result.get("analysis_raw") or result.get("report_raw")
+            
+            st.session_state.transcription_path = Path(result.get("transcription_path", ""))
+            st.session_state.analysis_path = Path(result.get("analysis_path", ""))
+            st.session_state.transcription_raw = result.get("transcription_raw")
+            st.session_state.analysis_raw = result.get("analysis_raw")
+
+
             time.sleep(0.6)
             st.session_state.step = "result"
         except Exception as e:
