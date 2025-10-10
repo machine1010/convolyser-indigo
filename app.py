@@ -615,15 +615,22 @@ elif st.session_state.step == "result":
 
     # Audio Player Section
     st.markdown("### 🎵 Audio Playback")
-    st.markdown("Listen to the uploaded audio file:")
 
-    try:
-        # Read the audio file and display player
-        with open(st.session_state.audio_path, 'rb') as audio_file:
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/mp3')
-    except Exception as e:
-        st.warning(f"Could not load audio file: {str(e)}")
+    if st.session_state.audio_path and st.session_state.audio_file:
+        st.markdown(f"**File:** {st.session_state.audio_file.name}")
+
+        try:
+            # Read the audio file
+            with open(st.session_state.audio_path, 'rb') as audio_file:
+                audio_bytes = audio_file.read()
+
+            # Display audio player - let Streamlit auto-detect format
+            st.audio(audio_bytes)
+
+        except Exception as e:
+            st.error(f"❌ Could not load audio file: {str(e)}")
+    else:
+        st.warning("⚠️ Audio file not found in session")
 
     st.markdown("---")
 
