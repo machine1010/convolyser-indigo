@@ -361,57 +361,65 @@ elif st.session_state.step == "ready":
         with cc2:
             if st.button("Run analysis"):
                 st.session_state.step = "processing"
-# --- PROCESSING (replace this entire branch) ---
+
 elif st.session_state.step == "processing":
     with st.spinner("Transcribing and analyzing…"):
         try:
             result = run_pipeline(
                 st.session_state.audio_path, st.session_state.license_path
             )
-
-            # Reset targets
-            st.session_state.transcription_path = None
-            st.session_state.analysis_path = None
-            st.session_state.transcription_raw = None
-            st.session_state.analysis_raw = None
-
-            if isinstance(result, dict):
-                # Keep existing key compatibility but do NOT parse JSON
-                tp = result.get("transcription_path") or result.get("transcript_path")
-                rp = result.get("analysis_path") or result.get("report_path")
-                st.session_state.transcription_path = Path(tp) if tp else None
-                st.session_state.analysis_path = Path(rp) if rp else None
-                st.session_state.transcription_raw = (
-                    result.get("transcription_raw")
-                    or result.get("transcript_raw")
-                    or result.get("transcription")
-                )
-                st.session_state.analysis_raw = (
-                    result.get("analysis_raw")
-                    or result.get("report_raw")
-                    or result.get("analysis")
-                )
-            else:
-                # Treat non-dict results as a sequence of raw outputs in order
-                seq = list(result) if isinstance(result, (list, tuple)) else [result]
-                if len(seq) > 0:
-                    st.session_state.transcription_raw = seq[0]
-                if len(seq) > 1:
-                    st.session_state.analysis_raw = seq[1]
-                if len(seq) > 2 and isinstance(seq[2], (str, Path)) and str(seq[2]):
-                    p = Path(str(seq[2]))
-                    st.session_state.transcription_path = p if p.exists() else None
-                if len(seq) > 3 and isinstance(seq[3], (str, Path)) and str(seq[3]):
-                    p = Path(str(seq[3]))
-                    st.session_state.analysis_path = p if p.exists() else None
-
+            st.session_state.transcription_path = Path(
+                result.get("transcription_path") or result.get("transcript_path", "")
+            ) if result.get("transcription_path") or result.get("transcript_path") else None
+            st.session_state.analysis_path = Path(
+                result.get("analysis_path") or result.get("report_path", "")
+            ) if result.get("analysis_path") or result.get("report_path") else None
+            st.session_state.transcription_raw = result.get("transcription_raw") or result.get("transcript_raw")
+            st.session_state.analysis_raw = result.get("analysis_raw") or result.get("report_raw")
             time.sleep(0.6)
             st.session_state.step = "result"
-
         except Exception as e:
             st.error(f"Processing failed: {e}")
             st.session_state.step = "ready"
 
+elif st.session_state.step == "result":
+    st.subheader("Results")
+    with st.container(border=True):
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### Transcription")
+            if st.session_state.transcription_raw:
+                if isinstance(st.session_state.transcription_raw, (list, dict)):
+                    st.json(st.session_state.transcription_raw)
+                else:
+                    st.write(st.session_state.transcription_raw)
+            if st.session_state.transcription_path and Path(st.session_state.transcription_path).exists():
+                with open(st.session_state.transcription_path, "rb") as f:
+                    st.download_button(
+                        "Download transcript",
+                        f,
+                        file_name=Path(st.session_state.transcription_path).name,
+                        mime="application/json",
+                    )
+        with c2:
+            st.markdown("#### Analysis")
+            if st.session_state.analysis_raw:
+                if isinstance(st.session_state.analysis_raw, (list, dict)):
+                    st.json(st.session_state.analysis_raw)
+                else:
+                    st.write(st.session_state.analysis_raw)
+            if st.session_state.analysis_path and Path(st.session_state.analysis_path).exists():
+                with open(st.session_state.analysis_path, "rb") as f:
+                    st.download_button(
+                        "Download analysis",
+                        f,
+                        file_name=Path(st.session_state.analysis_path).name,
+                        mime="application/json",
+                    )
+    cc1, cc2 = st.columns([0.2, 0.8])
+    with cc1:
+        if st.button("Back"):
+            st.session_state.step = "ready"
     with cc2:
         if st.button("Start over"):
             for k in list(st.session_state.keys()):
