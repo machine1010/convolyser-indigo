@@ -267,8 +267,12 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 
     def _load_json_file(self, file_path: str) -> dict:
         """Load JSON file and return as dictionary"""
-        with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Warning: Could not load JSON file {file_path}: {e}")
+            return {}
 
     def _load_audio_to_base64(self, file_path: str) -> str:
         """Convert audio file to base64 encoding"""
@@ -380,13 +384,13 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
         }
 
 
-def run_pipeline(audio_path: Path, json_path_1: Path, json_path_2: Path):
+def run_pipeline(audio_path, json_path_1, json_path_2):
     """
     Run the complete pipeline with audio file and two JSON configuration files
     
     Args:
         audio_path: Path to audio file
-        json_path_1: Path to first JSON configuration file
+        json_path_1: Path to first JSON configuration file (used as credentials)
         json_path_2: Path to second JSON configuration file
         
     Returns:
