@@ -80,7 +80,7 @@ Provide the output in the following JSON structure:
 3. **HINDI LANGUAGE UNDERSTANDING**:
    - Understand variations and synonyms in Hindi
    - The agent may use slightly different words but same meaning
-   - Consider conversational Hindi variations (e.g., "à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ?" vs "à¤‰à¤®à¥à¤° à¤•à¤¿à¤¤à¤¨à¥€ à¤¹à¥ˆ?")
+   - Consider conversational Hindi variations (e.g., "आपकी उम्र क्या है?" vs "उम्र कितनी है?")
    - Account for informal language and regional dialects
 
 4. **ASSESSMENT CRITERIA**:
@@ -94,86 +94,86 @@ Provide the output in the following JSON structure:
 
 ## SURVEY QUESTIONS TO EVALUATE:
 
-### Section 1 â€“ Personal Questions
+### Section 1 – Personal Questions
 
-**Question 1:** à¤•à¥à¤¯à¤¾ à¤†à¤ªà¤•à¤¾ à¤µà¥‹à¤Ÿ à¤‡à¤¸à¥€ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤®à¥‡à¤‚ à¤¬à¤¨à¤¾ à¤¹à¥à¤† à¤¹à¥ˆ ?
+**Question 1:** क्या आपका वोट इसी विधानसभा में बना हुआ है ?
 
-**Question 2:** à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤ ?
+**Question 2:** क्या मैं आपकी उम्र जान सकता हूँ ?
 
-**Question 3:** à¤²à¤¿à¤‚à¤—: (à¤ªà¥‚à¤›à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¤¦à¥‡à¤–à¤•à¤° à¤­à¤°à¥‡à¤‚)
+**Question 3:** लिंग: (पूछना नहीं है देखकर भरें)
 **Note:** This is an observational question. Mark as "not asked" since it's not meant to be asked.
 
-**Question 4:** à¤†à¤ª à¤•à¥à¤¯à¤¾ à¤•à¤¾à¤® à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
+**Question 4:** आप क्या काम करते हैं ?
 
-**Question 5:** à¤†à¤ª à¤•à¥Œà¤¨ à¤¸à¥‡ à¤§à¤°à¥à¤® à¤¸à¥‡ à¤¹à¥ˆà¤‚?
+**Question 5:** आप कौन से धर्म से हैं?
 
-**Question 6:** à¤†à¤ªà¤•à¥€ à¤œà¤¾à¤¤à¤¿ à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ ?
-
----
-
-### Section 2 â€“ Political Questions
-
-**Question 7:** à¤†à¤ªà¤•à¥‡ à¤à¤®à¤à¤²à¤/ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¤¾ à¤•à¥à¤¯à¤¾ à¤¨à¤¾à¤® à¤¹à¥ˆ?
-
-**Question 8:** à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤…à¤ªà¤¨à¥‡ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¥‡ à¤•à¤¾à¤® à¤¸à¥‡ à¤–à¥à¤¶ à¤¹à¥ˆà¤‚ ?
-
-**Question 9:** à¤…à¤—à¤° à¤†à¤ªà¤•à¤¾ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤«à¤¿à¤° à¤¸à¥‡ à¤šà¥à¤¨à¤¾à¤µ à¤²à¤¡à¤¼à¤¤à¤¾ à¤¹à¥ˆ à¤¤à¥‹ à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤‰à¤¨à¥à¤¹à¥‡à¤‚ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡ ?
-
-**Question 9.1:** à¤…à¤—à¤° à¤¨à¤¹à¥€à¤‚ à¤¤à¥‹, à¤†à¤ª à¤…à¤—à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¥‡ à¤¦à¥‡à¤–à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
-**Note:** This is a follow-up question. Only mark as "asked" if Question 9 was answered with "à¤¨à¤¹à¥€à¤‚" and the agent asked this follow-up.
-
-**Question 10:** à¤†à¤ª à¤†à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?
-
-**Question 11:** 2020 à¤•à¥‡ à¤ªà¤¿à¤›à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤†à¤ªà¤¨à¥‡ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¤¿à¤¯à¤¾ à¤¥à¤¾?
-
-**Question 12:** à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤¬à¤¿à¤¹à¤¾à¤° à¤¸à¤°à¤•à¤¾à¤° à¤¦à¥à¤µà¤¾à¤°à¤¾ 2020 â€“ 25 à¤®à¥‡à¤‚ à¤•à¤¿à¤ à¤—à¤ à¤•à¤¾à¤® à¤¸à¥‡ à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚ ?
-
-**Question 13:** à¤†à¤ª à¤…à¤—à¤²à¥‡ à¤®à¥à¤–à¥à¤¯à¤®à¤‚à¤¤à¥à¤°à¥€ à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¥‡ à¤¦à¥‡à¤–à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
+**Question 6:** आपकी जाति क्या है ?
 
 ---
 
-### Section 3 â€“ Observational Questions
+### Section 2 – Political Questions
 
-**Question 14:** à¤†à¤ª à¤—à¤¾à¤à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤¯à¤¾ à¤¶à¤¹à¤° à¤®à¥‡à¤‚?
+**Question 7:** आपके एमएलए/ विधायक का क्या नाम है?
 
-**Question 15:** à¤¬à¥à¤²à¤¾à¤• à¤•à¤¾ à¤¨à¤¾à¤® (à¤†à¤ª à¤œà¤¹à¤¾à¤ à¤¹à¥ˆ à¤‰à¤¸ à¤¬à¥à¤²à¤¾à¤• à¤•à¤¾ à¤¨à¤¾à¤® à¤šà¥à¤¨à¥‡à¤‚)
+**Question 8:** क्या आप अपने विधायक के काम से खुश हैं ?
 
-**Question 16:** à¤—à¤¾à¤à¤µ / à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤•à¤¾ à¤¨à¤¾à¤® (à¤†à¤ª à¤œà¤¿à¤¸ à¤—à¤¾à¤à¤µ/ à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¤‰à¤¸ à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤•à¤¾ à¤¨à¤¾à¤® à¤šà¥à¤¨à¥‡à¤‚)
+**Question 9:** अगर आपका विधायक फिर से चुनाव लड़ता है तो क्या आप उन्हें वोट देंगे ?
 
-**Question 17:** à¤¸à¤° à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¤¾ à¤®à¥‹à¤¬à¤¾à¤‡à¤² à¤¨à¤‚à¤¬à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤ ?
+**Question 9.1:** अगर नहीं तो, आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
+**Note:** This is a follow-up question. Only mark as "asked" if Question 9 was answered with "नहीं" and the agent asked this follow-up.
+
+**Question 10:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
+
+**Question 11:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
+
+**Question 12:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
+
+**Question 13:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
+
+---
+
+### Section 3 – Observational Questions
+
+**Question 14:** आप गाँव में रहते हैं या शहर में?
+
+**Question 15:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
+
+**Question 16:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
+
+**Question 17:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
 
 ---
 
 ## EVALUATION EXAMPLES FOR CLARITY:
 
 **Example 1 - Question 2 (Age):**
-- Original: "à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤ ?"
-- Agent says: "à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤?" â†’ **"asked properly"**
-- Agent says: "à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ?" â†’ **"asked properly"**
-- Agent says: "à¤‰à¤®à¥à¤° à¤•à¤¿à¤¤à¤¨à¥€ à¤¹à¥ˆ?" â†’ **"asked"**
-- Agent says: "à¤•à¤¿à¤¤à¤¨à¥‡ à¤¸à¤¾à¤² à¤•à¥‡ à¤¹à¥ˆà¤‚ à¤†à¤ª?" â†’ **"asked"**
-- Agent doesn't mention age at all â†’ **"not asked"**
+- Original: "क्या मैं आपकी उम्र जान सकता हूँ ?"
+- Agent says: "क्या मैं आपकी उम्र जान सकता हूँ?" → **"asked properly"**
+- Agent says: "आपकी उम्र क्या है?" → **"asked properly"**
+- Agent says: "उम्र कितनी है?" → **"asked"**
+- Agent says: "कितने साल के हैं आप?" → **"asked"**
+- Agent doesn't mention age at all → **"not asked"**
 
 **Example 2 - Question 4 (Occupation):**
-- Original: "à¤†à¤ª à¤•à¥à¤¯à¤¾ à¤•à¤¾à¤® à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?"
-- Agent says: "à¤†à¤ª à¤•à¥à¤¯à¤¾ à¤•à¤¾à¤® à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚?" â†’ **"asked properly"**
-- Agent says: "à¤†à¤ªà¤•à¤¾ à¤•à¤¾à¤® à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ?" â†’ **"asked properly"**
-- Agent says: "à¤•à¥à¤¯à¤¾ à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤†à¤ª?" â†’ **"asked"**
-- Agent says: "à¤ªà¥‡à¤¶à¤¾ à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ?" â†’ **"asked"**
-- Agent doesn't ask about occupation â†’ **"not asked"**
+- Original: "आप क्या काम करते हैं ?"
+- Agent says: "आप क्या काम करते हैं?" → **"asked properly"**
+- Agent says: "आपका काम क्या है?" → **"asked properly"**
+- Agent says: "क्या करते हैं आप?" → **"asked"**
+- Agent says: "पेशा क्या है?" → **"asked"**
+- Agent doesn't ask about occupation → **"not asked"**
 
 **Example 3 - Question 10 (Voting intention):**
-- Original: "à¤†à¤ª à¤†à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?"
-- Agent says: "à¤†à¤ª à¤†à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?" â†’ **"asked properly"**
-- Agent says: "à¤…à¤—à¤²à¥‡ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?" â†’ **"asked"**
-- Agent says: "à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?" (without mentioning upcoming election) â†’ **"asked"**
-- Agent doesn't ask about voting preference â†’ **"not asked"**
+- Original: "आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?"
+- Agent says: "आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?" → **"asked properly"**
+- Agent says: "अगले चुनाव में किसको वोट देंगे?" → **"asked"**
+- Agent says: "किस पार्टी को वोट देंगे?" (without mentioning upcoming election) → **"asked"**
+- Agent doesn't ask about voting preference → **"not asked"**
 
 ## SPECIAL CONSIDERATIONS:
 
 1. **Question 3 (Gender)**: This is observational and should NOT be asked. Always mark as "not asked" (this is correct behavior).
 
-2. **Question 9.1 (Follow-up)**: Only evaluate if respondent answered "à¤¨à¤¹à¥€à¤‚" to Question 9. If Question 9 was not asked or answered differently, mark 9.1 as "not asked".
+2. **Question 9.1 (Follow-up)**: Only evaluate if respondent answered "नहीं" to Question 9. If Question 9 was not asked or answered differently, mark 9.1 as "not asked".
 
 3. **Questions 15-17**: These ask for specific information (block name, village name, mobile number). The agent must specifically request this information.
 
@@ -252,132 +252,132 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 
 ## SURVEY QUESTIONS WITH OPTIONS:
 
-### Section 1 â€“ Personal Questions
+### Section 1 – Personal Questions
 
-**Question 1:** à¤•à¥à¤¯à¤¾ à¤†à¤ªà¤•à¤¾ à¤µà¥‹à¤Ÿ à¤‡à¤¸à¥€ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤®à¥‡à¤‚ à¤¬à¤¨à¤¾ à¤¹à¥à¤† à¤¹à¥ˆ ?
+**Question 1:** क्या आपका वोट इसी विधानसभा में बना हुआ है ?
 **Options:**
-- à¤¹à¤¾à¤
-- à¤¨à¤¹à¥€à¤‚
+- हाँ
+- नहीं
 
-**Question 2:** à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¥€ à¤‰à¤®à¥à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤ ?
+**Question 2:** क्या मैं आपकी उम्र जान सकता हूँ ?
 **Options:**
-- 18-30 à¤µà¤°à¥à¤·
-- 31-45 à¤µà¤°à¥à¤·
-- 46-60 à¤µà¤°à¥à¤·
-- 60 à¤µà¤°à¥à¤· à¤¸à¥‡ à¤…à¤§à¤¿à¤•
-- à¤¬à¤¤à¤¾à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤šà¤¾à¤¹à¤¤à¥‡
+- 18-30 वर्ष
+- 31-45 वर्ष
+- 46-60 वर्ष
+- 60 वर्ष से अधिक
+- बताना नहीं चाहते
 
-**Question 3:** à¤²à¤¿à¤‚à¤—: (à¤ªà¥‚à¤›à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¤¦à¥‡à¤–à¤•à¤° à¤­à¤°à¥‡à¤‚)
+**Question 3:** लिंग: (पूछना नहीं है देखकर भरें)
 **Options:**
-- à¤ªà¥à¤°à¥à¤·
-- à¤®à¤¹à¤¿à¤²à¤¾
+- पुरुष
+- महिला
 
-**Question 4:** à¤†à¤ª à¤•à¥à¤¯à¤¾ à¤•à¤¾à¤® à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
+**Question 4:** आप क्या काम करते हैं ?
 **Options:**
-- à¤•à¥ƒà¤·à¤¿
-- à¤®à¤œà¤¦à¥‚à¤°à¥€/à¤¦à¥ˆà¤¨à¤¿à¤• à¤µà¥‡à¤¤à¤¨
-- à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤¨à¥Œà¤•à¤°à¥€
-- à¤¨à¤¿à¤œà¥€ à¤¨à¥Œà¤•à¤°à¥€
-- à¤¸à¥à¤µà¤°à¥‹à¤œà¤—à¤¾à¤°/à¤µà¥à¤¯à¤µà¤¸à¤¾à¤¯
-- à¤¬à¥‡à¤°à¥‹à¤œà¤—à¤¾à¤°
-- à¤¹à¤¾à¤‰à¤¸à¤µà¤¾à¤‡à¤« / à¤—à¥ƒà¤¹à¤¿à¤£à¥€
-- à¤›à¤¾à¤¤à¥à¤° / à¤ªà¤¢à¤¾à¤ˆ
-- à¤…à¤¨à¥à¤¯ (à¤•à¥ƒà¤ªà¤¯à¤¾ à¤‰à¤²à¥à¤²à¥‡à¤– à¤•à¤°à¥‡à¤‚)
+- कृषि
+- मजदूरी/दैनिक वेतन
+- सरकारी नौकरी
+- निजी नौकरी
+- स्वरोजगार/व्यवसाय
+- बेरोजगार
+- हाउसवाइफ / गृहिणी
+- छात्र / पढाई
+- अन्य (कृपया उल्लेख करें)
 
-**Question 5:** à¤†à¤ª à¤•à¥Œà¤¨ à¤¸à¥‡ à¤§à¤°à¥à¤® à¤¸à¥‡ à¤¹à¥ˆà¤‚?
+**Question 5:** आप कौन से धर्म से हैं?
 **Options:**
-- à¤¹à¤¿à¤¨à¥à¤¦à¥‚
-- à¤®à¥à¤¸à¥à¤²à¤¿à¤®
-- à¤¸à¤¿à¤–
-- à¤•à¥à¤°à¤¿à¤¸à¥à¤šà¤¿à¤¯à¤¨
-- à¤œà¥ˆà¤¨
-- à¤¬à¥à¤¦à¥à¤§à¤¿à¤¸à¥à¤Ÿ
-- à¤•à¤¿à¤¸à¥€ à¤§à¤°à¥à¤® à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤®à¤¾à¤¨à¤¤à¤¾
-- à¤¬à¤¤à¤¾à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤šà¤¾à¤¹à¤¤à¥‡
+- हिन्दू
+- मुस्लिम
+- सिख
+- क्रिस्चियन
+- जैन
+- बुद्धिस्ट
+- किसी धर्म को नहीं मानता
+- बताना नहीं चाहते
 
-**Question 6:** à¤†à¤ªà¤•à¥€ à¤œà¤¾à¤¤à¤¿ à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ ?
+**Question 6:** आपकी जाति क्या है ?
 **Options:**
-- (à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤•à¥‡ à¤Ÿà¥‰à¤ª 12 à¤œà¤¾à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥€ à¤²à¤¿à¤¸à¥à¤Ÿ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤°)
+- (विधानसभा के टॉप 12 जातियों की लिस्ट के अनुसार)
 
 ---
 
-### Section 2 â€“ Political Questions
+### Section 2 – Political Questions
 
-**Question 7:** à¤†à¤ªà¤•à¥‡ à¤à¤®à¤à¤²à¤/ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¤¾ à¤•à¥à¤¯à¤¾ à¤¨à¤¾à¤® à¤¹à¥ˆ?
+**Question 7:** आपके एमएलए/ विधायक का क्या नाम है?
 **Options:**
-- MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤¸à¤¹à¥€ à¤¬à¤¤à¤¾à¤¯à¤¾
-- MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤¨à¤¹à¥€à¤‚ à¤ªà¤¤à¤¾
-- MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤—à¤²à¤¤ à¤¬à¤¤à¤¾à¤¯à¤¾
+- MLA का नाम सही बताया
+- MLA का नाम नहीं पता
+- MLA का नाम गलत बताया
 
-**Question 8:** à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤…à¤ªà¤¨à¥‡ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¥‡ à¤•à¤¾à¤® à¤¸à¥‡ à¤–à¥à¤¶ à¤¹à¥ˆà¤‚ ?
+**Question 8:** क्या आप अपने विधायक के काम से खुश हैं ?
 **Options:**
-- à¤¹à¤¾à¤
-- à¤¨à¤¹à¥€à¤‚
-- à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡
+- हाँ
+- नहीं
+- कुछ कह नहीं सकते
 
-**Question 9:** à¤…à¤—à¤° à¤†à¤ªà¤•à¤¾ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤«à¤¿à¤° à¤¸à¥‡ à¤šà¥à¤¨à¤¾à¤µ à¤²à¤¡à¤¼à¤¤à¤¾ à¤¹à¥ˆ à¤¤à¥‹ à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤‰à¤¨à¥à¤¹à¥‡à¤‚ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡ ?
+**Question 9:** अगर आपका विधायक फिर से चुनाव लड़ता है तो क्या आप उन्हें वोट देंगे ?
 **Options:**
-- à¤¹à¤¾à¤
-- à¤¨à¤¹à¥€à¤‚
-- à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡
+- हाँ
+- नहीं
+- कुछ कह नहीं सकते
 
-**Question 9.1:** à¤…à¤—à¤° à¤¨à¤¹à¥€à¤‚ à¤¤à¥‹, à¤†à¤ª à¤…à¤—à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¯à¤• à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¥‡ à¤¦à¥‡à¤–à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
+**Question 9.1:** अगर नहीं तो, आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
 **Options:**
-- (à¤¸à¤‚à¤­à¤¾à¤µà¤¿à¤¤ à¤‰à¤®à¥à¤®à¥€à¤¦à¤µà¤¾à¤°à¥‹à¤‚ à¤•à¥€ à¤¸à¥à¤šà¥€ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤°)
+- (संभावित उम्मीदवारों की सुची के अनुसार)
 
-**Question 10:** à¤†à¤ª à¤†à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¥‡à¤‚à¤—à¥‡?
-**Options:**
-- JDU | NDA
-- à¤®à¤¹à¤¾à¤—à¤ à¤¬à¤‚à¤§à¤¨ | MGB
-- à¤œà¤¨ à¤¸à¥à¤°à¤¾à¤œ à¤ªà¤¾à¤°à¥à¤Ÿà¥€
-- à¤…à¤¨à¥à¤¯
-- à¤¬à¥€à¤à¤¸à¤ªà¤¿ | BSP
-- NOTA
-- à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡
-
-**Question 11:** 2020 à¤•à¥‡ à¤ªà¤¿à¤›à¤²à¥‡ à¤µà¤¿à¤§à¤¾à¤¨à¤¸à¤­à¤¾ à¤šà¥à¤¨à¤¾à¤µ à¤®à¥‡à¤‚ à¤†à¤ªà¤¨à¥‡ à¤•à¤¿à¤¸ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ à¤•à¥‹ à¤µà¥‹à¤Ÿ à¤¦à¤¿à¤¯à¤¾ à¤¥à¤¾?
+**Question 10:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
 **Options:**
 - JDU | NDA
-- à¤®à¤¹à¤¾à¤—à¤ à¤¬à¤‚à¤§à¤¨ | MGB
-- à¤²à¥‹à¤• à¤œà¤¨à¤¶à¤•à¥à¤¤à¤¿ à¤ªà¤¾à¤°à¥à¤Ÿà¥€ (à¤²à¥‹à¤œà¤ªà¤¾)
-- à¤…à¤¨à¥à¤¯
-- à¤¬à¥€à¤à¤¸à¤ªà¤¿ | BSP
+- महागठबंधन | MGB
+- जन सुराज पार्टी
+- अन्य
+- बीएसपि | BSP
 - NOTA
-- à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡ / à¤¯à¤¾à¤¦ à¤¨à¤¹à¥€à¤‚
-- à¤µà¥‹à¤Ÿ à¤¨à¤¹à¥€à¤‚ à¤¦à¤¿à¤¯à¤¾
+- कह नहीं सकते
 
-**Question 12:** à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤¬à¤¿à¤¹à¤¾à¤° à¤¸à¤°à¤•à¤¾à¤° à¤¦à¥à¤µà¤¾à¤°à¤¾ 2020 â€“ 25 à¤®à¥‡à¤‚ à¤•à¤¿à¤ à¤—à¤ à¤•à¤¾à¤® à¤¸à¥‡ à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚ ?
+**Question 11:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
 **Options:**
-- à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚
-- à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¨à¤¹à¥€à¤‚
-- à¤•à¥à¤› à¤¹à¤¦ à¤¤à¤• à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚
-- à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡
+- JDU | NDA
+- महागठबंधन | MGB
+- लोक जनशक्ति पार्टी (लोजपा)
+- अन्य
+- बीएसपि | BSP
+- NOTA
+- कह नहीं सकते / याद नहीं
+- वोट नहीं दिया
 
-**Question 13:** à¤†à¤ª à¤…à¤—à¤²à¥‡ à¤®à¥à¤–à¥à¤¯à¤®à¤‚à¤¤à¥à¤°à¥€ à¤•à¥‡ à¤°à¥‚à¤ª à¤®à¥‡à¤‚ à¤•à¤¿à¤¸à¥‡ à¤¦à¥‡à¤–à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ ?
+**Question 12:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
 **Options:**
-- à¤¨à¤¿à¤¤à¥€à¤¶ à¤•à¥à¤®à¤¾à¤°
-- à¤¤à¥‡à¤œà¤¶à¥à¤µà¥€ à¤¯à¤¾à¤¦à¤µ
-- à¤¸à¤®à¥à¤°à¤¾à¤Ÿ à¤šà¥Œà¤§à¤°à¥€
-- à¤šà¤¿à¤°à¤¾à¤— à¤ªà¤¾à¤¸à¤µà¤¾à¤¨
-- à¤ªà¥à¤°à¤¶à¤¾à¤‚à¤¤ à¤•à¤¿à¤¶à¥‹à¤°
-- à¤…à¤¨à¥à¤¯
+- बिलकुल शंतुष्ट हैं
+- बिलकुल शंतुष्ट नहीं
+- कुछ हद तक शंतुष्ट हैं
+- कुछ कह नहीं सकते
+
+**Question 13:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
+**Options:**
+- नितीश कुमार
+- तेजश्वी यादव
+- सम्राट चौधरी
+- चिराग पासवान
+- प्रशांत किशोर
+- अन्य
 
 ---
 
-### Section 3 â€“ Observational Questions
+### Section 3 – Observational Questions
 
-**Question 14:** à¤†à¤ª à¤—à¤¾à¤à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤¯à¤¾ à¤¶à¤¹à¤° à¤®à¥‡à¤‚?
+**Question 14:** आप गाँव में रहते हैं या शहर में?
 **Options:**
-- à¤—à¤¾à¤à¤µ
-- à¤¶à¤¹à¤°
+- गाँव
+- शहर
 
-**Question 15:** à¤¬à¥à¤²à¤¾à¤• à¤•à¤¾ à¤¨à¤¾à¤® (à¤†à¤ª à¤œà¤¹à¤¾à¤ à¤¹à¥ˆ à¤‰à¤¸ à¤¬à¥à¤²à¤¾à¤• à¤•à¤¾ à¤¨à¤¾à¤® à¤šà¥à¤¨à¥‡à¤‚)
+**Question 15:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
 **Note:** Extract the exact block name mentioned in the transcript
 
-**Question 16:** à¤—à¤¾à¤à¤µ / à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤•à¤¾ à¤¨à¤¾à¤® (à¤†à¤ª à¤œà¤¿à¤¸ à¤—à¤¾à¤à¤µ/ à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¤‰à¤¸ à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤•à¤¾ à¤¨à¤¾à¤® à¤šà¥à¤¨à¥‡à¤‚)
+**Question 16:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
 **Note:** Extract the exact village/panchayat name mentioned in the transcript
 
-**Question 17:** à¤¸à¤° à¤•à¥à¤¯à¤¾ à¤®à¥ˆà¤‚ à¤†à¤ªà¤•à¤¾ à¤®à¥‹à¤¬à¤¾à¤‡à¤² à¤¨à¤‚à¤¬à¤° à¤œà¤¾à¤¨ à¤¸à¤•à¤¤à¤¾ à¤¹à¥‚à¤ ?
+**Question 17:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
 **Note:** Extract the mobile number if provided in the transcript
 
 ---
@@ -387,11 +387,11 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 1. **For Questions 1-14**: Select EXACTLY ONE option from the provided list that best matches the respondent's answer
 2. **For Question 15-17**: Extract the exact information (block name, village/panchayat name, mobile number) as mentioned in the transcript
 3. **Contextual Understanding**: Understand variations in Hindi responses. For example:
-   - "à¤¹à¤¾à¤", "à¤œà¥€ à¤¹à¤¾à¤", "à¤¬à¤¿à¤²à¥à¤•à¥à¤²", "à¤ à¥€à¤• à¤¹à¥ˆ" all mean "Yes"
-   - "à¤¨à¤¹à¥€à¤‚", "à¤œà¥€ à¤¨à¤¹à¥€à¤‚", "à¤¬à¤¿à¤²à¥à¤•à¥à¤² à¤¨à¤¹à¥€à¤‚" all mean "No"
+   - "हाँ", "जी हाँ", "बिल्कुल", "ठीक है" all mean "Yes"
+   - "नहीं", "जी नहीं", "बिल्कुल नहीं" all mean "No"
    - Age ranges: Listen for specific numbers and categorize appropriately
-4. **Partial Answers**: If the respondent gives an incomplete or unclear answer, choose "à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡" or equivalent option if available
-5. **Question 9.1**: Only answer this if the respondent answered "à¤¨à¤¹à¥€à¤‚" to Question 9
+4. **Partial Answers**: If the respondent gives an incomplete or unclear answer, choose "कुछ कह नहीं सकते" or equivalent option if available
+5. **Question 9.1**: Only answer this if the respondent answered "नहीं" to Question 9
 
 ## OUTPUT FORMAT:
 
@@ -455,11 +455,11 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
    - **"not matched"**: Answers are COMPLETELY DIFFERENT with no semantic overlap
 
 4. **HANDLE "Not Available"**:
-   - If BOTH answers are "Not Available" â†’ **"matched"**
-   - If ONE answer is "Not Available" and other is a valid answer â†’ **"not matched"**
+   - If BOTH answers are "Not Available" → **"matched"**
+   - If ONE answer is "Not Available" and other is a valid answer → **"not matched"**
 
 5. **LANGUAGE UNDERSTANDING**: Deep understanding of Hindi is critical
-   - Recognize synonyms (e.g., "à¤–à¥à¤¶" and "à¤¸à¤‚à¤¤à¥à¤·à¥à¤Ÿ" both mean satisfied/happy)
+   - Recognize synonyms (e.g., "खुश" and "संतुष्ट" both mean satisfied/happy)
    - Understand different phrasings of the same concept
    - Consider regional variations and colloquial expressions
 
@@ -467,41 +467,41 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 
 ### For Yes/No Questions (Questions 1, 8, 9):
 - **"matched"**:
-  - Both say "à¤¹à¤¾à¤" OR both say "à¤¨à¤¹à¥€à¤‚" OR both say "à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡"
-  - Synonyms: "à¤¹à¤¾à¤" = "à¤œà¥€ à¤¹à¤¾à¤" = "à¤¬à¤¿à¤²à¥à¤•à¥à¤²" = "à¤ à¥€à¤• à¤¹à¥ˆ"
-  - Synonyms: "à¤¨à¤¹à¥€à¤‚" = "à¤œà¥€ à¤¨à¤¹à¥€à¤‚" = "à¤¬à¤¿à¤²à¥à¤•à¥à¤² à¤¨à¤¹à¥€à¤‚"
-- **"partially matched"**: Rare for yes/no, but could occur if one is "à¤•à¥à¤› à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡" and other is conditional
-- **"not matched"**: One says "à¤¹à¤¾à¤" and other says "à¤¨à¤¹à¥€à¤‚"
+  - Both say "हाँ" OR both say "नहीं" OR both say "कुछ कह नहीं सकते"
+  - Synonyms: "हाँ" = "जी हाँ" = "बिल्कुल" = "ठीक है"
+  - Synonyms: "नहीं" = "जी नहीं" = "बिल्कुल नहीं"
+- **"partially matched"**: Rare for yes/no, but could occur if one is "कुछ कह नहीं सकते" and other is conditional
+- **"not matched"**: One says "हाँ" and other says "नहीं"
 
 ### For Age Range Questions (Question 2):
 - **"matched"**:
-  - Exact same age range: "18-30 à¤µà¤°à¥à¤·" = "18-30 à¤µà¤°à¥à¤·"
-  - "à¤¬à¤¤à¤¾à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤šà¤¾à¤¹à¤¤à¥‡" = "à¤¬à¤¤à¤¾à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤šà¤¾à¤¹à¤¤à¥‡"
+  - Exact same age range: "18-30 वर्ष" = "18-30 वर्ष"
+  - "बताना नहीं चाहते" = "बताना नहीं चाहते"
 - **"partially matched"**:
-  - Adjacent/overlapping age ranges: "31-45 à¤µà¤°à¥à¤·" and "46-60 à¤µà¤°à¥à¤·" (close but not same)
+  - Adjacent/overlapping age ranges: "31-45 वर्ष" and "46-60 वर्ष" (close but not same)
   - One specific age mentioned that falls within the range
 - **"not matched"**:
-  - Completely different age ranges: "18-30 à¤µà¤°à¥à¤·" vs "60 à¤µà¤°à¥à¤· à¤¸à¥‡ à¤…à¤§à¤¿à¤•"
+  - Completely different age ranges: "18-30 वर्ष" vs "60 वर्ष से अधिक"
 
 ### For Gender (Question 3):
-- **"matched"**: Both say "à¤ªà¥à¤°à¥à¤·" OR both say "à¤®à¤¹à¤¿à¤²à¤¾"
-- **"not matched"**: One says "à¤ªà¥à¤°à¥à¤·" and other says "à¤®à¤¹à¤¿à¤²à¤¾"
+- **"matched"**: Both say "पुरुष" OR both say "महिला"
+- **"not matched"**: One says "पुरुष" and other says "महिला"
 
 ### For Occupation (Question 4):
 - **"matched"**:
   - Exact same occupation
-  - Semantic equivalents: "à¤®à¤œà¤¦à¥‚à¤°à¥€" â‰ˆ "à¤¦à¥ˆà¤¨à¤¿à¤• à¤µà¥‡à¤¤à¤¨" (both are labor work)
-  - "à¤—à¥ƒà¤¹à¤¿à¤£à¥€" = "à¤¹à¤¾à¤‰à¤¸à¤µà¤¾à¤‡à¤«" = "à¤˜à¤° à¤•à¤¾ à¤•à¤¾à¤®"
+  - Semantic equivalents: "मजदूरी" ≈ "दैनिक वेतन" (both are labor work)
+  - "गृहिणी" = "हाउसवाइफ" = "घर का काम"
 - **"partially matched"**:
-  - Related occupations: "à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤¨à¥Œà¤•à¤°à¥€" and "à¤¨à¤¿à¤œà¥€ à¤¨à¥Œà¤•à¤°à¥€" (both are jobs but different sectors)
+  - Related occupations: "सरकारी नौकरी" and "निजी नौकरी" (both are jobs but different sectors)
   - Broad category match with some difference
 - **"not matched"**:
-  - Completely different: "à¤•à¥ƒà¤·à¤¿" vs "à¤›à¤¾à¤¤à¥à¤°"
+  - Completely different: "कृषि" vs "छात्र"
 
 ### For Religion (Question 5):
 - **"matched"**: Exact same religion
 - **"not matched"**: Different religions
-- Note: "à¤¬à¤¤à¤¾à¤¨à¤¾ à¤¨à¤¹à¥€à¤‚ à¤šà¤¾à¤¹à¤¤à¥‡" only matches with itself
+- Note: "बताना नहीं चाहते" only matches with itself
 
 ### For Caste (Question 6):
 - **"matched"**:
@@ -513,31 +513,31 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 
 ### For MLA Name (Question 7):
 - **"matched"**:
-  - Both say "MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤¨à¤¹à¥€à¤‚ à¤ªà¤¤à¤¾"
-  - Both say "MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤¸à¤¹à¥€ à¤¬à¤¤à¤¾à¤¯à¤¾" (assuming they named the same person)
-  - Both say "MLA à¤•à¤¾ à¤¨à¤¾à¤® à¤—à¤²à¤¤ à¤¬à¤¤à¤¾à¤¯à¤¾"
+  - Both say "MLA का नाम नहीं पता"
+  - Both say "MLA का नाम सही बताया" (assuming they named the same person)
+  - Both say "MLA का नाम गलत बताया"
 - **"not matched"**: Different categories selected
 
 ### For Political Party Questions (Questions 10, 11):
 - **"matched"**:
   - Exact same party/alliance
   - Semantic equivalents: "JDU" = "NDA" (if JDU is part of NDA)
-  - "à¤®à¤¹à¤¾à¤—à¤ à¤¬à¤‚à¤§à¤¨" = "MGB"
+  - "महागठबंधन" = "MGB"
 - **"partially matched"**:
   - Parties from same alliance but different specific parties mentioned
-  - "à¤•à¤¹ à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡" with a specific party (uncertainty vs decision)
+  - "कह नहीं सकते" with a specific party (uncertainty vs decision)
 - **"not matched"**:
-  - Completely different parties/alliances: "NDA" vs "à¤®à¤¹à¤¾à¤—à¤ à¤¬à¤‚à¤§à¤¨"
+  - Completely different parties/alliances: "NDA" vs "महागठबंधन"
   - "NOTA" vs any specific party
 
 ### For Satisfaction Questions (Question 12):
 - **"matched"**:
-  - Exact same level: "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚" = "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚"
+  - Exact same level: "बिलकुल शंतुष्ट हैं" = "बिलकुल शंतुष्ट हैं"
 - **"partially matched"**:
-  - Adjacent levels: "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚" and "à¤•à¥à¤› à¤¹à¤¦ à¤¤à¤• à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚" (both positive but different intensity)
-  - "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¨à¤¹à¥€à¤‚" and "à¤•à¥à¤› à¤¹à¤¦ à¤¤à¤• à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚" (one negative, one mixed)
+  - Adjacent levels: "बिलकुल शंतुष्ट हैं" and "कुछ हद तक शंतुष्ट हैं" (both positive but different intensity)
+  - "बिलकुल शंतुष्ट नहीं" and "कुछ हद तक शंतुष्ट हैं" (one negative, one mixed)
 - **"not matched"**:
-  - Opposite extremes: "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚" vs "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¨à¤¹à¥€à¤‚"
+  - Opposite extremes: "बिलकुल शंतुष्ट हैं" vs "बिलकुल शंतुष्ट नहीं"
 
 ### For CM Preference (Question 13):
 - **"matched"**:
@@ -547,8 +547,8 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 - **"not matched"**: Different persons
 
 ### For Village/City (Question 14):
-- **"matched"**: Both say "à¤—à¤¾à¤à¤µ" OR both say "à¤¶à¤¹à¤°"
-- **"not matched"**: One says "à¤—à¤¾à¤à¤µ" and other says "à¤¶à¤¹à¤°"
+- **"matched"**: Both say "गाँव" OR both say "शहर"
+- **"not matched"**: One says "गाँव" and other says "शहर"
 
 ### For Block/Village/Panchayat Names (Questions 15, 16):
 - **"matched"**:
@@ -569,28 +569,28 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 ## SEMANTIC EQUIVALENCE EXAMPLES:
 
 **Example 1 - Occupation:**
-- Answer 1: "à¤¹à¤¾à¤‰à¤¸à¤µà¤¾à¤‡à¤« / à¤—à¥ƒà¤¹à¤¿à¤£à¥€"
-- Answer 2: "à¤˜à¤° à¤•à¤¾ à¤•à¤¾à¤® à¤•à¤°à¤¤à¥€ à¤¹à¥‚à¤"
+- Answer 1: "हाउसवाइफ / गृहिणी"
+- Answer 2: "घर का काम करती हूँ"
 - Result: **"matched"** (same meaning - housewife)
 
 **Example 2 - Age:**
-- Answer 1: "31-45 à¤µà¤°à¥à¤·"
-- Answer 2: "46-60 à¤µà¤°à¥à¤·"
+- Answer 1: "31-45 वर्ष"
+- Answer 2: "46-60 वर्ष"
 - Result: **"partially matched"** (adjacent ranges, close but not same)
 
 **Example 3 - Political Party:**
 - Answer 1: "JDU | NDA"
-- Answer 2: "à¤®à¤¹à¤¾à¤—à¤ à¤¬à¤‚à¤§à¤¨ | MGB"
+- Answer 2: "महागठबंधन | MGB"
 - Result: **"not matched"** (opposite alliances)
 
 **Example 4 - Satisfaction:**
-- Answer 1: "à¤¬à¤¿à¤²à¤•à¥à¤² à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚"
-- Answer 2: "à¤•à¥à¤› à¤¹à¤¦ à¤¤à¤• à¤¶à¤‚à¤¤à¥à¤·à¥à¤Ÿ à¤¹à¥ˆà¤‚"
+- Answer 1: "बिलकुल शंतुष्ट हैं"
+- Answer 2: "कुछ हद तक शंतुष्ट हैं"
 - Result: **"partially matched"** (both positive but different intensity)
 
 **Example 5 - Yes/No:**
-- Answer 1: "à¤¹à¤¾à¤"
-- Answer 2: "à¤œà¥€ à¤¹à¤¾à¤, à¤¬à¤¿à¤²à¥à¤•à¥à¤²"
+- Answer 1: "हाँ"
+- Answer 2: "जी हाँ, बिल्कुल"
 - Result: **"matched"** (both mean yes)
 
 **Example 6 - Not Available:**
@@ -599,7 +599,7 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 - Result: **"matched"** (both unavailable)
 
 **Example 7 - Mixed:**
-- Answer 1: "à¤¨à¤¿à¤¤à¥€à¤¶ à¤•à¥à¤®à¤¾à¤°"
+- Answer 1: "नितीश कुमार"
 - Answer 2: "Not Available"
 - Result: **"not matched"** (one has answer, other doesn't)
 
@@ -886,7 +886,7 @@ Now, please analyze the  JSON with answer pairs and provide the semantic compari
                 with open(result[path_key], 'r', encoding='utf-8') as f:
                     result[key] = f.read()
 
-        print("\nâœ“ Pipeline completed successfully!")
+        print("\n✓ Pipeline completed successfully!")
         return result
 
 
