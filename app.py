@@ -3,6 +3,7 @@ import time
 import tempfile
 from pathlib import Path
 import streamlit as st
+import pandas as pd
 from dummy_processor import run_pipeline
 
 st.set_page_config(
@@ -231,6 +232,7 @@ def _init_state():
         "analysis_path": None,
         "transcription_raw": None,
         "analysis_raw": None,
+        "show_matrix": False,
     }.items():
         if k not in st.session_state:
             st.session_state[k] = v
@@ -245,6 +247,56 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.flush()
     tmp.close()
     return Path(tmp.name)
+
+def _generate_matrix_table(analysis_json):
+    """
+    Generate a matrix table from the analysis JSON output
+
+    Args:
+        analysis_json: The final output JSON with structure:
+                       {section_key: {question_key: [response1, response2, response3, response4]}}
+
+    Returns:
+        pandas DataFrame formatted as a table
+    """
+    table_rows = []
+
+    # Iterate through sections
+    for section_key, section_data in analysis_json.items():
+        if section_key == "summary":
+            continue
+
+        # Get questions for this section
+        questions = section_data
+
+        for question_key, responses in questions.items():
+            # responses is a list: [response1, response2, response3, response4]
+            if len(responses) >= 4:
+                row = {
+                    "Section": section_key,
+                    "Question": question_key,
+                    "Response 1": responses[0],
+                    "Response 2": responses[1],
+                    "Response 3": responses[2],
+                    "Response 4": responses[3]
+                }
+            else:
+                # Handle cases with fewer responses
+                row = {
+                    "Section": section_key,
+                    "Question": question_key,
+                    "Response 1": responses[0] if len(responses) > 0 else "Not Available",
+                    "Response 2": responses[1] if len(responses) > 1 else "Not Available",
+                    "Response 3": responses[2] if len(responses) > 2 else "Not Available",
+                    "Response 4": responses[3] if len(responses) > 3 else "Not Available"
+                }
+
+            table_rows.append(row)
+
+    # Create DataFrame
+    df = pd.DataFrame(table_rows)
+    return df
+
 
 def _stepper():
     """Display progress stepper"""
@@ -592,6 +644,48 @@ elif st.session_state.step == "result":
                     file_name="analysis.json",
                     mime="application/json"
                 )
+
+    # Matrix Generation Button
+    st.markdown("---")
+    if st.button("📊 Generate Matrix Table", use_container_width=True, key="matrix_btn"):
+        st.session_state.show_matrix = True
+
+    # Display matrix if button was clicked
+    if st.session_state.show_matrix:
+        st.markdown("### 📊 Matrix Output")
+        st.markdown("---")
+
+        try:
+            # Load the final output JSON
+            with open(st.session_state.analysis_path, 'r', encoding='utf-8') as f:
+                final_json = json.load(f)
+
+            # Generate the matrix table
+            matrix_df = _generate_matrix_table(final_json)
+
+            # Display the table with custom styling
+            st.dataframe(
+                matrix_df,
+                use_container_width=True,
+                hide_index=True,
+                height=600
+            )
+
+            # Download button for CSV
+            csv = matrix_df.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="💾 Download Matrix as CSV",
+                data=csv,
+                file_name="matrix_output.csv",
+                mime="text/csv",
+                use_container_width=True,
+                key="download_matrix_csv"
+            )
+
+        except Exception as e:
+            st.error(f"Error generating matrix: {str(e)}")
+            st.exception(e)
+
     
     st.markdown("---")
     
