@@ -611,6 +611,22 @@ elif st.session_state.step == "result":
     
     st.markdown('<h2 style="color: #dc2626;">📊 Results</h2>', unsafe_allow_html=True)
     
+    
+
+    # Audio Player Section
+    st.markdown("### 🎵 Audio Playback")
+    st.markdown("Listen to the uploaded audio file:")
+
+    try:
+        # Read the audio file and display player
+        with open(st.session_state.audio_path, 'rb') as audio_file:
+            audio_bytes = audio_file.read()
+            st.audio(audio_bytes, format='audio/mp3')
+    except Exception as e:
+        st.warning(f"Could not load audio file: {str(e)}")
+
+    st.markdown("---")
+
     tab1, tab2 = st.tabs(["📝 Transcription", "📈 Analysis"])
     
     with tab1:
