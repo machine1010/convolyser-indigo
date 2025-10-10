@@ -2,7 +2,6 @@ import json
 import time
 import tempfile
 from pathlib import Path
-
 import streamlit as st
 from dummy_processor import run_pipeline
 
@@ -13,15 +12,139 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ... [keep your CSS + helper code unchanged] ...
+# Custom CSS for styling
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .main {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: #ffffff;
+    }
+    
+    .stButton>button {
+        background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+    }
+    
+    .stButton>button:hover {
+        background: linear-gradient(90deg, #b91c1c 0%, #991b1b 100%);
+        box-shadow: 0 6px 12px rgba(220, 38, 38, 0.5);
+        transform: translateY(-2px);
+    }
+    
+    .upload-section {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px dashed #dc2626;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        margin: 20px 0;
+        transition: all 0.3s ease;
+    }
+    
+    .upload-section:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #ef4444;
+    }
+    
+    .step {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 0 8px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #9ca3af;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .step.active {
+        background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #d1d5db;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+    
+    .info-card {
+        background: rgba(220, 38, 38, 0.1);
+        border-left: 4px solid #dc2626;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+    
+    .stDownloadButton>button {
+        background: linear-gradient(90deg, #059669 0%, #047857 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .stDownloadButton>button:hover {
+        background: linear-gradient(90deg, #047857 0%, #065f46 100%);
+        transform: translateY(-2px);
+    }
+    
+    .json-viewer {
+        background: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 8px;
+        padding: 20px;
+        max-height: 500px;
+        overflow-y: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        color: #d1fae5;
+    }
+    
+    .stepper-container {
+        text-align: center;
+        padding: 30px 0;
+        margin-bottom: 30px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 def _init_state():
+    """Initialize session state variables"""
     for k, v in {
         "step": "landing",
         "audio_file": None,
-        "license_file": None,
+        "json_file_1": None,
+        "json_file_2": None,
         "audio_path": None,
-        "license_path": None,
+        "json_path_1": None,
+        "json_path_2": None,
         "transcription_path": None,
         "analysis_path": None,
         "transcription_raw": None,
@@ -29,9 +152,11 @@ def _init_state():
     }.items():
         if k not in st.session_state:
             st.session_state[k] = v
+
 _init_state()
 
 def _save_temp(uploaded_file, suffix: str) -> Path:
+    """Save uploaded file to temporary location"""
     ext = Path(uploaded_file.name).suffix or suffix
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
     tmp.write(uploaded_file.getvalue())
@@ -39,162 +164,246 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.close()
     return Path(tmp.name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def _stepper():
-    stages = ["landing", "audio", "license", "ready", "processing", "result"]
-    labels = ["Upload audio", "License key", "Explore", "Result"]
+    """Display progress stepper"""
+    stages = ["landing", "audio", "json1", "json2", "ready", "processing", "result"]
+    labels = ["Upload Audio", "JSON File 1", "JSON File 2", "Explore", "Result"]
+    
     try:
-        idx = max(1, min(4, stages.index(st.session_state.step)))
+        idx = max(1, min(5, stages.index(st.session_state.step)))
     except ValueError:
         idx = 1
+    
     chips = []
     for i, lbl in enumerate(labels, 1):
         cls = "step active" if i <= idx else "step"
-        chips.append(f'<div class="{cls}">{i}. {lbl}</div>')
-    st.markdown(f'<div class="stepper">{"".join(chips)}</div>', unsafe_allow_html=True)
+        chips.append(f'<span class="{cls}">{lbl}</span>')
+    
+    st.markdown(
+        f'<div class="stepper-container">{"".join(chips)}</div>',
+        unsafe_allow_html=True
+    )
 
-col_logo, col_cta = st.columns([0.7, 0.3])
-with col_logo:
-    st.markdown('<div class="navbar">', unsafe_allow_html=True)
-    left, right = st.columns([0.8, 0.2])
-    with left:
-        st.markdown('<div class="brand">', unsafe_allow_html=True)
-        st.image("assets/logo.png", use_container_width=False)
-        st.markdown("</div>", unsafe_allow_html=True)
-    with right:
-        st.image("assets/icon.png", use_container_width=False)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with col_logo:
-    st.markdown('<div class="hero">', unsafe_allow_html=True)
-    st.markdown("<h1>Conversation insights, instantly</h1>", unsafe_allow_html=True)
-    st.markdown('<p class="small-muted">Upload a call, apply your license, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with col_cta:
-    st.markdown('<div class="cta-row">', unsafe_allow_html=True)
-    if st.session_state.step == "landing":
-        if st.button("Get started", type="primary"):
-            st.session_state.step = "audio"
-    st.markdown("</div>", unsafe_allow_html=True)
-
-st.markdown("<hr style='border-color:rgba(255,255,255,0.08)'>", unsafe_allow_html=True)
-_stepper()
-
+# ==================== LANDING PAGE ====================
 if st.session_state.step == "landing":
-    st.markdown('<div class="card">Welcome — click “Get started” to begin.</div>', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">🎧 Conversation Intelligence Platform</h1>', unsafe_allow_html=True)
+    st.markdown(
+        '<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>',
+        unsafe_allow_html=True
+    )
+    
+    st.markdown("---")
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("🚀 Get Started", use_container_width=True):
+            st.session_state.step = "audio"
+            st.rerun()
 
+# ==================== AUDIO UPLOAD ====================
 elif st.session_state.step == "audio":
-    with st.container(border=True):
-        st.subheader("Upload conversation audio")
-        st.caption("Accepted: wav, mp3, m4a, aac, flac, ogg")
-        audio = st.file_uploader("Choose an audio file", type=["wav","mp3","m4a","aac","flac","ogg"], key="audio_upl")
-        if audio:
-            st.audio(audio)
-        c1, c2 = st.columns([0.2, 0.8])
-        with c1:
-            if st.button("Back"):
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">📁 Step 1: Upload Audio File</h2>', unsafe_allow_html=True)
+    st.markdown("Upload your audio file (supported formats: MP3, WAV, M4A, etc.)")
+    
+    audio_file = st.file_uploader(
+        "Choose an audio file",
+        type=["mp3", "wav", "m4a", "ogg", "flac"],
+        key="audio_uploader"
+    )
+    
+    if audio_file:
+        st.session_state.audio_file = audio_file
+        st.success(f"✅ Audio file uploaded: {audio_file.name}")
+        
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("⬅️ Back"):
                 st.session_state.step = "landing"
-        with c2:
-            if audio and st.button("Continue ➝ License"):
-                st.session_state.audio_file = audio
-                st.session_state.audio_path = _save_temp(audio, ".audio")
-                st.session_state.step = "license"
+                st.rerun()
+        with col2:
+            if st.button("Next ➡️", use_container_width=True):
+                st.session_state.audio_path = _save_temp(audio_file, ".m4a")
+                st.session_state.step = "json1"
+                st.rerun()
 
-elif st.session_state.step == "license":
-    with st.container(border=True):
-        st.subheader("Upload license key")
-        st.caption("Accepted: txt, json, key, lic")
-        keyf = st.file_uploader("Choose a license key file", type=["txt","json","key","lic"], key="lic_upl")
-        c1, c2 = st.columns([0.2, 0.8])
-        with c1:
-            if st.button("Back"):
+# ==================== JSON FILE 1 UPLOAD ====================
+elif st.session_state.step == "json1":
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 2: Upload JSON File 1</h2>', unsafe_allow_html=True)
+    st.markdown("Upload the first JSON configuration file")
+    
+    json_file_1 = st.file_uploader(
+        "Choose first JSON file",
+        type=["json"],
+        key="json1_uploader"
+    )
+    
+    if json_file_1:
+        st.session_state.json_file_1 = json_file_1
+        st.success(f"✅ JSON File 1 uploaded: {json_file_1.name}")
+        
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("⬅️ Back"):
                 st.session_state.step = "audio"
-        with c2:
-            if keyf and st.button("Continue ➝ Explore"):
-                st.session_state.license_file = keyf
-                st.session_state.license_path = _save_temp(keyf, ".lic")
+                st.rerun()
+        with col2:
+            if st.button("Next ➡️", use_container_width=True):
+                st.session_state.json_path_1 = _save_temp(json_file_1, ".json")
+                st.session_state.step = "json2"
+                st.rerun()
+
+# ==================== JSON FILE 2 UPLOAD ====================
+elif st.session_state.step == "json2":
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 3: Upload JSON File 2</h2>', unsafe_allow_html=True)
+    st.markdown("Upload the second JSON configuration file")
+    
+    json_file_2 = st.file_uploader(
+        "Choose second JSON file",
+        type=["json"],
+        key="json2_uploader"
+    )
+    
+    if json_file_2:
+        st.session_state.json_file_2 = json_file_2
+        st.success(f"✅ JSON File 2 uploaded: {json_file_2.name}")
+        
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("⬅️ Back"):
+                st.session_state.step = "json1"
+                st.rerun()
+        with col2:
+            if st.button("Process All Files ➡️", use_container_width=True):
+                st.session_state.json_path_2 = _save_temp(json_file_2, ".json")
                 st.session_state.step = "ready"
+                st.rerun()
 
+# ==================== READY TO PROCESS ====================
 elif st.session_state.step == "ready":
-    with st.container(border=True):
-        st.subheader("Review")
-        st.write({
-            "audio": getattr(st.session_state.audio_file, "name", None),
-            "license": getattr(st.session_state.license_file, "name", None),
-        })
-        if st.button("Explore", type="primary"):
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">✅ Ready to Process</h2>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="info-card">', unsafe_allow_html=True)
+    st.markdown("**Files uploaded successfully:**")
+    st.markdown(f"- 🎵 Audio: {st.session_state.audio_file.name if st.session_state.audio_file else 'N/A'}")
+    st.markdown(f"- 📄 JSON File 1: {st.session_state.json_file_1.name if st.session_state.json_file_1 else 'N/A'}")
+    st.markdown(f"- 📄 JSON File 2: {st.session_state.json_file_2.name if st.session_state.json_file_2 else 'N/A'}")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("⬅️ Back"):
+            st.session_state.step = "json2"
+            st.rerun()
+    with col2:
+        if st.button("🚀 Start Processing", use_container_width=True):
             st.session_state.step = "processing"
+            st.rerun()
 
+# ==================== PROCESSING ====================
 elif st.session_state.step == "processing":
-    with st.spinner("Running analysis…"):
-        # Returns file paths and content objects
-        try:
-            t_path, a_path, t_content, a_content = run_pipeline(
-                audio_path=Path(st.session_state.audio_path),
-                license_path=Path(st.session_state.license_path),
-            )
-            st.session_state.transcription_path = t_path
-            st.session_state.analysis_path = a_path
-            # Read raw file content (do not parse, just read as text)
-            try:
-                st.session_state.transcription_raw = Path(t_path).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.transcription_raw = "(Failed to read transcription file)"
-            try:
-                st.session_state.analysis_raw = Path(a_path).read_text(encoding="utf-8")
-            except Exception:
-                st.session_state.analysis_raw = "(Failed to read analysis file)"
-        except Exception as e:
-            st.session_state.transcription_raw = f"Pipeline failed:\n{e}"
-            st.session_state.analysis_raw = ""
-        time.sleep(0.3)
-    st.session_state.step = "result"
-    st.rerun()
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">⚙️ Processing...</h2>', unsafe_allow_html=True)
+    
+    progress_bar = st.progress(0)
+    status_text = st.empty()
+    
+    try:
+        status_text.text("📤 Uploading files...")
+        progress_bar.progress(20)
+        time.sleep(0.5)
+        
+        status_text.text("🔄 Running pipeline...")
+        progress_bar.progress(40)
+        
+        # Call the updated pipeline function with 3 files
+        transcription_path, analysis_path, transcription_raw, analysis_raw = run_pipeline(
+            audio_path=st.session_state.audio_path,
+            json_path_1=st.session_state.json_path_1,
+            json_path_2=st.session_state.json_path_2
+        )
+        
+        progress_bar.progress(80)
+        status_text.text("✅ Processing complete!")
+        
+        st.session_state.transcription_path = transcription_path
+        st.session_state.analysis_path = analysis_path
+        st.session_state.transcription_raw = transcription_raw
+        st.session_state.analysis_raw = analysis_raw
+        
+        progress_bar.progress(100)
+        time.sleep(1)
+        
+        st.session_state.step = "result"
+        st.rerun()
+        
+    except Exception as e:
+        st.error(f"❌ Error during processing: {str(e)}")
+        if st.button("🔄 Try Again"):
+            st.session_state.step = "ready"
+            st.rerun()
 
+# ==================== RESULTS ====================
 elif st.session_state.step == "result":
-    with st.container(border=True):
-        st.subheader("Transcription Output File Content:")
-        st.text(st.session_state.transcription_raw or "(No output or unable to read file)")
-        st.download_button(
-            "Download Transcription Output",
-            data=st.session_state.transcription_raw or "",
-            file_name="transcription_output.txt",
-            mime="text/plain",
-        )
-        st.subheader("Analysis Output File Content:")
-        st.text(st.session_state.analysis_raw or "(No output or unable to read file)")
-        st.download_button(
-            "Download Analysis Output",
-            data=st.session_state.analysis_raw or "",
-            file_name="analysis_output.txt",
-            mime="text/plain",
-        )
-        c1, c2 = st.columns(2)
-        with c1:
-            if st.button("Run again"):
-                for k in [
-                    "step","audio_file","license_file","audio_path","license_path",
-                    "transcription_path","analysis_path","transcription_raw","analysis_raw"
-                ]:
-                    if k in st.session_state:
-                        del st.session_state[k]
-                _init_state()
-        with c2:
-            if st.button("Exit"):
-                st.stop()
+    _stepper()
+    
+    st.markdown('<h2 style="color: #dc2626;">📊 Results</h2>', unsafe_allow_html=True)
+    
+    tab1, tab2 = st.tabs(["📝 Transcription", "📈 Analysis"])
+    
+    with tab1:
+        st.markdown("### Transcription Output")
+        
+        if st.session_state.transcription_raw:
+            st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
+            st.json(st.session_state.transcription_raw)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with open(st.session_state.transcription_path, "rb") as f:
+                st.download_button(
+                    label="⬇️ Download Transcription JSON",
+                    data=f.read(),
+                    file_name="transcription.json",
+                    mime="application/json"
+                )
+    
+    with tab2:
+        st.markdown("### Analysis Output")
+        
+        if st.session_state.analysis_raw:
+            st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
+            st.json(st.session_state.analysis_raw)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            with open(st.session_state.analysis_path, "rb") as f:
+                st.download_button(
+                    label="⬇️ Download Analysis JSON",
+                    data=f.read(),
+                    file_name="analysis.json",
+                    mime="application/json"
+                )
+    
+    st.markdown("---")
+    
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        if st.button("🔄 Process New Files", use_container_width=True):
+            # Reset state
+            for key in ["audio_file", "json_file_1", "json_file_2", "audio_path", "json_path_1", "json_path_2",
+                       "transcription_path", "analysis_path", "transcription_raw", "analysis_raw"]:
+                st.session_state[key] = None
+            st.session_state.step = "landing"
+            st.rerun()
+    
+    with col2:
+        if st.button("⬅️ Back to Ready", use_container_width=True):
+            st.session_state.step = "ready"
+            st.rerun()
