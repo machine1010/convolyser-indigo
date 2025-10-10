@@ -132,6 +132,89 @@ st.markdown("""
         padding: 30px 0;
         margin-bottom: 30px;
     }
+    
+    /* New sections styling */
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-top: 60px;
+        margin-bottom: 30px;
+    }
+    
+    .why-section {
+        background: rgba(220, 38, 38, 0.05);
+        border-left: 4px solid #dc2626;
+        padding: 30px;
+        border-radius: 8px;
+        margin: 30px 0;
+        color: #d1d5db;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+    
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin: 40px 0;
+    }
+    
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .benefit-icon {
+        color: #10b981;
+        font-size: 1.5rem;
+        margin-top: 3px;
+    }
+    
+    .benefit-text {
+        color: #e5e7eb;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .faq-container {
+        margin: 40px 0;
+    }
+    
+    .faq-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-bottom: 15px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .faq-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: #dc2626;
+    }
+    
+    .faq-question {
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .faq-answer {
+        color: #d1d5db;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        padding-left: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .benefits-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -199,6 +282,109 @@ if st.session_state.step == "landing":
         if st.button("🚀 Get Started", use_container_width=True):
             st.session_state.step = "audio"
             st.rerun()
+    
+    # ==================== NEW SECTIONS ====================
+    
+    # Section 1: Why We Created This Platform
+    st.markdown('<h2 class="section-title">Why We Created This Platform</h2>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="why-section">
+        After recognizing the need for efficient audio conversation analysis in government and organizational surveys, we developed this platform to bridge the gap between raw audio data and actionable insights. This platform was created as an independent solution, performing direct audio transcription and intelligent analysis without relying on multiple third-party services. Our goal is to provide accurate, detailed, and structured insights from Hindi language conversations, particularly for political surveys and citizen engagement initiatives.
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Section 2: Our Solution & Key Benefits
+    st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="benefits-grid">
+        <div style="padding-right: 20px;">
+            <h3 style="color: #ffffff; margin-bottom: 25px;">Our Solution</h3>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Complete independence from third-party APIs and their limitations</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Direct audio processing for accurate and detailed transcription results</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Intelligent analysis system with context-aware question extraction</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Speaker diarization to identify and separate multiple speakers</div>
+            </div>
+        </div>
+        
+        <div style="padding-left: 20px;">
+            <h3 style="color: #ffffff; margin-bottom: 25px;">Key Benefits</h3>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Stable and reliable API without external dependencies</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Configurable JSON-based survey question templates</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Real-time processing with instant downloadable outputs</div>
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-icon">✓</div>
+                <div class="benefit-text">Support for Hindi language conversations with cultural context understanding</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Section 3: Frequently Asked Questions
+    st.markdown('<h2 class="section-title">Frequently Asked Questions</h2>', unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">How can organizations use this platform for survey analysis?</div>
+            <div class="faq-answer">
+                Organizations can upload audio recordings of telephone surveys or field interviews along with their custom JSON configuration files. The platform automatically transcribes the conversation, performs speaker diarization, and extracts specific answers to predefined survey questions. This significantly reduces manual data entry time and improves accuracy in capturing survey responses.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Can I customize the survey questions and analysis parameters?</div>
+            <div class="faq-answer">
+                Yes! The platform accepts two JSON configuration files that allow you to define custom survey questions, response options, and analysis parameters. This makes it highly flexible for different types of surveys, whether political, social, or organizational research. You can adapt the question sets to match your specific research needs.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Does the platform work for long-form conversations?</div>
+            <div class="faq-answer">
+                Absolutely. The platform is designed to handle conversations of varying lengths, from short 2-3 minute calls to extended interviews. The transcription engine accurately captures timestamps for each speaker segment, and the analysis module can process comprehensive conversations while extracting relevant information across the entire audio duration.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">How accurate is the Hindi language transcription and analysis?</div>
+            <div class="faq-answer">
+                The platform uses advanced AI models specifically trained for Hindi language understanding, including various dialects and regional variations. It can handle conversational Hindi with high accuracy, including code-switching between Hindi and English. The analysis engine understands contextual meanings and can match responses to predefined options even when respondents use colloquial or varied phrasing.
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
 # ==================== AUDIO UPLOAD ====================
 elif st.session_state.step == "audio":
