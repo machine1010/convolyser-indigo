@@ -135,16 +135,16 @@ st.markdown("""
     
     /* New sections styling */
     .section-title {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 1.8rem;
+        font-weight: 600;
         color: #ffffff;
         margin-top: 60px;
         margin-bottom: 30px;
     }
     
     .why-section {
-        background: rgba(220, 38, 38, 0.05);
-        border-left: 4px solid #dc2626;
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(29, 78, 216, 0.05) 100%);
+        border-left: 4px solid #3b82f6;
         padding: 30px;
         border-radius: 8px;
         margin: 30px 0;
@@ -153,66 +153,65 @@ st.markdown("""
         line-height: 1.8;
     }
     
-    .benefits-grid {
+    .two-column-section {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 40px;
+        gap: 50px;
         margin: 40px 0;
+    }
+    
+    .column-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 25px;
     }
     
     .benefit-item {
         display: flex;
         align-items: flex-start;
-        gap: 15px;
+        gap: 12px;
+        margin-bottom: 18px;
     }
     
     .benefit-icon {
         color: #10b981;
-        font-size: 1.5rem;
-        margin-top: 3px;
+        font-size: 1.2rem;
+        margin-top: 2px;
+        flex-shrink: 0;
     }
     
     .benefit-text {
         color: #e5e7eb;
-        font-size: 1rem;
+        font-size: 0.95rem;
         line-height: 1.6;
     }
     
-    .faq-container {
-        margin: 40px 0;
+    /* FAQ Styling */
+    .faq-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-top: 60px;
+        margin-bottom: 30px;
     }
     
-    .faq-item {
+    .stExpander {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
-        margin-bottom: 15px;
-        padding: 20px;
-        transition: all 0.3s ease;
+        margin-bottom: 12px;
     }
     
-    .faq-item:hover {
+    .stExpander:hover {
         background: rgba(255, 255, 255, 0.05);
-        border-color: #dc2626;
-    }
-    
-    .faq-question {
-        color: #ffffff;
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    
-    .faq-answer {
-        color: #d1d5db;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        padding-left: 20px;
+        border-color: rgba(220, 38, 38, 0.3);
     }
     
     @media (max-width: 768px) {
-        .benefits-grid {
+        .two-column-section {
             grid-template-columns: 1fr;
+            gap: 30px;
         }
     }
 </style>
@@ -298,9 +297,9 @@ if st.session_state.step == "landing":
     st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
     
     st.markdown("""
-    <div class="benefits-grid">
-        <div style="padding-right: 20px;">
-            <h3 style="color: #ffffff; margin-bottom: 25px;">Our Solution</h3>
+    <div class="two-column-section">
+        <div>
+            <h3 class="column-title">Our Solution</h3>
             
             <div class="benefit-item">
                 <div class="benefit-icon">✓</div>
@@ -323,8 +322,8 @@ if st.session_state.step == "landing":
             </div>
         </div>
         
-        <div style="padding-left: 20px;">
-            <h3 style="color: #ffffff; margin-bottom: 25px;">Key Benefits</h3>
+        <div>
+            <h3 class="column-title">Key Benefits</h3>
             
             <div class="benefit-item">
                 <div class="benefit-icon">✓</div>
@@ -350,39 +349,35 @@ if st.session_state.step == "landing":
     """, unsafe_allow_html=True)
     
     # Section 3: Frequently Asked Questions
-    st.markdown('<h2 class="section-title">Frequently Asked Questions</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="faq-title">Frequently Asked Questions</h2>', unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class="faq-container">
-        <div class="faq-item">
-            <div class="faq-question">How can organizations use this platform for survey analysis?</div>
-            <div class="faq-answer">
-                Organizations can upload audio recordings of telephone surveys or field interviews along with their custom JSON configuration files. The platform automatically transcribes the conversation, performs speaker diarization, and extracts specific answers to predefined survey questions. This significantly reduces manual data entry time and improves accuracy in capturing survey responses.
-            </div>
-        </div>
-        
-        <div class="faq-item">
-            <div class="faq-question">Can I customize the survey questions and analysis parameters?</div>
-            <div class="faq-answer">
-                Yes! The platform accepts two JSON configuration files that allow you to define custom survey questions, response options, and analysis parameters. This makes it highly flexible for different types of surveys, whether political, social, or organizational research. You can adapt the question sets to match your specific research needs.
-            </div>
-        </div>
-        
-        <div class="faq-item">
-            <div class="faq-question">Does the platform work for long-form conversations?</div>
-            <div class="faq-answer">
-                Absolutely. The platform is designed to handle conversations of varying lengths, from short 2-3 minute calls to extended interviews. The transcription engine accurately captures timestamps for each speaker segment, and the analysis module can process comprehensive conversations while extracting relevant information across the entire audio duration.
-            </div>
-        </div>
-        
-        <div class="faq-item">
-            <div class="faq-question">How accurate is the Hindi language transcription and analysis?</div>
-            <div class="faq-answer">
-                The platform uses advanced AI models specifically trained for Hindi language understanding, including various dialects and regional variations. It can handle conversational Hindi with high accuracy, including code-switching between Hindi and English. The analysis engine understands contextual meanings and can match responses to predefined options even when respondents use colloquial or varied phrasing.
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.expander("How can organizations use this platform for survey analysis?"):
+        st.markdown("""
+        Organizations can upload audio recordings of telephone surveys or field interviews along with their custom JSON configuration files. 
+        The platform automatically transcribes the conversation, performs speaker diarization, and extracts specific answers to predefined survey questions. 
+        This significantly reduces manual data entry time and improves accuracy in capturing survey responses.
+        """)
+    
+    with st.expander("Can I customize the survey questions and analysis parameters?"):
+        st.markdown("""
+        Yes! The platform accepts two JSON configuration files that allow you to define custom survey questions, response options, and analysis parameters. 
+        This makes it highly flexible for different types of surveys, whether political, social, or organizational research. 
+        You can adapt the question sets to match your specific research needs.
+        """)
+    
+    with st.expander("Does the platform work for long-form conversations?"):
+        st.markdown("""
+        Absolutely. The platform is designed to handle conversations of varying lengths, from short 2-3 minute calls to extended interviews. 
+        The transcription engine accurately captures timestamps for each speaker segment, and the analysis module can process comprehensive conversations 
+        while extracting relevant information across the entire audio duration.
+        """)
+    
+    with st.expander("How accurate is the Hindi language transcription and analysis?"):
+        st.markdown("""
+        The platform uses advanced AI models specifically trained for Hindi language understanding, including various dialects and regional variations. 
+        It can handle conversational Hindi with high accuracy, including code-switching between Hindi and English. 
+        The analysis engine understands contextual meanings and can match responses to predefined options even when respondents use colloquial or varied phrasing.
+        """)
     
     st.markdown("<br><br>", unsafe_allow_html=True)
 
