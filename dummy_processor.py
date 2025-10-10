@@ -13,7 +13,7 @@ class HindiAudioAnalysisPipeline:
         self.project_id = project_id if project_id else str(os.environ.get("GOOGLE_CLOUD_PROJECT"))
         self.location = location
         vertexai.init(project=self.project_id, location=self.location)
-        self.model = genai.GenerativeModel(model_name="gemini-2.0-flash-lite-001")
+        self.model = genai.GenerativeModel("gemini-2.5-pro")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         self.transcription_prompt = '''
 This is a Hindi language conversation happens between a caller from the govt organisation and a tribal people . U need to pay close attention to the conversation and generate the transcript of it . Also make sure to do the speaker diarization. Donot pay much attention to the background noise and try not to include it in the transcript. Output it in the below mentioned json format .
@@ -321,14 +321,6 @@ Now, please analyze the given Hindi transcript and provide the extracted informa
 def run_pipeline(audio_path: Path, license_path: Path):
     credentials_path = str(license_path)
     out_dir = tempfile.mkdtemp(prefix="hindi-audio-pipeline-")
-    
     pipeline = HindiAudioAnalysisPipeline(credentials_path=credentials_path)
     result = pipeline.process_audio(audio_file_path=str(audio_path), output_dir=out_dir)
-    
-    # Return as dictionary with raw content (not parsed as JSON)
-    return {
-        'transcription_path': result['transcription_path'],
-        'analysis_path': result['analysis_path'],
-        'transcription_raw': result['transcription'],
-        'analysis_raw': result['analysis']
-    }
+    return result['transcription_path'], result['analysis_path'], result['transcription'], result['analysis']
