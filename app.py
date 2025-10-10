@@ -517,7 +517,7 @@ elif st.session_state.step == "processing":
         progress_bar.progress(40)
         
         # Call the updated pipeline function with 3 files
-        transcription_path, analysis_path, transcription_raw, analysis_raw = run_pipeline(
+        transcription_path,_, final_path, transcription_raw, final_raw = run_pipeline(
             audio_path=st.session_state.audio_path,
             json_path_1=st.session_state.json_path_1,
             json_path_2=st.session_state.json_path_2
@@ -527,9 +527,9 @@ elif st.session_state.step == "processing":
         status_text.text("✅ Processing complete!")
         
         st.session_state.transcription_path = transcription_path
-        st.session_state.analysis_path = analysis_path
+        st.session_state.analysis_path = final_path
         st.session_state.transcription_raw = transcription_raw
-        st.session_state.analysis_raw = analysis_raw
+        st.session_state.analysis_raw = final_raw
         
         progress_bar.progress(100)
         time.sleep(1)
