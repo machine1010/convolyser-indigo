@@ -225,8 +225,8 @@ def _init_state():
         "json_file_1": None,
         "json_file_2": None,
         "audio_path": None,
-        "agent_json_path": None,
-        "license_path": None,
+        "json_path_1": None,
+        "json_path_2": None,
         "transcription_path": None,
         "analysis_path": None,
         "transcription_raw": None,
@@ -444,7 +444,7 @@ elif st.session_state.step == "json1":
                 st.rerun()
         with col2:
             if st.button("Next ➡️", use_container_width=True):
-                st.session_state.agent_json_path = _save_temp(json_file_1, ".json")
+                st.session_state.json_path_1 = _save_temp(json_file_1, ".json")
                 st.session_state.step = "json2"
                 st.rerun()
 
@@ -472,7 +472,7 @@ elif st.session_state.step == "json2":
                 st.rerun()
         with col2:
             if st.button("Process All Files ➡️", use_container_width=True):
-                st.session_state.license_path = _save_temp(json_file_2, ".json")
+                st.session_state.json_path_2 = _save_temp(json_file_2, ".json")
                 st.session_state.step = "ready"
                 st.rerun()
 
@@ -519,8 +519,8 @@ elif st.session_state.step == "processing":
         # Call the updated pipeline function with 3 files
         transcription_path, analysis_path, transcription_raw, analysis_raw = run_pipeline(
             audio_path=st.session_state.audio_path,
-            agent_json_path=st.session_state.agent_json_path,
-            license_path=st.session_state.license_path
+            json_path_1=st.session_state.json_path_1,
+            json_path_2=st.session_state.json_path_2
         )
         
         progress_bar.progress(80)
@@ -589,7 +589,7 @@ elif st.session_state.step == "result":
     with col1:
         if st.button("🔄 Process New Files", use_container_width=True):
             # Reset state
-            for key in ["audio_file", "json_file_1", "json_file_2", "audio_path", "agent_json_path", "license_path",
+            for key in ["audio_file", "json_file_1", "json_file_2", "audio_path", "json_path_1", "json_path_2",
                        "transcription_path", "analysis_path", "transcription_raw", "analysis_raw"]:
                 st.session_state[key] = None
             st.session_state.step = "landing"
