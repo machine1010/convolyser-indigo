@@ -248,56 +248,6 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     tmp.close()
     return Path(tmp.name)
 
-def _generate_matrix_table(analysis_json):
-    """
-    Generate a matrix table from the analysis JSON output
-
-    Args:
-        analysis_json: The final output JSON with structure:
-                       {section_key: {question_key: [response1, response2, response3, response4]}}
-
-    Returns:
-        pandas DataFrame formatted as a table
-    """
-    table_rows = []
-
-    # Iterate through sections
-    for section_key, section_data in analysis_json.items():
-        if section_key == "summary":
-            continue
-
-        # Get questions for this section
-        questions = section_data
-
-        for question_key, responses in questions.items():
-            # responses is a list: [response1, response2, response3, response4]
-            if len(responses) >= 4:
-                row = {
-                    "Section": section_key,
-                    "Question": question_key,
-                    "Response 1": responses[0],
-                    "Response 2": responses[1],
-                    "Response 3": responses[2],
-                    "Response 4": responses[3]
-                }
-            else:
-                # Handle cases with fewer responses
-                row = {
-                    "Section": section_key,
-                    "Question": question_key,
-                    "Response 1": responses[0] if len(responses) > 0 else "Not Available",
-                    "Response 2": responses[1] if len(responses) > 1 else "Not Available",
-                    "Response 3": responses[2] if len(responses) > 2 else "Not Available",
-                    "Response 4": responses[3] if len(responses) > 3 else "Not Available"
-                }
-
-            table_rows.append(row)
-
-    # Create DataFrame
-    df = pd.DataFrame(table_rows)
-    return df
-
-
 def _stepper():
     """Display progress stepper"""
     stages = ["landing", "audio", "json1", "json2", "ready", "processing", "result"]
@@ -318,21 +268,22 @@ def _stepper():
         unsafe_allow_html=True
     )
 
+def _display_logo():
+    """Display logo on every page"""
+    col_logo, col_spacer = st.columns([1, 4])
+    with col_logo:
+        st.image('logo.png', width=150)
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
 # ==================== LANDING PAGE ====================
 # Landing page - Add image at top left
 if st.session_state.step == "landing":
     _stepper()
-    
-    # Add image at top left corner
-    col_logo, col_spacer = st.columns([1, 4])
-    with col_logo:
-        # Place your image file in the same directory as app.py
-        # Replace 'logo.png' with your image filename
-        st.image('logo.png', width=150)
-    
+
     # Original hero section
-    st.markdown('<h1 class="hero-title">🎧 SurveyScribe AI </h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle"> From Voice to Value with AI Insight </p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">🎧 Conversation Intelligence Platform</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -347,15 +298,15 @@ if st.session_state.step == "landing":
     # ==================== NEW SECTIONS ====================
     
     # Section 1: Why We Created This Platform
-    st.markdown('<h2 class="section-title"> Empowering Surveys with AI m</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">Why We Created This Platform</h2>', unsafe_allow_html=True)
     
     st.markdown("""
     <div class="why-section">
-        This platform transforms survey calls into clear, actionable insights. By using AI to transcribe and analyze conversations, it ensures every question and answer counts. It’s built to make surveys smarter and more reliable.
+        After recognizing the need for efficient audio conversation analysis in government and organizational surveys, we developed this platform to bridge the gap between raw audio data and actionable insights. This platform was created as an independent solution, performing direct audio transcription and intelligent analysis without relying on multiple third-party services. Our goal is to provide accurate, detailed, and structured insights from Hindi language conversations, particularly for political surveys and citizen engagement initiatives.
     </div>
     """, unsafe_allow_html=True)
         # Section 2: Our Solution & Key Benefits
-    st.markdown('<h2 class="section-title"> Unlocking Value for You </h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -365,28 +316,28 @@ if st.session_state.step == "landing":
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Uses speaker diarization to distinguish multiple voices </div>
+            <div class="benefit-text">Complete independence from third-party APIs and their limitations</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Employs context-aware AI for extracting relevant questions </div>
+            <div class="benefit-text">Direct audio processing for accurate and detailed transcription results</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Offers a stable, dependency-free API for seamless integration </div>
+            <div class="benefit-text">Intelligent analysis system with context-aware question extraction</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Provides real-time processing with instant downloadable results </div>
+            <div class="benefit-text">Speaker diarization to identify and separate multiple speakers</div>
         </div>
         """, unsafe_allow_html=True)
     
@@ -396,28 +347,28 @@ if st.session_state.step == "landing":
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Ensures clear separation of speakers for accurate analysis </div>
+            <div class="benefit-text">Stable and reliable API without external dependencies</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Delivers relevant insights through intelligent question extraction </div>
+            <div class="benefit-text">Configurable JSON-based survey question templates</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text">Reliable performance with minimal external dependencies</div>
+            <div class="benefit-text">Real-time processing with instant downloadable outputs</div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text"> Enables quick decision-making with immediate report downloads </div>
+            <div class="benefit-text">Support for Hindi language conversations with cultural context understanding</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -431,9 +382,11 @@ if st.session_state.step == "landing":
         This significantly reduces manual data entry time and improves accuracy in capturing survey responses.
         """)
     
-    with st.expander("Can the platform handle multiple languages or accents?"):
+    with st.expander("Can I customize the survey questions and analysis parameters?"):
         st.markdown("""
-        Yes, it supports Hindi language conversations with cultural context understanding and is designed to adapt to various accents effectively.
+        Yes! The platform accepts two JSON configuration files that allow you to define custom survey questions, response options, and analysis parameters. 
+        This makes it highly flexible for different types of surveys, whether political, social, or organizational research. 
+        You can adapt the question sets to match your specific research needs.
         """)
     
     with st.expander("Does the platform work for long-form conversations?"):
@@ -455,6 +408,7 @@ if st.session_state.step == "landing":
 # ==================== AUDIO UPLOAD ====================
 elif st.session_state.step == "audio":
     _stepper()
+    _display_logo()
     
     st.markdown('<h2 style="color: #dc2626;">📁 Step 1: Upload Audio File</h2>', unsafe_allow_html=True)
     st.markdown("Upload your audio file (supported formats: MP3, WAV, M4A, etc.)")
@@ -483,6 +437,7 @@ elif st.session_state.step == "audio":
 # ==================== JSON FILE 1 UPLOAD ====================
 elif st.session_state.step == "json1":
     _stepper()
+    _display_logo()
     
     st.markdown('<h2 style="color: #dc2626;">📄 Step 2: Upload JSON File 1</h2>', unsafe_allow_html=True)
     st.markdown("Upload the first JSON configuration file")
@@ -511,6 +466,7 @@ elif st.session_state.step == "json1":
 # ==================== JSON FILE 2 UPLOAD ====================
 elif st.session_state.step == "json2":
     _stepper()
+    _display_logo()
     
     st.markdown('<h2 style="color: #dc2626;">📄 Step 3: Upload JSON File 2</h2>', unsafe_allow_html=True)
     st.markdown("Upload the second JSON configuration file")
@@ -539,6 +495,7 @@ elif st.session_state.step == "json2":
 # ==================== READY TO PROCESS ====================
 elif st.session_state.step == "ready":
     _stepper()
+    _display_logo()
     
     st.markdown('<h2 style="color: #dc2626;">✅ Ready to Process</h2>', unsafe_allow_html=True)
     
@@ -562,6 +519,7 @@ elif st.session_state.step == "ready":
 # ==================== PROCESSING ====================
 elif st.session_state.step == "processing":
     _stepper()
+    _display_logo()
     
     st.markdown('<h2 style="color: #dc2626;">⚙️ Processing...</h2>', unsafe_allow_html=True)
     
@@ -609,29 +567,6 @@ elif st.session_state.step == "result":
     
     st.markdown('<h2 style="color: #dc2626;">📊 Results</h2>', unsafe_allow_html=True)
     
-    
-
-    # Audio Player Section
-    st.markdown("### 🎵 Audio Playback")
-
-    if st.session_state.audio_path and st.session_state.audio_file:
-        st.markdown(f"**File:** {st.session_state.audio_file.name}")
-
-        try:
-            # Read the audio file
-            with open(st.session_state.audio_path, 'rb') as audio_file:
-                audio_bytes = audio_file.read()
-
-            # Display audio player - let Streamlit auto-detect format
-            st.audio(audio_bytes)
-
-        except Exception as e:
-            st.error(f"❌ Could not load audio file: {str(e)}")
-    else:
-        st.warning("⚠️ Audio file not found in session")
-
-    st.markdown("---")
-
     tab1, tab2 = st.tabs(["📝 Transcription", "📈 Analysis"])
     
     with tab1:
@@ -665,48 +600,6 @@ elif st.session_state.step == "result":
                     file_name="analysis.json",
                     mime="application/json"
                 )
-
-    # Matrix Generation Button
-    st.markdown("---")
-    if st.button("📊 Generate Matrix Table", use_container_width=True, key="matrix_btn"):
-        st.session_state.show_matrix = True
-
-    # Display matrix if button was clicked
-    if st.session_state.show_matrix:
-        st.markdown("### 📊 Matrix Output")
-        st.markdown("---")
-
-        try:
-            # Load the final output JSON
-            with open(st.session_state.analysis_path, 'r', encoding='utf-8') as f:
-                final_json = json.load(f)
-
-            # Generate the matrix table
-            matrix_df = _generate_matrix_table(final_json)
-
-            # Display the table with custom styling
-            st.dataframe(
-                matrix_df,
-                use_container_width=True,
-                hide_index=True,
-                height=600
-            )
-
-            # Download button for CSV
-            csv = matrix_df.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                label="💾 Download Matrix as CSV",
-                data=csv,
-                file_name="matrix_output.csv",
-                mime="text/csv",
-                use_container_width=True,
-                key="download_matrix_csv"
-            )
-
-        except Exception as e:
-            st.error(f"Error generating matrix: {str(e)}")
-            st.exception(e)
-
     
     st.markdown("---")
     
