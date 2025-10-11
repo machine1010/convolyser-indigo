@@ -331,8 +331,8 @@ if st.session_state.step == "landing":
     _stepper()
     _display_logo()
     
-    st.markdown('<h1 class="hero-title">🎧 Conversation Intelligence Platform</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">Upload an audio file, provide two JSON configuration files, then explore real‑time outputs — all on a polished red theme.</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="hero-title">🎧 SurveyScribe AI </h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle"> From Voice to Value with AI Insight </p>', unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -346,15 +346,15 @@ if st.session_state.step == "landing":
     # ==================== NEW SECTIONS ====================
     
     # Section 1: Why We Created This Platform
-    st.markdown('<h2 class="section-title">Why We Created This Platform</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title"> The Story Behind Our Innovation </h2>', unsafe_allow_html=True)
     
     st.markdown("""
     <div class="why-section">
-        After recognizing the need for efficient audio conversation analysis in government and organizational surveys, we developed this platform to bridge the gap between raw audio data and actionable insights. This platform was created as an independent solution, performing direct audio transcription and intelligent analysis without relying on multiple third-party services. Our goal is to provide accurate, detailed, and structured insights from Hindi language conversations, particularly for political surveys and citizen engagement initiatives.
+        This product was built to revolutionize the way telephone surveys are conducted by bringing the power of AI to every conversation. It matters because accurate transcripts and intelligent analysis ensure that each interaction is meaningful, helping organizations capture true insights and improve customer experiences. By validating answers and assessing how well agents ask questions, this platform drives higher survey quality and smarter decision-making.
     </div>
     """, unsafe_allow_html=True)
         # Section 2: Our Solution & Key Benefits
-    st.markdown('<h2 class="section-title">Our Solution & Key Benefits</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title"> Unlocking Value for You </h2>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     
@@ -395,7 +395,7 @@ if st.session_state.step == "landing":
         st.markdown("""
         <div class="benefit-item">
             <div class="benefit-icon">✓</div>
-            <div class="benefit-text">Stable and reliable API without external dependencies</div>
+            <div class="benefit-text"> Improved survey accuracy and reliability </div>
         </div>
         """, unsafe_allow_html=True)
         
