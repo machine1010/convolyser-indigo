@@ -254,7 +254,7 @@ def _generate_matrix_table(analysis_json):
 
     Args:
         analysis_json: The final output JSON with structure:
-                       {section_key: {question_key: [response1, response2, response3, response4]}}
+                       {section_key: {question_key: [agent_recorded, ai_finding, agent_asked, symantic]}}
 
     Returns:
         pandas DataFrame formatted as a table
@@ -274,21 +274,21 @@ def _generate_matrix_table(analysis_json):
             if len(responses) >= 4:
                 row = {
                     "Section": section_key,
-                    "Question": question_key,
-                    "Response 1": responses[0],
-                    "Response 2": responses[1],
-                    "Response 3": responses[2],
-                    "Response 4": responses[3]
+                    "Question_no": question_key,
+                    "agent_recorded": responses[0],
+                    "ai_finding": responses[1],
+                    "agent_asked": responses[2],
+                    "symantic": responses[3]
                 }
             else:
                 # Handle cases with fewer responses
                 row = {
                     "Section": section_key,
-                    "Question": question_key,
-                    "Response 1": responses[0] if len(responses) > 0 else "Not Available",
-                    "Response 2": responses[1] if len(responses) > 1 else "Not Available",
-                    "Response 3": responses[2] if len(responses) > 2 else "Not Available",
-                    "Response 4": responses[3] if len(responses) > 3 else "Not Available"
+                    "Question_no": question_key,
+                    "agent_recorded": responses[0] if len(responses) > 0 else "Not Available",
+                    "ai_finding": responses[1] if len(responses) > 1 else "Not Available",
+                    "agent_asked": responses[2] if len(responses) > 2 else "Not Available",
+                    "symantic": responses[3] if len(responses) > 3 else "Not Available"
                 }
 
             table_rows.append(row)
