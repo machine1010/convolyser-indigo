@@ -682,11 +682,11 @@ if st.session_state.show_matrix:
         # Generate the matrix table
         matrix_df = _generate_matrix_table(final_json)
 
-        # Apply color styling to Response 4 column (text color only)
+        # Apply color styling to  symantic column (text color only)
         def highlight_response4(row):
             colors = []
             for col in matrix_df.columns:
-                if col == 'Response 4':
+                if col == 'symantic':
                     val = str(row[col]).lower()
                     if 'matched' == val:
                         colors.append('color: #10b981')  # Green text
