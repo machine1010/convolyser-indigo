@@ -682,18 +682,18 @@ if st.session_state.show_matrix:
         # Generate the matrix table
         matrix_df = _generate_matrix_table(final_json)
 
-        # Apply color styling to Response 4 column
+        # Apply color styling to Response 4 column (text color only)
         def highlight_response4(row):
             colors = []
             for col in matrix_df.columns:
                 if col == 'Response 4':
                     val = str(row[col]).lower()
                     if 'matched' == val:
-                        colors.append('background-color: #10b981; color: white')  # Green
+                        colors.append('color: #10b981')  # Green text
                     elif 'not matched' == val:
-                        colors.append('background-color: #ef4444; color: white')  # Red
+                        colors.append('color: #ef4444')  # Red text
                     elif 'fuzzy match' == val:
-                        colors.append('background-color: #f59e0b; color: white')  # Amber
+                        colors.append('color: #f59e0b')  # Amber text
                     else:
                         colors.append('')
                 else:
@@ -723,8 +723,6 @@ if st.session_state.show_matrix:
     except Exception as e:
         st.error(f"Error generating matrix: {str(e)}")
         st.exception(e)
-
-
 
 
 
