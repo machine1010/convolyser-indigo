@@ -40,146 +40,148 @@ st.markdown("""
     
     .stButton>button:hover {
         background: linear-gradient(90deg, #b91c1c 0%, #991b1b 100%);
-        box-shadow: 0 6px 8px rgba(220, 38, 38, 0.4);
+        box-shadow: 0 6px 12px rgba(220, 38, 38, 0.5);
         transform: translateY(-2px);
     }
     
-    .hero-title {
-        font-size: 4rem;
-        font-weight: 800;
+    .upload-section {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px dashed #dc2626;
+        border-radius: 12px;
+        padding: 30px;
         text-align: center;
-        background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 1rem;
-        text-shadow: 0 0 30px rgba(220, 38, 38, 0.3);
+        margin: 20px 0;
+        transition: all 0.3s ease;
     }
     
-    .hero-subtitle {
-        font-size: 1.5rem;
-        text-align: center;
-        color: #d1d5db;
-        margin-bottom: 3rem;
-        font-weight: 300;
-    }
-    
-    .stepper {
-        display: flex;
-        justify-content: space-between;
-        margin: 2rem auto;
-        max-width: 900px;
-        padding: 0 1rem;
+    .upload-section:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: #ef4444;
     }
     
     .step {
-        flex: 1;
-        text-align: center;
-        padding: 1rem;
-        background: rgba(55, 65, 81, 0.5);
-        margin: 0 0.5rem;
-        border-radius: 12px;
-        font-weight: 600;
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 0 8px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.1);
         color: #9ca3af;
-        transition: all 0.3s;
-        border: 2px solid transparent;
+        font-size: 14px;
+        font-weight: 500;
     }
     
     .step.active {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
         color: white;
-        box-shadow: 0 8px 16px rgba(220, 38, 38, 0.4);
-        border: 2px solid #ef4444;
-        transform: scale(1.05);
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin: 20px 0;
+        background: linear-gradient(90deg, #dc2626, #ef4444, #f87171);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .subtitle {
+        font-size: 1.3rem;
+        text-align: center;
+        color: #d1d5db;
+        margin-bottom: 30px;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #dc2626;
+        margin: 40px 0 20px 0;
+        text-align: center;
     }
     
     .feature-card {
-        background: rgba(55, 65, 81, 0.3);
-        padding: 2rem;
-        border-radius: 16px;
-        margin: 1.5rem 0;
-        border: 1px solid rgba(220, 38, 38, 0.3);
-        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 15px 0;
+        border-left: 4px solid #dc2626;
+        transition: all 0.3s ease;
     }
     
     .feature-card:hover {
-        border: 1px solid rgba(220, 38, 38, 0.6);
-        box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
-        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(5px);
     }
     
-    .feature-card h3 {
-        color: #ef4444;
-        margin-bottom: 1rem;
+    .why-section {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        padding: 30px;
+        margin: 20px 0;
+        line-height: 1.8;
+        font-size: 1.1rem;
+    }
+    
+    .logo-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    .logo-text {
+        font-size: 2.5rem;
         font-weight: 700;
-    }
-    
-    .stFileUploader {
-        background: rgba(55, 65, 81, 0.3);
-        border-radius: 12px;
-        padding: 1.5rem;
-        border: 2px dashed rgba(220, 38, 38, 0.4);
-    }
-    
-    .stAudio {
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    
-    h1, h2, h3 {
-        color: #ffffff;
-    }
-    
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: rgba(55, 65, 81, 0.3);
-        padding: 0.5rem;
-        border-radius: 12px;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: transparent;
-        color: #9ca3af;
-        border-radius: 8px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
-        color: white;
+        color: #dc2626;
+        letter-spacing: 2px;
     }
     
     .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+        background-color: #dc2626;
     }
     
-    /* Login form styling */
+    .success-box {
+        background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.1) 100%);
+        border: 2px solid #22c55e;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .info-box {
+        background: rgba(59, 130, 246, 0.1);
+        border: 2px solid #3b82f6;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
     .login-container {
-        max-width: 450px;
-        margin: 3rem auto;
-        padding: 2.5rem;
-        background: rgba(55, 65, 81, 0.5);
+        background: rgba(255, 255, 255, 0.05);
         border-radius: 16px;
-        border: 1px solid rgba(220, 38, 38, 0.3);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        padding: 40px;
+        margin: 50px auto;
+        max-width: 500px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
     
     .login-title {
+        font-size: 2rem;
+        font-weight: 600;
         text-align: center;
-        color: #ef4444;
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 1.5rem;
+        color: #dc2626;
+        margin-bottom: 30px;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Dummy users for login
+# Dummy users database
 DUMMY_USERS = {
     "admin": "admin123",
     "user1": "password1",
-    "demo": "demo123",
-    "test": "test123"
+    "user2": "password2",
+    "demo": "demo123"
 }
 
 def _init_state():
@@ -197,9 +199,9 @@ def _init_state():
         "transcription_raw": None,
         "analysis_raw": None,
         "show_matrix": False,
-        "authenticated": False,
+        "logged_in": False,
         "username": None,
-        "show_login": False,
+        "return_to_step": None,
     }.items():
         if k not in st.session_state:
             st.session_state[k] = v
@@ -218,11 +220,9 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
 def _generate_matrix_table(analysis_json):
     """
     Generate a matrix table from the analysis JSON output
-    
     Args:
         analysis_json: The final output JSON with structure:
-            {section_key: {question_key: [agent_recorded, ai_finding, agent_asked, symantic]}}
-    
+                      {section_key: {question_key: [agent_recorded, ai_finding, agent_asked, symantic]}}
     Returns:
         pandas DataFrame formatted as a table
     """
@@ -262,12 +262,11 @@ def _generate_matrix_table(analysis_json):
     
     # Create DataFrame
     df = pd.DataFrame(table_rows)
-    
     return df
 
 def _stepper():
     """Display progress stepper"""
-    stages = ["landing", "audio", "json1", "json2", "ready", "processing", "result"]
+    stages = ["landing", "login", "audio", "json1", "json2", "ready", "processing", "result"]
     labels = ["Upload Audio", "JSON File 1", "JSON File 2", "Explore", "Result"]
     
     try:
@@ -278,312 +277,470 @@ def _stepper():
     chips = []
     for i, lbl in enumerate(labels, 1):
         cls = "step active" if i <= idx else "step"
-        chips.append(f'<div class="{cls}">{lbl}</div>')
+        chips.append(f'<span class="{cls}">{lbl}</span>')
     
     st.markdown(
-        f'<div class="stepper">{"".join(chips)}</div>',
+        f'<div style="text-align: center; margin: 30px 0;">{" ".join(chips)}</div>',
         unsafe_allow_html=True
     )
 
+def _display_logo():
+    """Display the logo"""
+    st.markdown('<div class="logo-container"><div class="logo-text">YBrantWorks</div></div>', unsafe_allow_html=True)
+
 def _login_page():
     """Display login page"""
+    _display_logo()
     st.markdown('<div class="login-container">', unsafe_allow_html=True)
     st.markdown('<h2 class="login-title">🔐 Login</h2>', unsafe_allow_html=True)
     
-    st.markdown("---")
-    
-    # Display available demo credentials
-    with st.expander("ℹ️ Demo Credentials"):
-        st.markdown("""
-        **Available demo users:**
-        - Username: `admin` | Password: `admin123`
-        - Username: `user1` | Password: `password1`
-        - Username: `demo` | Password: `demo123`
-        - Username: `test` | Password: `test123`
-        """)
-    
     with st.form("login_form"):
         username = st.text_input("Username", placeholder="Enter your username")
-        password = st.text_input("Password", placeholder="Enter your password", type="password")
+        password = st.text_input("Password", type="password", placeholder="Enter your password")
         
-        col1, col2 = st.columns(2)
-        login_button = col1.form_submit_button("Login", use_container_width=True)
-        cancel_button = col2.form_submit_button("Cancel", use_container_width=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            login_button = st.form_submit_button("Login", use_container_width=True)
         
         if login_button:
-            if not username or not password:
-                st.warning("⚠️ Please fill in both username and password.")
-            elif username in DUMMY_USERS and DUMMY_USERS[username] == password:
-                st.session_state.authenticated = True
+            if username in DUMMY_USERS and DUMMY_USERS[username] == password:
+                st.session_state.logged_in = True
                 st.session_state.username = username
-                st.session_state.show_login = False
-                st.session_state.step = "audio"
-                st.success(f"✅ Welcome, {username}!")
-                st.balloons()
-                time.sleep(1)
+                # Redirect to the step they were trying to access
+                if st.session_state.return_to_step:
+                    st.session_state.step = st.session_state.return_to_step
+                    st.session_state.return_to_step = None
+                else:
+                    st.session_state.step = "audio"
+                st.success(f"Welcome {username}!")
+                time.sleep(0.5)
                 st.rerun()
             else:
-                st.error("❌ Invalid username or password.")
-        
-        if cancel_button:
-            st.session_state.show_login = False
-            st.session_state.step = "landing"
-            st.rerun()
+                st.error("Invalid username or password")
     
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Display available demo credentials
+    st.markdown("---")
+    st.markdown("### Demo Credentials")
+    st.markdown("""
+    - **admin** / admin123
+    - **user1** / password1
+    - **user2** / password2
+    - **demo** / demo123
+    """)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("← Back to Home", use_container_width=True):
+            st.session_state.step = "landing"
+            st.rerun()
 
-def _landing_page():
-    """Landing page"""
-    st.markdown('<h1 class="hero-title">🎧 YBrantWorks</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="hero-subtitle">From Voice to Value with AI Insight</p>', unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+
+
+# ==================== LOGIN PAGE ====================
+if st.session_state.step == "login":
+    _login_page()
+
+# ==================== LANDING PAGE ====================
+elif st.session_state.step == "landing":
+    _stepper()
+    _display_logo()
+    
+    st.markdown('<h1 class="hero-title">🎧 SurveyScribe AI </h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle"> From Voice to Value with AI Insight </p>', unsafe_allow_html=True)
     
     st.markdown("---")
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         if st.button("🚀 Get Started", use_container_width=True):
-            st.session_state.show_login = True
+            st.session_state.return_to_step = "audio"
+            st.session_state.step = "login"
             st.rerun()
+
     
     # ==================== NEW SECTIONS ====================
     
     # Section 1: Why We Created This Platform
-    st.markdown('<div class="feature-card">', unsafe_allow_html=True)
-    st.markdown("### 🎯 Why We Created This Platform")
+    st.markdown('<h2 class="section-title"> The Story Behind Our Innovation </h2>', unsafe_allow_html=True)
+    
     st.markdown("""
-    In today's fast-paced business environment, understanding customer conversations is crucial. 
-    We built this platform to transform raw audio conversations into actionable intelligence, 
-    helping businesses improve their customer service quality and agent performance.
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    <div class="why-section">
+        This product was built to revolutionize the way telephone surveys are conducted by bringing the power
+        of artificial intelligence to every conversation. Traditional survey processes are time-consuming, 
+        error-prone, and difficult to analyze at scale. Our platform transforms raw audio conversations into 
+        actionable insights, ensuring survey quality, compliance, and efficiency like never before.
+        
+        <br><br>
+        
+        We recognized that human oversight alone cannot guarantee the consistency and accuracy needed in modern
+        survey operations. By leveraging advanced AI models, we empower organizations to validate survey 
+        interactions, identify compliance issues, and extract valuable insights—all in real-time.
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Section 2: What This Platform Does
-    st.markdown('<div class="feature-card">', unsafe_allow_html=True)
-    st.markdown("### 🔍 What This Platform Does")
+    # Section 2: Key Features
+    st.markdown('<h2 class="section-title"> What Makes Us Different </h2>', unsafe_allow_html=True)
+    
+    features = [
+        ("🎯", "Automated Transcription", "Convert audio conversations to text with industry-leading accuracy using state-of-the-art speech recognition."),
+        ("🔍", "Intelligent Analysis", "AI-powered evaluation of survey quality, agent performance, and response validation."),
+        ("📊", "Comprehensive Reports", "Generate detailed compliance reports, performance metrics, and actionable insights."),
+        ("⚡", "Real-Time Processing", "Process and analyze conversations in minutes, not hours or days."),
+        ("🔒", "Secure & Compliant", "Enterprise-grade security with full GDPR and compliance standards."),
+        ("🎨", "Intuitive Interface", "Beautiful, user-friendly design that makes complex analysis simple."),
+    ]
+    
+    cols = st.columns(2)
+    for i, (icon, title, desc) in enumerate(features):
+        with cols[i % 2]:
+            st.markdown(f"""
+            <div class="feature-card">
+                <h3>{icon} {title}</h3>
+                <p>{desc}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Section 3: How It Works
+    st.markdown('<h2 class="section-title"> How It Works </h2>', unsafe_allow_html=True)
+    
     st.markdown("""
-    - **Transcription**: Converts audio conversations into accurate text transcripts
-    - **Analysis**: Evaluates agent performance and question compliance
-    - **Insights**: Identifies gaps in conversation flow and data collection
-    - **Reporting**: Generates comprehensive reports with actionable metrics
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    <div class="info-box">
+        <h3>📝 Step 1: Upload Your Audio</h3>
+        <p>Simply upload your telephone survey recording in any common audio format (MP3, WAV, etc.)</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Section 3: Key Features
-    st.markdown('<div class="feature-card">', unsafe_allow_html=True)
-    st.markdown("### ⚡ Key Features")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
-        **AI-Powered Analysis**
-        - Smart conversation parsing
-        - Automated quality checks
-        - Performance scoring
-        """)
-    
-    with col2:
-        st.markdown("""
-        **Easy to Use**
-        - Simple file upload
-        - Intuitive interface
-        - Fast processing
-        """)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Section 4: How It Works
-    st.markdown('<div class="feature-card">', unsafe_allow_html=True)
-    st.markdown("### 🔄 How It Works")
     st.markdown("""
-    1. **Upload Audio**: Upload your conversation recording
-    2. **Add Context**: Provide reference JSON files
-    3. **Process**: Our AI analyzes the conversation
-    4. **Review**: Get detailed insights and reports
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    <div class="info-box">
+        <h3>📄 Step 2: Provide Survey Context</h3>
+        <p>Upload your survey questionnaire and expected responses in JSON format for accurate validation.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Section 5: Who Can Benefit
-    st.markdown('<div class="feature-card">', unsafe_allow_html=True)
-    st.markdown("### 👥 Who Can Benefit")
     st.markdown("""
-    - **Quality Assurance Teams**: Monitor agent performance at scale
-    - **Training Managers**: Identify coaching opportunities
-    - **Operations Leaders**: Track compliance and quality metrics
-    - **Business Analysts**: Extract insights from customer conversations
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    <div class="info-box">
+        <h3>🤖 Step 3: AI Processing</h3>
+        <p>Our advanced AI models transcribe, analyze, and validate the conversation against your survey criteria.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Footer CTA
-    st.markdown("---")
+    st.markdown("""
+    <div class="info-box">
+        <h3>📊 Step 4: Review Results</h3>
+        <p>Get comprehensive reports with transcription, analysis, compliance scores, and actionable insights.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Section 4: Use Cases
+    st.markdown('<h2 class="section-title"> Who Can Benefit </h2>', unsafe_allow_html=True)
+    
+    use_cases = [
+        ("🏢 Market Research Firms", "Ensure survey quality and compliance across thousands of interviews."),
+        ("🏥 Healthcare Organizations", "Validate patient surveys and maintain regulatory compliance."),
+        ("🏦 Financial Institutions", "Monitor customer service quality and adherence to protocols."),
+        ("📞 Call Centers", "Improve agent performance and customer satisfaction tracking."),
+        ("🎓 Academic Research", "Streamline qualitative research analysis and data collection."),
+        ("🏛️ Government Agencies", "Ensure transparency and accuracy in public opinion surveys."),
+    ]
+    
+    cols = st.columns(2)
+    for i, (title, desc) in enumerate(use_cases):
+        with cols[i % 2]:
+            st.markdown(f"""
+            <div class="feature-card">
+                <h3>{title}</h3>
+                <p>{desc}</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    # Call to Action
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title"> Ready to Transform Your Survey Process? </h2>', unsafe_allow_html=True)
+    
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🚀 Start Analyzing Now", use_container_width=True, key="footer_cta"):
-            st.session_state.show_login = True
+        if st.button("🚀 Start Your First Analysis", use_container_width=True, key="cta_button"):
+            st.session_state.return_to_step = "audio"
+            st.session_state.step = "login"
             st.rerun()
 
-def _audio_page():
-    """Audio upload step"""
+# ==================== AUDIO UPLOAD ====================
+elif st.session_state.step == "audio":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "audio"
+        st.session_state.step = "login"
+        st.rerun()
+    
     _stepper()
+    _display_logo()
     
-    st.markdown("## 🎤 Step 1: Upload Audio File")
-    st.markdown("Upload the conversation recording you want to analyze.")
+    st.markdown(f'<h2 class="section-title">Welcome, {st.session_state.username}! 👋</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">Step 1: Upload Audio File 🎵</h2>', unsafe_allow_html=True)
     
-    uploaded = st.file_uploader(
+    st.markdown("""
+    <div class="upload-section">
+        <h3>📁 Upload Your Survey Audio Recording</h3>
+        <p>Supported formats: MP3, WAV, M4A, FLAC</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    audio = st.file_uploader(
         "Choose an audio file",
-        type=["mp3", "wav", "m4a", "ogg"],
-        help="Supported formats: MP3, WAV, M4A, OGG"
+        type=["mp3", "wav", "m4a", "flac"],
+        help="Upload the telephone survey recording you want to analyze"
     )
     
-    col1, col2 = st.columns([1, 1])
+    if audio:
+        st.session_state.audio_file = audio
+        st.session_state.audio_path = _save_temp(audio, ".mp3")
+        
+        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+        st.success(f"✅ Audio file '{audio.name}' uploaded successfully!")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info(f"📊 File size: {audio.size / 1024:.2f} KB")
+        with col2:
+            st.info(f"📝 File type: {audio.type}")
+        
+        st.audio(audio)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("Next: Upload Survey JSON →", use_container_width=True):
+                st.session_state.step = "json1"
+                st.rerun()
     
-    with col1:
-        if st.button("⬅️ Back to Landing", use_container_width=True):
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("← Back to Home", use_container_width=True):
             st.session_state.step = "landing"
             st.rerun()
-    
-    with col2:
-        if uploaded and st.button("Next: JSON 1 ➡️", use_container_width=True):
-            st.session_state.audio_file = uploaded
-            st.session_state.audio_path = _save_temp(uploaded, ".mp3")
-            st.session_state.step = "json1"
-            st.rerun()
-    
-    if uploaded:
-        st.audio(uploaded)
-        st.success(f"✅ File loaded: {uploaded.name}")
 
-def _json1_page():
-    """First JSON upload step"""
+# ==================== JSON FILE 1 UPLOAD ====================
+elif st.session_state.step == "json1":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "json1"
+        st.session_state.step = "login"
+        st.rerun()
+    
     _stepper()
+    _display_logo()
     
-    st.markdown("## 📄 Step 2: Upload First JSON File")
-    st.markdown("Upload the first configuration/reference JSON file.")
+    st.markdown('<h2 class="section-title">Step 2: Upload Survey Questionnaire (JSON File 1) 📄</h2>', unsafe_allow_html=True)
     
-    uploaded = st.file_uploader(
-        "Choose the first JSON file",
+    st.markdown("""
+    <div class="upload-section">
+        <h3>📋 Upload Your Survey Questions JSON</h3>
+        <p>This file should contain the survey questionnaire structure and expected responses</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    json1 = st.file_uploader(
+        "Choose first JSON file",
         type=["json"],
-        help="This file contains reference data for analysis"
+        help="Upload the survey questionnaire JSON file",
+        key="json1_uploader"
     )
     
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        if st.button("⬅️ Back to Audio", use_container_width=True):
-            st.session_state.step = "audio"
-            st.rerun()
-    
-    with col2:
-        if uploaded and st.button("Next: JSON 2 ➡️", use_container_width=True):
-            st.session_state.json_file_1 = uploaded
-            st.session_state.json_path_1 = _save_temp(uploaded, ".json")
-            st.session_state.step = "json2"
-            st.rerun()
-    
-    if uploaded:
+    if json1:
+        st.session_state.json_file_1 = json1
+        st.session_state.json_path_1 = _save_temp(json1, ".json")
+        
+        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+        st.success(f"✅ JSON file '{json1.name}' uploaded successfully!")
+        
         try:
-            content = json.loads(uploaded.read())
-            with st.expander("📋 Preview JSON Content"):
-                st.json(content)
-            st.success(f"✅ File loaded: {uploaded.name}")
+            json_data = json.loads(json1.getvalue().decode("utf-8"))
+            st.json(json_data, expanded=False)
         except Exception as e:
-            st.error(f"❌ Invalid JSON file: {str(e)}")
+            st.warning(f"⚠️ Could not preview JSON: {e}")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("← Previous Step", use_container_width=True):
+                st.session_state.step = "audio"
+                st.rerun()
+        with col2:
+            if st.button("Next: Upload Additional JSON →", use_container_width=True):
+                st.session_state.step = "json2"
+                st.rerun()
+    else:
+        st.markdown("<br>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("← Previous Step", use_container_width=True):
+                st.session_state.step = "audio"
+                st.rerun()
 
-def _json2_page():
-    """Second JSON upload step"""
+# ==================== JSON FILE 2 UPLOAD ====================
+elif st.session_state.step == "json2":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "json2"
+        st.session_state.step = "login"
+        st.rerun()
+    
     _stepper()
+    _display_logo()
     
-    st.markdown("## 📄 Step 3: Upload Second JSON File")
-    st.markdown("Upload the second configuration/reference JSON file.")
+    st.markdown('<h2 class="section-title">Step 3: Upload Survey Responses (JSON File 2) 📄</h2>', unsafe_allow_html=True)
     
-    uploaded = st.file_uploader(
-        "Choose the second JSON file",
+    st.markdown("""
+    <div class="upload-section">
+        <h3>📊 Upload Your Expected Survey Responses JSON</h3>
+        <p>This file should contain the expected response patterns and validation criteria</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    json2 = st.file_uploader(
+        "Choose second JSON file",
         type=["json"],
-        help="This file contains additional reference data"
+        help="Upload the survey responses validation JSON file",
+        key="json2_uploader"
     )
     
-    col1, col2 = st.columns([1, 1])
-    
-    with col1:
-        if st.button("⬅️ Back to JSON 1", use_container_width=True):
-            st.session_state.step = "json1"
-            st.rerun()
-    
-    with col2:
-        if uploaded and st.button("Next: Review ➡️", use_container_width=True):
-            st.session_state.json_file_2 = uploaded
-            st.session_state.json_path_2 = _save_temp(uploaded, ".json")
-            st.session_state.step = "ready"
-            st.rerun()
-    
-    if uploaded:
+    if json2:
+        st.session_state.json_file_2 = json2
+        st.session_state.json_path_2 = _save_temp(json2, ".json")
+        
+        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+        st.success(f"✅ JSON file '{json2.name}' uploaded successfully!")
+        
         try:
-            content = json.loads(uploaded.read())
-            with st.expander("📋 Preview JSON Content"):
-                st.json(content)
-            st.success(f"✅ File loaded: {uploaded.name}")
+            json_data = json.loads(json2.getvalue().decode("utf-8"))
+            st.json(json_data, expanded=False)
         except Exception as e:
-            st.error(f"❌ Invalid JSON file: {str(e)}")
+            st.warning(f"⚠️ Could not preview JSON: {e}")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("← Previous Step", use_container_width=True):
+                st.session_state.step = "json1"
+                st.rerun()
+        with col2:
+            if st.button("Next: Review & Process →", use_container_width=True):
+                st.session_state.step = "ready"
+                st.rerun()
+    else:
+        st.markdown("<br>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("← Previous Step", use_container_width=True):
+                st.session_state.step = "json1"
+                st.rerun()
 
-def _ready_page():
-    """Review and confirm before processing"""
+# ==================== READY TO PROCESS ====================
+elif st.session_state.step == "ready":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "ready"
+        st.session_state.step = "login"
+        st.rerun()
+    
     _stepper()
+    _display_logo()
     
-    st.markdown("## ✅ Ready to Process")
-    st.markdown("Review your uploaded files before starting the analysis.")
+    st.markdown('<h2 class="section-title">Step 4: Ready to Process 🚀</h2>', unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("""
+    <div class="info-box">
+        <h3>✅ All Files Uploaded Successfully!</h3>
+        <p>Review your uploaded files below and click "Start Processing" to begin the AI analysis.</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("### 🎤 Audio File")
+        st.markdown("### 🎵 Audio File")
         if st.session_state.audio_file:
-            st.info(f"📁 {st.session_state.audio_file.name}")
+            st.success(f"✅ {st.session_state.audio_file.name}")
+            st.audio(st.session_state.audio_file)
+        else:
+            st.error("❌ No audio file")
     
     with col2:
         st.markdown("### 📄 JSON File 1")
         if st.session_state.json_file_1:
-            st.info(f"📁 {st.session_state.json_file_1.name}")
+            st.success(f"✅ {st.session_state.json_file_1.name}")
+        else:
+            st.error("❌ No JSON file 1")
     
     with col3:
         st.markdown("### 📄 JSON File 2")
         if st.session_state.json_file_2:
-            st.info(f"📁 {st.session_state.json_file_2.name}")
+            st.success(f"✅ {st.session_state.json_file_2.name}")
+        else:
+            st.error("❌ No JSON file 2")
     
-    st.markdown("---")
+    st.markdown("<br>", unsafe_allow_html=True)
     
-    col1, col2 = st.columns([1, 1])
+    all_ready = all([
+        st.session_state.audio_path,
+        st.session_state.json_path_1,
+        st.session_state.json_path_2
+    ])
     
-    with col1:
-        if st.button("⬅️ Back to JSON 2", use_container_width=True):
-            st.session_state.step = "json2"
-            st.rerun()
-    
-    with col2:
-        if st.button("🚀 Start Processing", use_container_width=True):
-            st.session_state.step = "processing"
-            st.rerun()
+    if all_ready:
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("← Previous Step", use_container_width=True):
+                st.session_state.step = "json2"
+                st.rerun()
+        with col2:
+            if st.button("🚀 Start Processing", use_container_width=True):
+                st.session_state.step = "processing"
+                st.rerun()
+    else:
+        st.error("⚠️ Please upload all required files before processing")
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("← Go Back", use_container_width=True):
+                st.session_state.step = "audio"
+                st.rerun()
 
-def _processing_page():
-    """Processing page with progress indicator"""
-    _stepper()
+# ==================== PROCESSING ====================
+elif st.session_state.step == "processing":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "processing"
+        st.session_state.step = "login"
+        st.rerun()
     
-    st.markdown("## ⚙️ Processing Your Conversation")
-    st.markdown("Please wait while we analyze your audio file...")
+    _stepper()
+    _display_logo()
+    
+    st.markdown('<h2 class="section-title">Processing Your Survey... 🤖</h2>', unsafe_allow_html=True)
     
     progress_bar = st.progress(0)
     status_text = st.empty()
     
     try:
-        # Stage 1: Transcription
-        status_text.markdown("### 📝 Stage 1/3: Transcribing audio...")
-        progress_bar.progress(10)
+        # Stage 1: Starting
+        status_text.markdown("### 🎬 Initializing AI pipeline...")
+        progress_bar.progress(20)
         time.sleep(0.5)
         
-        progress_bar.progress(30)
-        
-        # Stage 2: Analysis
-        status_text.markdown("### 🔍 Stage 2/3: Running AI analysis...")
+        # Stage 2: Transcribing
+        status_text.markdown("### 🎤 Transcribing audio to text...")
         progress_bar.progress(40)
+        
+        # Stage 3: Processing
+        status_text.markdown("### 🧠 Running AI analysis...")
+        progress_bar.progress(60)
         
         # Run the actual pipeline
         transcription_path, analysis_path = run_pipeline(
@@ -592,11 +749,8 @@ def _processing_page():
             str(st.session_state.json_path_2)
         )
         
-        progress_bar.progress(70)
-        
-        # Stage 3: Generating results
-        status_text.markdown("### 📊 Stage 3/3: Generating insights...")
         progress_bar.progress(80)
+        status_text.markdown("### 📊 Generating reports...")
         
         # Load results
         with open(transcription_path, 'r', encoding='utf-8') as f:
@@ -609,160 +763,110 @@ def _processing_page():
         st.session_state.analysis_path = analysis_path
         
         progress_bar.progress(100)
-        status_text.markdown("### ✅ Processing Complete!")
-        time.sleep(1)
+        status_text.markdown("### ✅ Processing complete!")
         
+        time.sleep(1)
         st.session_state.step = "result"
         st.rerun()
         
     except Exception as e:
-        st.error(f"❌ Processing failed: {str(e)}")
-        st.exception(e)
-        
-        if st.button("⬅️ Go Back to Ready"):
-            st.session_state.step = "ready"
-            st.rerun()
-
-def _result_page():
-    """Results display page"""
-    _stepper()
-    
-    st.markdown("## 📊 Analysis Results")
-    
-    # Display user info and logout option
-    if st.session_state.username:
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.markdown(f"**Logged in as:** {st.session_state.username}")
+        st.error(f"❌ Error during processing: {e}")
+        st.markdown("<br>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            if st.button("🚪 Logout"):
-                st.session_state.authenticated = False
-                st.session_state.username = None
-                st.session_state.step = "landing"
+            if st.button("← Try Again", use_container_width=True):
+                st.session_state.step = "ready"
                 st.rerun()
+
+# ==================== RESULTS ====================
+elif st.session_state.step == "result":
+    if not st.session_state.logged_in:
+        st.session_state.return_to_step = "result"
+        st.session_state.step = "login"
+        st.rerun()
     
-    st.markdown("---")
+    _stepper()
+    _display_logo()
     
-    # Create tabs for different views
-    tab1, tab2, tab3 = st.tabs(["📝 Transcription", "🔍 Analysis Report", "📊 Matrix View"])
+    st.markdown('<h2 class="section-title">Analysis Results 📊</h2>', unsafe_allow_html=True)
+    
+    tab1, tab2, tab3, tab4 = st.tabs(["📝 Transcription", "🔍 Analysis", "📊 Matrix View", "💾 Downloads"])
     
     with tab1:
-        st.markdown("### 📝 Conversation Transcription")
-        
+        st.markdown("### 🎤 Full Transcription")
         if st.session_state.transcription_raw:
-            with st.expander("🔎 View Full Transcription", expanded=True):
-                st.json(st.session_state.transcription_raw)
-            
-            # Download button
-            json_str = json.dumps(st.session_state.transcription_raw, indent=2)
-            st.download_button(
-                label="💾 Download Transcription JSON",
-                data=json_str,
-                file_name="transcription_output.json",
-                mime="application/json",
-                use_container_width=True,
-                key="download_transcription"
-            )
+            st.json(st.session_state.transcription_raw, expanded=True)
         else:
             st.warning("No transcription data available")
     
     with tab2:
-        st.markdown("### 🔍 Detailed Analysis Report")
-        
+        st.markdown("### 🧠 AI Analysis Results")
         if st.session_state.analysis_raw:
-            with st.expander("🔎 View Full Analysis", expanded=True):
-                st.json(st.session_state.analysis_raw)
-            
-            # Download button
-            json_str = json.dumps(st.session_state.analysis_raw, indent=2)
-            st.download_button(
-                label="💾 Download Analysis JSON",
-                data=json_str,
-                file_name="analysis_output.json",
-                mime="application/json",
-                use_container_width=True,
-                key="download_analysis"
-            )
+            st.json(st.session_state.analysis_raw, expanded=True)
         else:
             st.warning("No analysis data available")
     
     with tab3:
-        st.markdown("### 📊 Matrix View")
-        st.markdown("Tabular representation of the analysis results")
+        st.markdown("### 📊 Survey Validation Matrix")
         
-        if st.session_state.analysis_raw:
+        if st.button("🔄 Generate Matrix Table", use_container_width=False):
+            st.session_state.show_matrix = True
+        
+        if st.session_state.show_matrix and st.session_state.analysis_raw:
             try:
-                df = _generate_matrix_table(st.session_state.analysis_raw)
+                matrix_df = _generate_matrix_table(st.session_state.analysis_raw)
+                st.dataframe(matrix_df, use_container_width=True)
                 
-                st.dataframe(
-                    df,
-                    use_container_width=True,
-                    hide_index=True,
-                )
-                
-                # Download as CSV
-                csv = df.to_csv(index=False)
+                # Option to download matrix as CSV
+                csv = matrix_df.to_csv(index=False)
                 st.download_button(
-                    label="💾 Download Matrix as CSV",
+                    label="📥 Download Matrix as CSV",
                     data=csv,
-                    file_name="matrix_output.csv",
-                    mime="text/csv",
-                    use_container_width=True,
-                    key="download_matrix_csv"
+                    file_name="survey_validation_matrix.csv",
+                    mime="text/csv"
                 )
-            
             except Exception as e:
-                st.error(f"Error generating matrix: {str(e)}")
-                st.exception(e)
+                st.error(f"Error generating matrix: {e}")
     
-    st.markdown("---")
+    with tab4:
+        st.markdown("### 💾 Download Results")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.session_state.transcription_raw:
+                st.download_button(
+                    label="📥 Download Transcription JSON",
+                    data=json.dumps(st.session_state.transcription_raw, indent=2),
+                    file_name="transcription.json",
+                    mime="application/json",
+                    use_container_width=True
+                )
+        
+        with col2:
+            if st.session_state.analysis_raw:
+                st.download_button(
+                    label="📥 Download Analysis JSON",
+                    data=json.dumps(st.session_state.analysis_raw, indent=2),
+                    file_name="analysis.json",
+                    mime="application/json",
+                    use_container_width=True
+                )
     
-    col1, col2 = st.columns([1, 1])
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
     with col1:
-        if st.button("🔄 Process New Files", use_container_width=True):
-            # Reset state
-            for key in ["audio_file", "json_file_1", "json_file_2", "audio_path", "json_path_1", "json_path_2",
-                       "transcription_path", "analysis_path", "transcription_raw", "analysis_raw"]:
-                st.session_state[key] = None
-            st.session_state.step = "landing"
+        if st.button("🔄 Process Another Survey", use_container_width=True):
+            # Reset session state for new analysis
+            st.session_state.step = "audio"
+            st.session_state.audio_file = None
+            st.session_state.json_file_1 = None
+            st.session_state.json_file_2 = None
+            st.session_state.show_matrix = False
             st.rerun()
     
     with col2:
-        if st.button("⬅️ Back to Ready", use_container_width=True):
-            st.session_state.step = "ready"
+        if st.button("🏠 Back to Home", use_container_width=True):
+            st.session_state.step = "landing"
             st.rerun()
-
-# ==================== MAIN ROUTER ====================
-
-def main():
-    """Main application router"""
-    
-    # Check if login page should be shown
-    if st.session_state.show_login and not st.session_state.authenticated:
-        _login_page()
-        return
-    
-    # Route to appropriate page based on step
-    if st.session_state.step == "landing":
-        _landing_page()
-    elif st.session_state.step == "audio":
-        if not st.session_state.authenticated:
-            st.warning("⚠️ Please login first")
-            st.session_state.show_login = True
-            st.rerun()
-        _audio_page()
-    elif st.session_state.step == "json1":
-        _json1_page()
-    elif st.session_state.step == "json2":
-        _json2_page()
-    elif st.session_state.step == "ready":
-        _ready_page()
-    elif st.session_state.step == "processing":
-        _processing_page()
-    elif st.session_state.step == "result":
-        _result_page()
-    else:
-        _landing_page()
-
-if __name__ == "__main__":
-    main()
