@@ -669,42 +669,67 @@ elif st.session_state.step == "result":
     if st.button("📊 Generate Matrix Table", use_container_width=True, key="matrix_btn"):
         st.session_state.show_matrix = True
 
-    # Display matrix if button was clicked
-    if st.session_state.show_matrix:
-        st.markdown("### 📊 Matrix Output")
-        st.markdown("---")
+# Display matrix if button was clicked
+if st.session_state.show_matrix:
+    st.markdown("### 📊 Matrix Output")
+    st.markdown("---")
 
-        try:
-            # Load the final output JSON
-            with open(st.session_state.analysis_path, 'r', encoding='utf-8') as f:
-                final_json = json.load(f)
+    try:
+        # Load the final output JSON
+        with open(st.session_state.analysis_path, 'r', encoding='utf-8') as f:
+            final_json = json.load(f)
 
-            # Generate the matrix table
-            matrix_df = _generate_matrix_table(final_json)
+        # Generate the matrix table
+        matrix_df = _generate_matrix_table(final_json)
 
-            # Display the table with custom styling
-            st.dataframe(
-                matrix_df,
-                use_container_width=True,
-                hide_index=True,
-                height=600
-            )
+        # Apply color styling to Response 4 column
+        def highlight_response4(row):
+            colors = []
+            for col in matrix_df.columns:
+                if col == 'Response 4':
+                    val = str(row[col]).lower()
+                    if 'matched' == val:
+                        colors.append('background-color: #10b981; color: white')  # Green
+                    elif 'not matched' == val:
+                        colors.append('background-color: #ef4444; color: white')  # Red
+                    elif 'fuzzy match' == val:
+                        colors.append('background-color: #f59e0b; color: white')  # Amber
+                    else:
+                        colors.append('')
+                else:
+                    colors.append('')
+            return colors
 
-            # Download button for CSV
-            csv = matrix_df.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                label="💾 Download Matrix as CSV",
-                data=csv,
-                file_name="matrix_output.csv",
-                mime="text/csv",
-                use_container_width=True,
-                key="download_matrix_csv"
-            )
+        # Display the styled table
+        styled_df = matrix_df.style.apply(highlight_response4, axis=1)
+        st.dataframe(
+            styled_df,
+            use_container_width=True,
+            hide_index=True,
+            height=600
+        )
 
-        except Exception as e:
-            st.error(f"Error generating matrix: {str(e)}")
-            st.exception(e)
+        # Download button for CSV
+        csv = matrix_df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="💾 Download Matrix as CSV",
+            data=csv,
+            file_name="matrix_output.csv",
+            mime="text/csv",
+            use_container_width=True,
+            key="download_matrix_csv"
+        )
 
+    except Exception as e:
+        st.error(f"Error generating matrix: {str(e)}")
+        st.exception(e)
+
+
+
+
+
+
+    
     
     st.markdown("---")
     
