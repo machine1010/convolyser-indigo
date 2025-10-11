@@ -487,11 +487,11 @@ elif st.session_state.step == "json1":
     _stepper()
     _display_logo()
     
-    st.markdown('<h2 style="color: #dc2626;">📄 Step 2: Upload JSON File 1</h2>', unsafe_allow_html=True)
-    st.markdown("Upload the first JSON configuration file")
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 2: Upload User Auth File </h2>', unsafe_allow_html=True)
+    st.markdown("Upload the User Auth configuration file")
     
     json_file_1 = st.file_uploader(
-        "Choose first JSON file",
+        "Choose JSON file",
         type=["json"],
         key="json1_uploader"
     )
@@ -516,11 +516,11 @@ elif st.session_state.step == "json2":
     _stepper()
     _display_logo()
     
-    st.markdown('<h2 style="color: #dc2626;">📄 Step 3: Upload JSON File 2</h2>', unsafe_allow_html=True)
-    st.markdown("Upload the second JSON configuration file")
+    st.markdown('<h2 style="color: #dc2626;">📄 Step 3: Upload Survey Response JSON File </h2>', unsafe_allow_html=True)
+    st.markdown("Upload the Survey JSON file")
     
     json_file_2 = st.file_uploader(
-        "Choose second JSON file",
+        "Choose Survey JSON file",
         type=["json"],
         key="json2_uploader"
     )
@@ -545,10 +545,10 @@ elif st.session_state.step == "ready":
     _stepper()
     _display_logo()
     
-    st.markdown('<h2 style="color: #dc2626;">✅ Ready to Process</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">✅ Start Your Insight</h2>', unsafe_allow_html=True)
     
     st.markdown('<div class="info-card">', unsafe_allow_html=True)
-    st.markdown("**Files uploaded successfully:**")
+    st.markdown("**Selected Files uploaded successfully, Please verify:**")
     st.markdown(f"- 🎵 Audio: {st.session_state.audio_file.name if st.session_state.audio_file else 'N/A'}")
     st.markdown(f"- 📄 JSON File 1: {st.session_state.json_file_1.name if st.session_state.json_file_1 else 'N/A'}")
     st.markdown(f"- 📄 JSON File 2: {st.session_state.json_file_2.name if st.session_state.json_file_2 else 'N/A'}")
@@ -560,7 +560,7 @@ elif st.session_state.step == "ready":
             st.session_state.step = "json2"
             st.rerun()
     with col2:
-        if st.button("🚀 Start Processing", use_container_width=True):
+        if st.button("🚀 Start Analysis", use_container_width=True):
             st.session_state.step = "processing"
             st.rerun()
 
@@ -579,7 +579,7 @@ elif st.session_state.step == "processing":
         progress_bar.progress(20)
         time.sleep(0.5)
         
-        status_text.text("🔄 Running pipeline...")
+        status_text.text("🔄 Crunching the Conversation...")
         progress_bar.progress(40)
         
         # Call the updated pipeline function with 3 files
@@ -614,11 +614,11 @@ elif st.session_state.step == "result":
     _stepper()
     _display_logo()
     
-    st.markdown('<h2 style="color: #dc2626;">📊 Results</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="color: #dc2626;">📊 Insight Scoop</h2>', unsafe_allow_html=True)
     
     # Audio Player Section
-    st.markdown("### 🎵 Audio Playback")
-    st.markdown("Listen to the uploaded audio file:")
+    st.markdown("### 🎵 Spin the Track")
+    st.markdown("Play & Verify:")
 
     try:
         # Read the audio file and display player
@@ -649,7 +649,7 @@ elif st.session_state.step == "result":
                 )
     
     with tab2:
-        st.markdown("### Analysis Output")
+        st.markdown("### Response Audit")
         
         if st.session_state.analysis_raw:
             st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
@@ -666,7 +666,7 @@ elif st.session_state.step == "result":
 
     # Matrix Generation Button
     st.markdown("---")
-    if st.button("📊 Generate Matrix Table", use_container_width=True, key="matrix_btn"):
+    if st.button("📊 Survey Matrix", use_container_width=True, key="matrix_btn"):
         st.session_state.show_matrix = True
 
 # Display matrix if button was clicked
