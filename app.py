@@ -23,9 +23,27 @@ st.markdown("""
     }
     
     .main {
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        color: #ffffff;
+        background-image: url('data:image/jpeg;base64,YOUR_BASE64_STRING_HERE');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: #f1f5f9;
+        padding: 1rem 2rem;
     }
+
+    /* Add a dark overlay for better text readability */
+    .main::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: -1;
+    }
+
     
     .stButton>button {
         background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
