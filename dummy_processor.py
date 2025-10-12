@@ -29,7 +29,8 @@ class AudioAnalysisPipeline:
         
         # Initialize Vertex AI
         vertexai.init(project=self.project_id, location=self.location)
-        self.model = genai.GenerativeModel("gemini-2.0-flash-lite-001")
+        ##self.model = genai.GenerativeModel("gemini-2.0-flash-lite-001")
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         
         # Initialize all prompts
