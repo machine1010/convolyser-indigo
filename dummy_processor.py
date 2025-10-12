@@ -29,8 +29,8 @@ class AudioAnalysisPipeline:
         
         # Initialize Vertex AI
         vertexai.init(project=self.project_id, location=self.location)
-        ##self.model = genai.GenerativeModel("gemini-2.0-flash-lite-001")
-        self.model = genai.GenerativeModel("gemini-2.5-flash")
+        self.model_lite = genai.GenerativeModel("gemini-2.5-flash")
+        self.model_pro = genai.GenerativeModel("gemini-2.5-pro")
         self.generation_config = genai.GenerationConfig(temperature=0.1)
         
         # Initialize all prompts
@@ -804,7 +804,7 @@ Now, please analyze the  JSON with answer pairs and provide the semantic compari
             self.transcription_prompt
         ]
         
-        response = self.model.generate_content(
+        response = self.model_lite.generate_content(
             contents_transcription,
             generation_config=self.generation_config
         )
@@ -820,7 +820,7 @@ Now, please analyze the  JSON with answer pairs and provide the semantic compari
             self.evaluation_prompt
         ]
         
-        response = self.model.generate_content(
+        response = self.model_lite.generate_content(
             contents_evaluation,
             generation_config=self.generation_config
         )
@@ -834,7 +834,7 @@ Now, please analyze the  JSON with answer pairs and provide the semantic compari
             self.analysis_prompt
         ]
         
-        response = self.model.generate_content(
+        response = self.model_pro.generate_content(
             contents_analysis,
             generation_config=self.generation_config
         )
@@ -855,7 +855,7 @@ Now, please analyze the  JSON with answer pairs and provide the semantic compari
             self.comparison_prompt
         ]
         
-        response = self.model.generate_content(
+        response = self.model_lite.generate_content(
             contents_comparison,
             generation_config=self.generation_config
         )
