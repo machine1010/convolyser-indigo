@@ -300,6 +300,43 @@ def _generate_matrix_table(analysis_json):
     # Create DataFrame
     df = pd.DataFrame(table_rows)
     return df
+def _generate_transcript_table(transcription_json):
+    """
+    Build a 2-column table from transcription JSON.
+    Columns: Speaker, Text
+    """
+    try:
+        # Normalize raw to dict
+        if isinstance(transcription_json, str):
+            transcription_json = json.loads(transcription_json)
+    except Exception:
+        transcription_json = {}
+
+    rows = []
+    # Handle common nesting: { "Call Details": { "Transcript": [ ... ] } }
+    call_block = (
+        transcription_json.get("Call Details")
+        or transcription_json.get("Call_Details")
+        or transcription_json
+    )
+
+    segments = (
+        (call_block or {}).get("Transcript")
+        or (call_block or {}).get("transcript")
+        or []
+    )
+
+    for seg in segments:
+        if not isinstance(seg, dict):
+            continue
+        speaker = seg.get("Speaker", "Unknown")
+        text = seg.get("Voice") or seg.get("Text") or seg.get("Utterance") or ""
+        # If text came as a dict by any chance, flatten the common field
+        if isinstance(text, dict):
+            text = text.get("content", "") or str(text)
+        rows.append({"Speaker": speaker, "Text": text})
+
+    return pd.DataFrame(rows, columns=["Speaker", "Text"])
 
 
 def _stepper():
@@ -656,21 +693,33 @@ elif st.session_state.step == "result":
 
     tab1, tab2 = st.tabs(["📝 Transcription", "📈 Analysis"])
     
-    with tab1:
-        st.markdown("### Transcription Output")
-        
-        if st.session_state.transcription_raw:
-            st.markdown('<div class="json-viewer">', unsafe_allow_html=True)
-            st.json(st.session_state.transcription_raw)
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            with open(st.session_state.transcription_path, "rb") as f:
-                st.download_button(
-                    label="⬇️ Download Transcription JSON",
-                    data=f.read(),
-                    file_name="transcription.json",
-                    mime="application/json"
-                )
+with tab1:
+    st.markdown("### Transcription Output")
+
+    if st.session_state.transcription_raw:
+        # Build 2-column table
+        tdf = _generate_transcript_table(st.session_state.transcription_raw)
+
+        if not tdf.empty:
+            st.dataframe(
+                tdf,
+                use_container_width=True,
+                hide_index=True
+            )
+        else:
+            st.info("No transcript segments found.")
+
+        # Keep the existing download button
+        with open(st.session_state.transcription_path, "rb") as f:
+            st.download_button(
+                label="⬇️ Download Transcription JSON",
+                data=f.read(),
+                file_name="transcription.json",
+                mime="application/json"
+            )
+    else:
+        st.info("Transcription not available yet.")
+
     
     with tab2:
         st.markdown("### Response Audit")
