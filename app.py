@@ -122,7 +122,6 @@ def _init_state():
         "transcription_raw": None,
         "analysis_raw": None,
         "show_matrix": False,
-        # login gate
         "show_login": False,
         "authenticated": False,
         "username": "",
@@ -142,10 +141,7 @@ def _save_temp(uploaded_file, suffix: str) -> Path:
     return Path(tmp.name)
 
 def _generate_matrix_table(analysis_json):
-    """
-    Generate a matrix table from the analysis JSON output
-    {section_key: {question_key: [agent_recorded, ai_finding, agent_asked, symantic]}}
-    """
+    """Generate matrix table from analysis JSON"""
     table_rows = []
     for section_key, section_data in analysis_json.items():
         if section_key == "summary":
@@ -175,10 +171,7 @@ def _generate_matrix_table(analysis_json):
     return df
 
 def _generate_transcript_table(transcription_json):
-    """
-    Build a 2-column table from transcription JSON.
-    Columns: Speaker, Text
-    """
+    """Build 2-column table from transcription JSON"""
     try:
         if isinstance(transcription_json, str):
             transcription_json = json.loads(transcription_json)
@@ -265,7 +258,6 @@ if st.session_state.step == "landing":
                     st.session_state.show_login = False
                     st.rerun()
 
-    # Info sections (unchanged)
     st.markdown('<h2 class="section-title"> The Story Behind Our Innovation </h2>', unsafe_allow_html=True)
     st.markdown("""
     <div class="why-section">
@@ -465,8 +457,13 @@ elif st.session_state.step == "result":
 
     st.markdown("---")
 
-    # Three tabs: JSON, Table, Analysis
-    tab_json, tab_table, tab_analysis = st.tabs(["🧾 Transcription JSON", "📋 Transcript Table", "📈 Analysis"])
+    # Four tabs: JSON, Table, Analysis, Performance
+    tab_json, tab_table, tab_analysis, tab_performance = st.tabs([
+        "🧾 Transcription JSON", 
+        "📋 Transcript Table", 
+        "📈 Analysis",
+        "📊 Performance"
+    ])
 
     with tab_json:
         st.markdown("### Transcription JSON")
@@ -518,6 +515,55 @@ elif st.session_state.step == "result":
                 )
         else:
             st.info("Analysis not available yet.")
+
+    with tab_performance:
+        st.markdown("### 📊 Performance Dashboard")
+        st.markdown("---")
+        
+        # Performance metrics
+        perf_data = {
+            "calls_completed": 345,
+            "avg_rating_last_month": 8.5,
+            "rating_current_month": 7.5,
+            "manager_name": "John"
+        }
+        
+        # Top section: Metric cards
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(
+                label="📞 Calls Completed",
+                value=perf_data["calls_completed"],
+                delta="Total"
+            )
+        with col2:
+            st.metric(
+                label="⭐ Avg Rating (Last Month)",
+                value=f"{perf_data['avg_rating_last_month']}/10",
+                delta=None
+            )
+        with col3:
+            st.metric(
+                label="⭐ Rating (Current Month)",
+                value=f"{perf_data['rating_current_month']}/10",
+                delta=f"{perf_data['rating_current_month'] - perf_data['avg_rating_last_month']:.1f}",
+                delta_color="inverse"
+            )
+        
+        st.markdown("---")
+        
+        # Manager info
+        st.markdown(f"**👤 Manager:** {perf_data['manager_name']}")
+        
+        st.markdown("---")
+        
+        # Bar chart for ratings comparison
+        st.markdown("#### Rating Trend Comparison")
+        rating_df = pd.DataFrame({
+            "Period": ["Last Month", "Current Month"],
+            "Rating": [perf_data["avg_rating_last_month"], perf_data["rating_current_month"]]
+        })
+        st.bar_chart(rating_df.set_index("Period"))
 
     # Matrix button
     st.markdown("---")
