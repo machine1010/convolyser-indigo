@@ -97,51 +97,50 @@ Provide the output in the following JSON structure:
 
 ### Section 1 – Personal Questions
 
-**Question 1:** क्या आपका वोट इसी विधानसभा में बना हुआ है ?
 
-**Question 2:** क्या मैं आपकी उम्र जान सकता हूँ ?
 
-**Question 3:** लिंग: (पूछना नहीं है देखकर भरें)
+**Question 1:** क्या मैं आपकी उम्र जान सकता हूँ ?
+
+**Question 2:** लिंग: (पूछना नहीं है देखकर भरें)
 **Note:** This is an observational question. Mark as "not asked" since it's not meant to be asked.
 
-**Question 4:** आप क्या काम करते हैं ?
+**Question 3:** आप क्या काम करते हैं ?
 
-**Question 5:** आप कौन से धर्म से हैं?
+**Question 4:** आप कौन से धर्म से हैं?
 
-**Question 6:** आपकी जाति क्या है ?
+**Question 5:** आपकी जाति क्या है ?
 
 ---
 
 ### Section 2 – Political Questions
 
-**Question 7:** आपके एमएलए/ विधायक का क्या नाम है?
+**Question 6:** आपके एमएलए/ विधायक का क्या नाम है?
 
-**Question 8:** क्या आप अपने विधायक के काम से खुश हैं ?
+**Question 7:** क्या आप अपने विधायक के काम से खुश हैं ?
 
-**Question 9:** अगर आपका विधायक फिर से चुनाव लड़ता है तो क्या आप उन्हें वोट देंगे ?
+**Question 8:** आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
 
-**Question 9.1:** अगर नहीं तो, आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
-**Note:** This is a follow-up question. Only mark as "asked" if Question 9 was answered with "नहीं" and the agent asked this follow-up.
 
-**Question 10:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
 
-**Question 11:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
+**Question 9:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
 
-**Question 12:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
+**Question 10:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
 
-**Question 13:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
+**Question 11:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
+
+**Question 12:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
 
 ---
 
 ### Section 3 – Observational Questions
 
-**Question 14:** आप गाँव में रहते हैं या शहर में?
+**Question 13:** आप गाँव में रहते हैं या शहर में?
 
-**Question 15:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
+**Question 14:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
 
-**Question 16:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
+**Question 15:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
 
-**Question 17:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
+**Question 16:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
 
 ---
 
@@ -174,9 +173,9 @@ Provide the output in the following JSON structure:
 
 1. **Question 3 (Gender)**: This is observational and should NOT be asked. Always mark as "not asked" (this is correct behavior).
 
-2. **Question 9.1 (Follow-up)**: Only evaluate if respondent answered "नहीं" to Question 9. If Question 9 was not asked or answered differently, mark 9.1 as "not asked".
 
-3. **Questions 15-17**: These ask for specific information (block name, village name, mobile number). The agent must specifically request this information.
+
+3. **Questions 15-16**: These ask for specific information (block name, village name, mobile number). The agent must specifically request this information.
 
 4. **Implicit vs Explicit**: If the respondent volunteers information without being asked, mark the question as "not asked" unless the agent explicitly requested it.
 
@@ -198,7 +197,7 @@ Return your assessment in the following JSON structure with ONLY these three val
     "question_7": "asked properly / asked / not asked",
     "question_8": "asked properly / asked / not asked",
     "question_9": "asked properly / asked / not asked",
-    "question_9_1": "asked properly / asked / not asked",
+    
     "question_10": "asked properly / asked / not asked",
     "question_11": "asked properly / asked / not asked",
     "question_12": "asked properly / asked / not asked",
@@ -206,10 +205,10 @@ Return your assessment in the following JSON structure with ONLY these three val
     "question_14": "asked properly / asked / not asked",
     "question_15": "asked properly / asked / not asked",
     "question_16": "asked properly / asked / not asked",
-    "question_17": "asked properly / asked / not asked"
+    
   },
   "summary": {
-    "total_questions": 17,
+    "total_questions": 16,
     "asked_properly": 0,
     "asked": 0,
     "not_asked": 0
@@ -220,7 +219,7 @@ Return your assessment in the following JSON structure with ONLY these three val
 
 1. **Step 1**: Read the entire transcript carefully
 2. **Step 2**: Identify which speaker is the agent and which is the respondent
-3. **Step 3**: Go through each of the 17 survey questions one by one
+3. **Step 3**: Go through each of the 16 survey questions one by one
 4. **Step 4**: For each question, search the transcript for where the agent asked it
 5. **Step 5**: Evaluate the quality: "asked properly", "asked", or "not asked"
 6. **Step 6**: Provide the summary counts
@@ -255,12 +254,9 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 
 ### Section 1 – Personal Questions
 
-**Question 1:** क्या आपका वोट इसी विधानसभा में बना हुआ है ?
-**Options:**
-- हाँ
-- नहीं
 
-**Question 2:** क्या मैं आपकी उम्र जान सकता हूँ ?
+
+**Question 1:** क्या मैं आपकी उम्र जान सकता हूँ ?
 **Options:**
 - 18-30 वर्ष
 - 31-45 वर्ष
@@ -268,12 +264,12 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - 60 वर्ष से अधिक
 - बताना नहीं चाहते
 
-**Question 3:** लिंग: (पूछना नहीं है देखकर भरें)
+**Question 2:** लिंग: (पूछना नहीं है देखकर भरें)
 **Options:**
 - पुरुष
 - महिला
 
-**Question 4:** आप क्या काम करते हैं ?
+**Question 3:** आप क्या काम करते हैं ?
 **Options:**
 - कृषि
 - मजदूरी/दैनिक वेतन
@@ -285,7 +281,7 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - छात्र / पढाई
 - अन्य (कृपया उल्लेख करें)
 
-**Question 5:** आप कौन से धर्म से हैं?
+**Question 4:** आप कौन से धर्म से हैं?
 **Options:**
 - हिन्दू
 - मुस्लिम
@@ -296,7 +292,7 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - किसी धर्म को नहीं मानता
 - बताना नहीं चाहते
 
-**Question 6:** आपकी जाति क्या है ?
+**Question 5:** आपकी जाति क्या है ?
 **Options:**
 - (विधानसभा के टॉप 12 जातियों की लिस्ट के अनुसार)
 
@@ -304,29 +300,25 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 
 ### Section 2 – Political Questions
 
-**Question 7:** आपके एमएलए/ विधायक का क्या नाम है?
+**Question 6:** आपके एमएलए/ विधायक का क्या नाम है?
 **Options:**
 - MLA का नाम सही बताया
 - MLA का नाम नहीं पता
 - MLA का नाम गलत बताया
 
-**Question 8:** क्या आप अपने विधायक के काम से खुश हैं ?
+**Question 7:** क्या आप अपने विधायक के काम से खुश हैं ?
 **Options:**
 - हाँ
 - नहीं
 - कुछ कह नहीं सकते
 
-**Question 9:** अगर आपका विधायक फिर से चुनाव लड़ता है तो क्या आप उन्हें वोट देंगे ?
-**Options:**
-- हाँ
-- नहीं
-- कुछ कह नहीं सकते
 
-**Question 9.1:** अगर नहीं तो, आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
+
+**Question 8:** आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
 **Options:**
 - (संभावित उम्मीदवारों की सुची के अनुसार)
 
-**Question 10:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
+**Question 9:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
 **Options:**
 - JDU | NDA
 - महागठबंधन | MGB
@@ -336,7 +328,7 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - NOTA
 - कह नहीं सकते
 
-**Question 11:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
+**Question 10:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
 **Options:**
 - JDU | NDA
 - महागठबंधन | MGB
@@ -347,14 +339,14 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - कह नहीं सकते / याद नहीं
 - वोट नहीं दिया
 
-**Question 12:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
+**Question 11:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
 **Options:**
 - बिलकुल शंतुष्ट हैं
 - बिलकुल शंतुष्ट नहीं
 - कुछ हद तक शंतुष्ट हैं
 - कुछ कह नहीं सकते
 
-**Question 13:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
+**Question 12:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
 **Options:**
 - नितीश कुमार
 - तेजश्वी यादव
@@ -367,32 +359,32 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 
 ### Section 3 – Observational Questions
 
-**Question 14:** आप गाँव में रहते हैं या शहर में?
+**Question 13:** आप गाँव में रहते हैं या शहर में?
 **Options:**
 - गाँव
 - शहर
 
-**Question 15:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
+**Question 14:** ब्लाक का नाम (आप जहाँ है उस ब्लाक का नाम चुनें)
 **Note:** Extract the exact block name mentioned in the transcript
 
-**Question 16:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
+**Question 15:** गाँव / पंचायत का नाम (आप जिस गाँव/ पंचायत में है उस पंचायत का नाम चुनें)
 **Note:** Extract the exact village/panchayat name mentioned in the transcript
 
-**Question 17:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
+**Question 16:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
 **Note:** Extract the mobile number if provided in the transcript
 
 ---
 
 ## ANALYSIS GUIDELINES:
 
-1. **For Questions 1-14**: Select EXACTLY ONE option from the provided list that best matches the respondent's answer
-2. **For Question 15-17**: Extract the exact information (block name, village/panchayat name, mobile number) as mentioned in the transcript
+1. **For Questions 1-13**: Select EXACTLY ONE option from the provided list that best matches the respondent's answer
+2. **For Question 14-16**: Extract the exact information (block name, village/panchayat name, mobile number) as mentioned in the transcript
 3. **Contextual Understanding**: Understand variations in Hindi responses. For example:
    - "हाँ", "जी हाँ", "बिल्कुल", "ठीक है" all mean "Yes"
    - "नहीं", "जी नहीं", "बिल्कुल नहीं" all mean "No"
    - Age ranges: Listen for specific numbers and categorize appropriately
 4. **Partial Answers**: If the respondent gives an incomplete or unclear answer, choose "कुछ कह नहीं सकते" or equivalent option if available
-5. **Question 9.1**: Only answer this if the respondent answered "नहीं" to Question 9
+
 
 ## OUTPUT FORMAT:
 
@@ -411,7 +403,7 @@ Return your analysis in the following JSON structure:
     "question_7": "selected option or Not Available",
     "question_8": "selected option or Not Available",
     "question_9": "selected option or Not Available",
-    "question_9_1": "answer or Not Available",
+    
     "question_10": "selected option or Not Available",
     "question_11": "selected option or Not Available",
     "question_12": "selected option or Not Available",
@@ -419,9 +411,9 @@ Return your analysis in the following JSON structure:
   },
   "section_3": {
     "question_14": "selected option or Not Available",
-    "question_15": "block name or Not Available",
-    "question_16": "village/panchayat name or Not Available",
-    "question_17": "mobile number or Not Available"
+    "question_15": "Answer or Not Available",
+    "question_16": "Answer or Not Available",
+    
   }
 }
 
