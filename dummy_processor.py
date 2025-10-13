@@ -613,7 +613,6 @@ Return your comparison results in the following JSON structure:
     "question_7": "matched / partially matched / not matched",
     "question_8": "matched / partially matched / not matched",
     "question_9": "matched / partially matched / not matched",
-    "question_9_1": "matched / partially matched / not matched",
     "question_10": "matched / partially matched / not matched",
     "question_11": "matched / partially matched / not matched",
     "question_12": "matched / partially matched / not matched",
@@ -622,11 +621,10 @@ Return your comparison results in the following JSON structure:
   "section_3": {
     "question_14": "matched / partially matched / not matched",
     "question_15": "matched / partially matched / not matched",
-    "question_16": "matched / partially matched / not matched",
-    "question_17": "matched / partially matched / not matched"
+    "question_16": "matched / partially matched / not matched"
   },
   "summary": {
-    "total_questions": 17,
+    "total_questions": 16,
     "matched": 0,
     "partially_matched": 0,
     "not_matched": 0
