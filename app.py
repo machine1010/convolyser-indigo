@@ -462,7 +462,7 @@ elif st.session_state.step == "result":
         "🧾 Transcription JSON", 
         "📋 Transcript Table", 
         "📈 Analysis",
-        "📊 Performance"
+        "📊 Performance Dashboard"
     ])
 
     with tab_json:
@@ -517,53 +517,120 @@ elif st.session_state.step == "result":
             st.info("Analysis not available yet.")
 
     with tab_performance:
-        st.markdown("### 📊 Performance Dashboard")
+        st.markdown("### 📊 Agent Performance Dashboard")
+        st.markdown("**Agent:** Rajesh Kumar | **Manager:** John Smith | **Team:** Survey Operations")
         st.markdown("---")
         
-        # Performance metrics
-        perf_data = {
-            "calls_completed": 345,
-            "avg_rating_last_month": 8.5,
-            "rating_current_month": 7.5,
-            "manager_name": "John"
-        }
-        
-        # Top section: Metric cards
-        col1, col2, col3 = st.columns(3)
+        # KPI Metrics Row 1
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.metric(
-                label="📞 Calls Completed",
-                value=perf_data["calls_completed"],
-                delta="Total"
+                label="📞 Total Calls",
+                value="1,247",
+                delta="↑ 12% vs last month"
             )
         with col2:
             st.metric(
-                label="⭐ Avg Rating (Last Month)",
-                value=f"{perf_data['avg_rating_last_month']}/10",
-                delta=None
+                label="✅ Successful Calls",
+                value="1,089",
+                delta="87.3% success rate"
             )
         with col3:
             st.metric(
-                label="⭐ Rating (Current Month)",
-                value=f"{perf_data['rating_current_month']}/10",
-                delta=f"{perf_data['rating_current_month'] - perf_data['avg_rating_last_month']:.1f}",
-                delta_color="inverse"
+                label="⏱️ Avg Call Duration",
+                value="4m 32s",
+                delta="↓ 15s vs target"
+            )
+        with col4:
+            st.metric(
+                label="⭐ Quality Score",
+                value="8.7/10",
+                delta="↑ 0.4"
             )
         
         st.markdown("---")
         
-        # Manager info
-        st.markdown(f"**👤 Manager:** {perf_data['manager_name']}")
+        # KPI Metrics Row 2
+        col5, col6, col7, col8 = st.columns(4)
+        with col5:
+            st.metric(
+                label="🎯 First Call Resolution",
+                value="82%",
+                delta="↑ 5%"
+            )
+        with col6:
+            st.metric(
+                label="😊 Customer Satisfaction",
+                value="4.6/5",
+                delta="↑ 0.2"
+            )
+        with col7:
+            st.metric(
+                label="🔄 Callback Rate",
+                value="7.8%",
+                delta="↓ 2.1%",
+                delta_color="inverse"
+            )
+        with col8:
+            st.metric(
+                label="📋 Compliance Score",
+                value="95%",
+                delta="↑ 3%"
+            )
         
         st.markdown("---")
         
-        # Bar chart for ratings comparison
-        st.markdown("#### Rating Trend Comparison")
-        rating_df = pd.DataFrame({
-            "Period": ["Last Month", "Current Month"],
-            "Rating": [perf_data["avg_rating_last_month"], perf_data["rating_current_month"]]
+        # Charts Section
+        col_chart1, col_chart2 = st.columns(2)
+        
+        with col_chart1:
+            st.markdown("#### 📈 Daily Calls Trend (Last 7 Days)")
+            daily_calls_data = pd.DataFrame({
+                "Day": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                "Calls": [42, 48, 45, 51, 47, 38, 41]
+            })
+            st.line_chart(daily_calls_data.set_index("Day"))
+        
+        with col_chart2:
+            st.markdown("#### ⭐ Quality Score Trend (Last 7 Days)")
+            quality_data = pd.DataFrame({
+                "Day": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                "Score": [8.5, 8.7, 8.4, 8.9, 8.6, 8.8, 8.7]
+            })
+            st.line_chart(quality_data.set_index("Day"))
+        
+        st.markdown("---")
+        
+        # Performance Comparison
+        st.markdown("#### 📊 Monthly Performance Comparison")
+        monthly_perf = pd.DataFrame({
+            "Month": ["Aug", "Sep", "Oct"],
+            "Calls Completed": [1156, 1198, 1247],
+            "Quality Score": [8.2, 8.5, 8.7],
+            "Success Rate": [84, 86, 87]
         })
-        st.bar_chart(rating_df.set_index("Period"))
+        st.dataframe(monthly_perf, use_container_width=True, hide_index=True)
+        
+        st.markdown("---")
+        
+        # Hourly Performance
+        col_hour1, col_hour2 = st.columns(2)
+        
+        with col_hour1:
+            st.markdown("#### 🕐 Peak Performance Hours")
+            hourly_data = pd.DataFrame({
+                "Hour": ["9-10", "10-11", "11-12", "12-1", "2-3", "3-4", "4-5"],
+                "Calls": [8, 12, 15, 10, 14, 11, 9]
+            })
+            st.bar_chart(hourly_data.set_index("Hour"))
+        
+        with col_hour2:
+            st.markdown("#### 🎯 Call Outcome Distribution")
+            outcome_data = pd.DataFrame({
+                "Outcome": ["Successful", "No Answer", "Callback", "Rejected"],
+                "Count": [1089, 98, 45, 15]
+            })
+            st.bar_chart(outcome_data.set_index("Outcome"))
 
     # Matrix button
     st.markdown("---")
