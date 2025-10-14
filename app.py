@@ -543,7 +543,7 @@ elif st.session_state.step == "result":
             )
         with col4:
             st.metric(
-                label="⭐ Quality Score",
+                label="⭐ Rating Score",
                 value="8.7/10",
                 delta="↑ 0.4"
             )
@@ -560,14 +560,14 @@ elif st.session_state.step == "result":
             )
         with col6:
             st.metric(
-                label="😊 Customer Satisfaction",
-                value="NA",
-                delta="NA"
+                label="😊 Sentiment analysis-Happy",
+                value="80%",
+                delta="↑ 3% vs last month"
             )
         with col7:
             st.metric(
                 label="🔄 Callback Rate",
-                value="30%",
+                value="20%",
                 delta="5%",
                 delta_color="inverse"
             )
@@ -592,7 +592,7 @@ elif st.session_state.step == "result":
             st.line_chart(daily_calls_data.set_index("Day"))
         
         with col_chart2:
-            st.markdown("#### ⭐ Quality Score Trend (Last 7 Days)")
+            st.markdown("#### ⭐ Rating Score Trend (Last 7 Days)")
             quality_data = pd.DataFrame({
                 "Day": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
                 "Score": [8.5, 8.7, 8.4, 8.9, 8.6, 8.8, 8.7]
@@ -606,7 +606,7 @@ elif st.session_state.step == "result":
         monthly_perf = pd.DataFrame({
             "Month": ["Aug", "Sep", "Oct"],
             "Calls Completed": [1156, 1198, 1247],
-            "Quality Score": [8.2, 8.5, 8.7],
+            "Rating Score": [8.2, 8.5, 8.7],
             "Success Rate": [84, 86, 87]
         })
         st.dataframe(monthly_perf, use_container_width=True, hide_index=True)
