@@ -555,8 +555,8 @@ elif st.session_state.step == "result":
         with col5:
             st.metric(
                 label="🎯 First Call Resolution",
-                value="NA",
-                delta="NA"
+                value="80%",
+                delta="↑ 2% vs last month"
             )
         with col6:
             st.metric(
