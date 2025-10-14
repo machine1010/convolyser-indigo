@@ -568,14 +568,14 @@ elif st.session_state.step == "result":
             st.metric(
                 label="🔄 Callback Rate",
                 value="20%",
-                delta="5%",
+                delta="5% vs last month",
                 delta_color="inverse"
             )
         with col8:
             st.metric(
                 label="📋 Compliance Score",
                 value="95%",
-                delta="↑ 3%"
+                delta="↑ 3% vs last month"
             )
         
         st.markdown("---")
