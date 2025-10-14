@@ -555,20 +555,20 @@ elif st.session_state.step == "result":
         with col5:
             st.metric(
                 label="🎯 First Call Resolution",
-                value="82%",
-                delta="↑ 5%"
+                value="NA",
+                delta="NA"
             )
         with col6:
             st.metric(
                 label="😊 Customer Satisfaction",
-                value="4.6/5",
-                delta="↑ 0.2"
+                value="NA",
+                delta="NA"
             )
         with col7:
             st.metric(
                 label="🔄 Callback Rate",
-                value="7.8%",
-                delta="↓ 2.1%",
+                value="NA",
+                delta="NA",
                 delta_color="inverse"
             )
         with col8:
