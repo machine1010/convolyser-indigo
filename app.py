@@ -567,8 +567,8 @@ elif st.session_state.step == "result":
         with col7:
             st.metric(
                 label="🔄 Callback Rate",
-                value="NA",
-                delta="NA",
+                value="30%",
+                delta="5%",
                 delta_color="inverse"
             )
         with col8:
