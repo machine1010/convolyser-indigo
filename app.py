@@ -617,7 +617,7 @@ elif st.session_state.step == "result":
         col_hour1, col_hour2 = st.columns(2)
         
         with col_hour1:
-            st.markdown("#### 🕐 Peak Performance Hours")
+            st.markdown("#### 🕐 Peak Response Hours(Call Receiver)")
             hourly_data = pd.DataFrame({
                 "Hour": ["9-10", "10-11", "11-12", "12-1", "2-3", "3-4", "4-5"],
                 "Calls": [8, 12, 15, 10, 14, 11, 9]
