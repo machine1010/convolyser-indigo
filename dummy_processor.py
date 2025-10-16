@@ -316,8 +316,13 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 
 
 **Question 8:** आप अगले विधायक के रूप में किसे देखना चाहते हैं ?
+Carefully analyse the response then answer this question.
 **Options:**
-- (संभावित उम्मीदवारों की सुची के अनुसार)
+नौशाद आलम	महागठबंधन (MGB)
+महमूद आलम	महागठबंधन (MGB)
+शाहूद आलम	महागठबंधन (MGB)
+गोपाल अग्रवाल	बीएसपि (BSP)
+गुलाम हसनैन	अन्य
 
 **Question 9:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
 SPECIAL INSTRUCTIONS - 
@@ -387,7 +392,7 @@ Frame the answer by analysing both special instructions and options .
 **Note:** Extract the exact village/panchayat name mentioned in the transcript
 
 **Question 16:** सर क्या मैं आपका मोबाइल नंबर जान सकता हूँ ?
-**Note:** Extract the mobile number if provided in the transcript
+**Note:** Extract the mobile number if provided in the transcript. Mobile number should be 10 digit and extracted from the transcript if avaliable.
 
 ---
 
