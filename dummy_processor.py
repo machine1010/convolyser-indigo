@@ -319,6 +319,14 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - (संभावित उम्मीदवारों की सुची के अनुसार)
 
 **Question 9:** आप आने वाले विधानसभा चुनाव में किस पार्टी को वोट देंगे?
+SPECIAL INSTRUCTIONS - 
+while analysing the  options be careful and map the symbol with party name. For example if the person says लालटेन छाप then she/he referring to महागठबंधन (MGB) . below are the mapping 
+| Symbol (छाप) | Party Name (English) |
+| ------------ | -------------------- |
+| लालटेन छाप   | महागठबंधन (MGB)      |
+| तीर छाप      | JDU (NDA)            |
+| पतंग छाप     | जन सुराज पार्टी      |
+
 **Options:**
 - JDU | NDA
 - महागठबंधन | MGB
@@ -327,8 +335,16 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - बीएसपि | BSP
 - NOTA
 - कह नहीं सकते
+Frame the answer by analysing both special instructions and options . 
 
 **Question 10:** 2020 के पिछले विधानसभा चुनाव में आपने किस पार्टी को वोट दिया था?
+SPECIAL INSTRUCTIONS - 
+while analysing the  options be careful and map the symbol with party name. For example if the person says लालटेन छाप then she/he referring to महागठबंधन (MGB) . below are the mapping 
+| Symbol (छाप) | Party Name (English) |
+| ------------ | -------------------- |
+| लालटेन छाप   | महागठबंधन (MGB)      |
+| तीर छाप      | JDU (NDA)            |
+| पतंग छाप     | जन सुराज पार्टी      |
 **Options:**
 - JDU | NDA
 - महागठबंधन | MGB
@@ -338,12 +354,11 @@ Now, please analyze the Hindi transcript and provide the quality assessment in t
 - NOTA
 - कह नहीं सकते / याद नहीं
 - वोट नहीं दिया
-
+Frame the answer by analysing both special instructions and options . 
 **Question 11:** क्या आप बिहार सरकार द्वारा 2020 – 25 में किए गए काम से शंतुष्ट हैं ?
 **Options:**
 - बिलकुल शंतुष्ट हैं
 - बिलकुल शंतुष्ट नहीं
-- कुछ हद तक शंतुष्ट हैं
 - कुछ कह नहीं सकते
 
 **Question 12:** आप अगले मुख्यमंत्री के रूप में किसे देखना चाहते हैं ?
